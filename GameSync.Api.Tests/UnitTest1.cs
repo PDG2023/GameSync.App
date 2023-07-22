@@ -6,6 +6,7 @@ namespace GameSync.Api.Tests
         [TestMethod]
         public void TestMethod1()
         {
+            Assert.IsFalse(false);
         }
     }
 }

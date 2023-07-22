@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33414.496
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameSync.Api", "GameSync.Api\GameSync.Api.csproj", "{5422749D-D442-4FA9-BEF3-816601308012}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "GameSync.Front", "GameSync.Front\GameSync.Front.esproj", "{F768A70B-F635-4617-A4C2-CB3EAC96EB16}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameSync.Api.Tests", "GameSync.Api.Tests\GameSync.Api.Tests.csproj", "{0653B494-88C8-46BE-9E70-C4697AE4C43B}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{E4A447D0-87DB-4A48-AEFC-ED2144EDC2A3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5422749D-D442-4FA9-BEF3-816601308012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5422749D-D442-4FA9-BEF3-816601308012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5422749D-D442-4FA9-BEF3-816601308012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5422749D-D442-4FA9-BEF3-816601308012}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F768A70B-F635-4617-A4C2-CB3EAC96EB16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F768A70B-F635-4617-A4C2-CB3EAC96EB16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F768A70B-F635-4617-A4C2-CB3EAC96EB16}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{F768A70B-F635-4617-A4C2-CB3EAC96EB16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F768A70B-F635-4617-A4C2-CB3EAC96EB16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F768A70B-F635-4617-A4C2-CB3EAC96EB16}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{0653B494-88C8-46BE-9E70-C4697AE4C43B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0653B494-88C8-46BE-9E70-C4697AE4C43B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0653B494-88C8-46BE-9E70-C4697AE4C43B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0653B494-88C8-46BE-9E70-C4697AE4C43B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4A447D0-87DB-4A48-AEFC-ED2144EDC2A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4A447D0-87DB-4A48-AEFC-ED2144EDC2A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4A447D0-87DB-4A48-AEFC-ED2144EDC2A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4A447D0-87DB-4A48-AEFC-ED2144EDC2A3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0EACA49C-CEAD-4FD3-9237-7175106D7967}
+	EndGlobalSection
+EndGlobal

@@ -30,14 +30,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    
-    - name: Install modules
-      run: yarn
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 20
+        cache: "npm"
+        
+    - run: npm ci
       working-directory: ./GameSync.Front
-    
-    - name: Testing
+    - run: npm test
       working-directory: ./GameSync.Front
-      run: yarn test
     
   release:
     needs: [validate-api, validate-front]

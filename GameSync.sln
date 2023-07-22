@@ -9,6 +9,8 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "GameSync.Front", "GameSync.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameSync.Api.Tests", "GameSync.Api.Tests\GameSync.Api.Tests.csproj", "{0653B494-88C8-46BE-9E70-C4697AE4C43B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameSync.Business", "GameSync.Business\GameSync.Business.csproj", "{6EF54307-430A-4862-B79E-86B0108A325A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{0653B494-88C8-46BE-9E70-C4697AE4C43B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0653B494-88C8-46BE-9E70-C4697AE4C43B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0653B494-88C8-46BE-9E70-C4697AE4C43B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EF54307-430A-4862-B79E-86B0108A325A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EF54307-430A-4862-B79E-86B0108A325A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EF54307-430A-4862-B79E-86B0108A325A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EF54307-430A-4862-B79E-86B0108A325A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

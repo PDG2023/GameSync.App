@@ -16,4 +16,9 @@
     <PackageReference Include="coverlet.collector" Version="3.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GameSync.Api\GameSync.Api.csproj" />
+    <ProjectReference Include="..\GameSync.Business\GameSync.Business.csproj" />
+  </ItemGroup>
+
 </Project>

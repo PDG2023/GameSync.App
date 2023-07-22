@@ -30,6 +30,7 @@ jobs:
     needs: [validate-api]
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v3
     - name: Logging into the ACR registry
       uses: azure/docker-login@v1
       with:

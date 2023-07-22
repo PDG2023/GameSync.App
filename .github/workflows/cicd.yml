@@ -36,7 +36,7 @@ jobs:
       with:
         login-server: gamesync.azurecr.io
         username: ${{secrets.ACR_USERNAME}}
-        password: ${{secrets.ACR_USERNAME}}
+        password: ${{secrets.ACR_PASSWORD}}
         
     - name: Build and push
       run: |

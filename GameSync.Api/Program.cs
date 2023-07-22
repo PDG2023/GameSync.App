@@ -17,8 +17,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UsePathBase("/api");
-app.UseStaticFiles();
-app.UseHttpsRedirection();
+app.UseFileServer();
 
 app.UseAuthorization();
 

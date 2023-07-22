@@ -25,13 +25,18 @@ jobs:
       with:
         dotnet-version: 7.0.x
     - run: dotnet test GameSync.sln -c Release
+    
   validate-front: 
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    
     - name: Install modules
       run: yarn
+      working-directory: ./GameSync.Front
+    
     - name: Testing
+      working-directory: ./GameSync.Front
       run: yarn test
     
   release:

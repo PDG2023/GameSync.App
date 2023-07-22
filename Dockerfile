@@ -16,7 +16,15 @@ RUN dotnet build "GameSync.Api.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "GameSync.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
+FROM node:slim AS front-install
+WORKDIR /src/GameSync.Front
+RUN npm npm install
+
+FROM front-install AS front-build
+RUN npm run build
+
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY --from=front /src/
 ENTRYPOINT ["dotnet", "GameSync.Api.dll"]

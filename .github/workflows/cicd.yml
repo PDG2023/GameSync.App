@@ -25,9 +25,17 @@ jobs:
       with:
         dotnet-version: 7.0.x
     - run: dotnet test GameSync.sln -c Release
+  validate-front: 
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install modules
+      run: yarn
+    - name: Testing
+      run: yarn test
     
   release:
-    needs: [validate-api]
+    needs: [validate-api, validate-front]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3

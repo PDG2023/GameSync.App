@@ -3,10 +3,26 @@
     <StartupCommand>npm start</StartupCommand>
     <JavaScriptTestFramework>Jasmine</JavaScriptTestFramework>
     <!-- Command to run on project build -->
-    <BuildCommand></BuildCommand>
+    <BuildCommand>
+    </BuildCommand>
     <!-- Command to create an optimized build of the project that's ready for publishing -->
     <ProductionBuildCommand>npm run build</ProductionBuildCommand>
     <!-- Folder where production build objects will be placed -->
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist\GameSync.Front</BuildOutputFolder>
   </PropertyGroup>
+  <ItemGroup>
+    <TypeScriptConfiguration Remove="%2a%2a\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="%2a%2a\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="%2a%2a/%2a" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptConfiguration Remove="%2a%2a/tsconfig.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptConfiguration Remove="%2a%2a/jsconfig.json" />
+  </ItemGroup>
 </Project>

@@ -38,7 +38,7 @@ namespace GameSync.Api.Tests
             var response = await _factory.Client.GetAsync("/api/search?term=Loups");
 
             // assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            response.EnsureSuccessStatusCode();
 
             var res = await response.Content.ReadFromJsonAsync<IEnumerable<Game>>();
             Assert.Equal(2, res.Count());

@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GameSync.Api.Persistence\GameSync.Api.Persistence.csproj" />
+  </ItemGroup>
+
 </Project>

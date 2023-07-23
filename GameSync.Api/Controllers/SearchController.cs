@@ -1,4 +1,5 @@
-﻿using GameSync.Business.Features.Search;
+﻿using GameSync.Api.Persistence;
+using GameSync.Business.Features.Search;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -8,18 +9,16 @@ namespace GameSync.Api.Controllers
     [Route("[controller]")]
     public class SearchController : ControllerBase
     {
+        private readonly GameStoreSearcher searcher;
+
+        public SearchController(GameStoreSearcher searcher)
+        {
+            this.searcher = searcher;
+        }
 
         [HttpGet]
         public IEnumerable<Game> Get([FromQuery][Required] string term)
         {
-            var store = new[]
-            {
-                new Game("my game"),
-                new Game("second game")
-            };
-
-            var searcher = new GameStoreSearcher(store);
-
             return searcher.SearchGames(term);
         }
     }

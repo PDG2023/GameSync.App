@@ -1,17 +1,22 @@
-﻿namespace GameSync.Business.Features.Search;
+﻿using GameSync.Api.Persistence;
+using Microsoft.EntityFrameworkCore;
+
+namespace GameSync.Business.Features.Search;
 
 public class GameStoreSearcher
 {
-    private readonly IReadOnlyCollection<Game> _store;
-    public GameStoreSearcher(IReadOnlyCollection<Game> store) 
+    private readonly GameSyncContext _context;
+    public GameStoreSearcher(GameSyncContext context) 
     {
-        _store = store;
+        _context = context;
     }
 
     public IEnumerable<Game> SearchGames(string term)
     {
-        return _store
-            .Where(game => game.Name.Contains(term));
+        return _context.Games
+            .Where(x => x.Name.Contains(term))
+            .Select(x => new Game(x.Name))
+            .ToList();
     }
 }
 

@@ -61,7 +61,7 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         using var scope = serviceProvider.CreateScope();
         var scopedServices = scope.ServiceProvider;
         var context = scopedServices.GetRequiredService<GameSyncContext>();
-        context.Database.EnsureCreated();
+        context.Database.Migrate();
     }
 
     private static void RemoveDbContext(IServiceCollection services)

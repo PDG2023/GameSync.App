@@ -9,7 +9,7 @@ env:
   TAG: gamesync.azurecr.io/gamesyncapi:latest
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
   pull_request:
     branches: [ "main" ]
     

@@ -1,54 +1,47 @@
 using GameSync.Api.Persistence;
 using GameSync.Business.Features.Search;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System.Net;
+using System.Net.Http.Json;
+using Xunit;
 
 namespace GameSync.Api.Tests
 {
-    [TestClass]
-    public class SearchGamesFeaturesTests
+    public class SearchGamesFeaturesTests : IClassFixture<GameSyncAppFactory>
     {
+        private readonly GameSyncAppFactory _factory;
 
-        GameSyncContext _context;
-        GameStoreSearcher _searcher;
-        SqliteConnection _connection;
-        [TestInitialize]
-        public void Init()
+        public SearchGamesFeaturesTests(GameSyncAppFactory integrationTestFactory)
         {
-            var connectionString = "Data Source=SearchGamesFeatures;Mode=Memory;Cache=Shared";
-            _connection = new SqliteConnection(connectionString);
-            _connection.Open();
+            _factory = integrationTestFactory;
 
-            var opt = new DbContextOptionsBuilder<GameSyncContext>()
-                .UseSqlite(_connection)
-                .Options;
-            _context = new GameSyncContext(opt);
-            _context.Database.Migrate();
-            SetupData();
-            _searcher = new GameStoreSearcher(_context);
-        }
-
-        [TestCleanup]
-        public void Cleanup() 
-        {
-            _connection.Close();
-            _connection.Dispose();
-        }
-
-        private void SetupData()
-        {
-            _context.Games.Add(new Persistence.Entities.Game { Name = "Loups-garoups pour une nuit" });
-            _context.Games.Add(new Persistence.Entities.Game { Name = "Loups-garoups de Thiercelieu" });
-            _context.Games.Add(new Persistence.Entities.Game { Name = "Twister" });
-            _context.SaveChanges();
         }
 
 
-        [TestMethod]
-        public void SearchingExistingTerm()
+        [Fact]
+        public async Task SearchingNonExistingTerm()
         {
-            var needle = _searcher.SearchGames("Loups");
-            Assert.AreEqual(needle.Count(), 2);
+
+            // arrange
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var ctx = scope.ServiceProvider.GetRequiredService<GameSyncContext>();
+                ctx.Games.AddRange(new[] {
+                    new Persistence.Entities.Game {Name = "Loups-garous pour une nuit"},
+                    new Persistence.Entities.Game {Name = "Loups-garous de thiercelieu"},
+                    new Persistence.Entities.Game {Name = "Twister"},
+                });
+                ctx.SaveChanges();
+            }
+
+            // act
+            var response = await _factory.Client.GetAsync("/api/search?term=Loups");
+
+            // assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var res = await response.Content.ReadFromJsonAsync<IEnumerable<Game>>();
+            Assert.Equal(2, res.Count());
         }
     }
 }

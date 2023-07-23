@@ -13,7 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<GameSyncContext>(options =>
 {
-    options.UseSqlite(builder.Configuration.GetConnectionString("Default"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default"));
 });
 
 builder.Services.AddTransient<GameStoreSearcher>();
@@ -42,3 +42,5 @@ using (var scope = app.Services.CreateScope())
 
 app.MapControllers();
 app.Run();
+
+public partial class Program { }

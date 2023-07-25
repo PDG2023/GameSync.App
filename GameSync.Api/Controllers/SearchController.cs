@@ -17,7 +17,7 @@ namespace GameSync.Api.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Game> Get([FromQuery][Required] string term)
+        public IEnumerable<Game> Get([FromQuery] string term)
         {
             return searcher.SearchGames(term);
         }

@@ -1,9 +1,9 @@
 
 
-<input type="text" />
+<input type="text" (input)="searchEventFired($event)" />
 
-<div *ngFor="let result in results;">
-  {{result.name}}
-</div>
-
-<br />
+<ul>
+  <li *ngFor="let game of games">
+    {{game.name}}
+  </li>
+</ul>

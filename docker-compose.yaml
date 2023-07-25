@@ -32,6 +32,7 @@ services:
         build: .
         environment:
             - "ConnectionStrings__Default=User ID=postgres;Password=postgres;Host=db;Port=5432;Database=gamesync;"
+            - "ASPNETCORE_ENVIRONMENT=Development"
         networks:
             - dev
         ports:

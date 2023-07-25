@@ -1,7 +1,13 @@
 
 
 <input type="text" (input)="searchEventFired($event)" />
+<button (click)="addGameButtonClicked()">Ajouter le jeu</button>
 
+<div>
+  {{validationMessage}}
+</div>
+
+Liste des jeux trouvés :
 <ul>
   <li *ngFor="let game of games">
     {{game.name}}

@@ -1,5 +1,6 @@
 using GameSync.Api.Persistence;
 using GameSync.Business.Features.Search;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Net.Http.Json;
@@ -7,16 +8,34 @@ using Xunit;
 
 namespace GameSync.Api.Tests
 {
-    public class SearchGamesFeaturesTests : IClassFixture<GameSyncAppFactory>
+    public class GamesFeaturesTest : IClassFixture<GameSyncAppFactory>
     {
         private readonly GameSyncAppFactory _factory;
 
-        public SearchGamesFeaturesTests(GameSyncAppFactory integrationTestFactory)
+        public GamesFeaturesTest(GameSyncAppFactory integrationTestFactory)
         {
             _factory = integrationTestFactory;
 
         }
 
+        [Fact]
+        public async Task AddSingleGameTest()
+        {
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var ctx = scope.ServiceProvider.GetRequiredService<GameSyncContext>();
+                await ctx.Games.ExecuteDeleteAsync();
+                ctx.SaveChanges();
+            }
+
+            // act
+            var response = await _factory.Client.PostAsync("/api/game/Cluedo", null);
+
+            //assert
+            response.EnsureSuccessStatusCode();
+            var game = await response.Content.ReadFromJsonAsync<Game>();
+            Assert.Equal("Cluedo", game.Name);
+        }
 
         [Fact]
         public async Task SearchingNonExistingTerm()
@@ -35,7 +54,7 @@ namespace GameSync.Api.Tests
             }
 
             // act
-            var response = await _factory.Client.GetAsync("/api/search?term=Loups");
+            var response = await _factory.Client.GetAsync("/api/game/search?term=Loups");
 
             // assert
             response.EnsureSuccessStatusCode();

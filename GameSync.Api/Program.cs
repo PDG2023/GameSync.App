@@ -1,7 +1,7 @@
 using GameSync.Api.Persistence;
+using GameSync.Business.BoardGamesGeek;
 using GameSync.Business.Features.Search;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +16,7 @@ builder.Services.AddDbContext<GameSyncContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default"));
 });
 
-builder.Services.AddTransient<GameStoreSearcher>();
+builder.Services.AddSingleton<IGameSearcher, BoardGameGeekClient>();
 
 
 var app = builder.Build();

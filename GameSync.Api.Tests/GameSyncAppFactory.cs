@@ -70,7 +70,4 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         if (descriptor != null) services.Remove(descriptor);
     }
 
-
-    public HttpClient Client => CreateClient(_opt);
-
 }

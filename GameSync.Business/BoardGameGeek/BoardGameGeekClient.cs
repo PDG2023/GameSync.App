@@ -46,7 +46,16 @@ public class BoardGameGeekClient : IGameSearcher
 
         var results = Deserialize<Results>(body)!;
 
-        return results.Items.Select(searchResult => new BoardGameSearchResult(searchResult.Name.Value, int.Parse(searchResult.Id), searchResult.Type == ExpansionType));
+        return results.Items.Select(searchResult =>
+        {
+            return new BoardGameSearchResult
+            {
+                Id = int.Parse(searchResult.Id),
+                Name = searchResult.Name.Value,
+                IsExpansion = searchResult.Type == ExpansionType,
+                YearPublished = int.Parse(searchResult.YearPublished.Value)
+            };
+        });
     }
 
 }

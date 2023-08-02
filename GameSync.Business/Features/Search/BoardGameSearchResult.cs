@@ -1,3 +1,9 @@
 ﻿namespace GameSync.Business.Features.Search;
 
-public record BoardGameSearchResult(string Name, int Id, bool IsExpansion);
+public class BoardGameSearchResult
+{
+    public required int YearPublished { get; init; }
+    public required string Name { get; init; }
+    public bool IsExpansion { get; init; }
+    public required int Id { get; init; }
+}

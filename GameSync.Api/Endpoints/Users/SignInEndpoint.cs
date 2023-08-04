@@ -7,20 +7,20 @@ using Microsoft.AspNetCore.Identity;
 
 namespace GameSync.Api.Endpoints.Users;
 
-public class SignInRequest
+public class SignUpRequest
 {
     public required string Email { get; set; }
     public required string Password { get; set; }
 }
 
-public class SignInValidResponse
+public class SignUpValidResponse
 {
     public required string Email { get; set; }
 }
 
 [AllowAnonymous]
 [HttpPost("users/sign-in")]
-public class SignInEndpoint : Endpoint<SignInRequest, Results<BadRequest<IEnumerable<IdentityError>>, Ok<SignInValidResponse>>>
+public class SignInEndpoint : Endpoint<SignUpRequest, Results<BadRequest<IEnumerable<IdentityError>>, Ok<SignUpValidResponse>>>
 {
     private readonly UserManager<User> userManager;
 
@@ -29,7 +29,7 @@ public class SignInEndpoint : Endpoint<SignInRequest, Results<BadRequest<IEnumer
         this.userManager = userManager;
     }
 
-    public override async Task<Results<BadRequest<IEnumerable<IdentityError>>, Ok<SignInValidResponse>>> ExecuteAsync(SignInRequest req, CancellationToken ct)
+    public override async Task<Results<BadRequest<IEnumerable<IdentityError>>, Ok<SignUpValidResponse>>> ExecuteAsync(SignUpRequest req, CancellationToken ct)
     {
         var newUser = new User
         {
@@ -44,7 +44,7 @@ public class SignInEndpoint : Endpoint<SignInRequest, Results<BadRequest<IEnumer
             return TypedResults.BadRequest(tryCreateUser.Errors);
         }
 
-        return TypedResults.Ok(new SignInValidResponse
+        return TypedResults.Ok(new SignUpValidResponse
         {
             Email = req.Email
         });

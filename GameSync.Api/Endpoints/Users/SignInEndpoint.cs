@@ -33,7 +33,8 @@ public class SignInEndpoint : Endpoint<SignInRequest, Results<BadRequest<IEnumer
     {
         var newUser = new User
         {
-            Email = req.Email
+            Email = req.Email,
+            UserName = req.Email
         };
 
         var tryCreateUser = await userManager.CreateAsync(newUser, req.Password);

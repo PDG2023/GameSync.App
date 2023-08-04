@@ -6,8 +6,10 @@ using GameSync.Api.Identity;
 using GameSync.Api.Persistence;
 using GameSync.Business.BoardGamesGeek;
 using GameSync.Business.Features.Search;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +37,8 @@ builder.Services.AddCors();
 
 builder.Services.AddSingleton<IGameSearcher, BoardGameGeekClient>();
 
+builder.Services.Configure<JsonOptions>(o => o.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -43,8 +47,7 @@ if (app.Environment.IsDevelopment())
     app.UseCors(configuration => configuration.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 }
 
-app.UsePathBase("/api");
-app.UseFastEndpoints();
+app.UseFastEndpoints(c => c.Endpoints.RoutePrefix = "api");
 app.UseFileServer();
 app.UseAuthentication();
 app.UseAuthorization();

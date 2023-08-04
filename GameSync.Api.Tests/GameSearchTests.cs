@@ -21,7 +21,7 @@ namespace GameSync.Api.Tests
 
 
         [Fact]
-        public async Task SingleResult()
+        public async Task VimtoCluedoShouldReturnSingleResult()
         {
             var client = _factory.CreateClient();
 

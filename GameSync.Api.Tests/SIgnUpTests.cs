@@ -27,14 +27,9 @@ namespace GameSync.Api.Tests
             var testRequest = GetTestRequest("$UX#%A!qaphEL2");
 
             // act
-            var response = await SignIn(testRequest);
+            var response = await TryCreateAccout(testRequest);
             
             // assert
-            if (!response.IsSuccessStatusCode) 
-            {
-                _output.WriteLine(response.Content.ToString());
-            }
-
             var payload = await response.Content.ReadFromJsonAsync<SignUpValidResponse>();
             Assert.NotNull(payload);
             Assert.Equal(testRequest.Email, payload.Email);
@@ -47,16 +42,24 @@ namespace GameSync.Api.Tests
         [InlineData("$1241245ds125", "PasswordRequiresUpper")]
         [InlineData("$XaBaBweqgRw", "PasswordRequiresDigit")]
         [InlineData("$X3%A!q", "PasswordTooShort")]
-        public async Task ErrorProductionTests(string password, string expectedError)
+        public async Task BadlyFormedPassword(string password, string expectedError)
         {
             // arrange
             var testRequest = GetTestRequest(password);
 
             // act
-            var response = await SignIn(testRequest);
+            var response = await TryCreateAccout(testRequest);
 
             // assert
             await AssertProduceError(expectedError, response);
+        }
+
+        [Fact]
+        public async Task BadlyFormedMail()
+        {
+            var response = await TryCreateAccout(new SignUpRequest { Email = "ab", Password = "$UX#%A!qaphEL2a23" });
+
+            await AssertProduceError("InvalidEmail", response);
         }
 
 
@@ -66,7 +69,7 @@ namespace GameSync.Api.Tests
             Password = password
         };
 
-        private async Task<HttpResponseMessage> SignIn(SignUpRequest req)
+        private async Task<HttpResponseMessage> TryCreateAccout(SignUpRequest req)
         {
             var client = _factory.CreateClient();
             return await client.PostAsJsonAsync("/api/users/sign-in", req);

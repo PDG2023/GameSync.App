@@ -27,7 +27,7 @@ public class SignUpTests : IClassFixture<GameSyncAppFactory>
         var response = await TryCreateAccount(testRequest);
         
         // assert
-        var payload = await response.Content.ReadFromJsonAsync<SignUpValidResponse>();
+        var payload = await response.Content.ReadFromJsonAsync<SucessfulSignUpResponse>();
         Assert.NotNull(payload);
         Assert.Equal(testRequest.Email, payload.Email);
 
@@ -54,9 +54,9 @@ public class SignUpTests : IClassFixture<GameSyncAppFactory>
     [Fact]
     public async Task BadlyFormedMail()
     {
-        var badlyFormedMailSignInRequest = new SignUpRequest { Email = "ab", Password = "$UX#%A!qaphEL2a23" };
+        var badlyFormMail = new SignUpRequest { Email = "ab", Password = "$UX#%A!qaphEL2a23" };
 
-        var response = await TryCreateAccount(badlyFormedMailSignInRequest);
+        var response = await TryCreateAccount(badlyFormMail);
 
         await AssertProduceError("InvalidEmail", response);
     }
@@ -71,7 +71,7 @@ public class SignUpTests : IClassFixture<GameSyncAppFactory>
     private async Task<HttpResponseMessage> TryCreateAccount(SignUpRequest req)
     {
         var client = _factory.CreateClient();
-        return await client.PostAsJsonAsync("/api/users/sign-in", req);
+        return await client.PostAsJsonAsync("/api/users/sign-up", req);
     }
 
     private async Task AssertProduceError(string errorCode, HttpResponseMessage response)

@@ -2,13 +2,14 @@ global using FastEndpoints;
 global using FastEndpoints.Security;
 
 using FastEndpoints.Swagger;
-using GameSync.Api.Identity;
 using GameSync.Api.Persistence;
+using GameSync.Api.Persistence.Entities;
 using GameSync.Business.BoardGamesGeek;
 using GameSync.Business.Features.Search;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,13 +26,21 @@ builder.Services.AddDbContext<GameSyncContext>(options =>
 
 
 builder.Services.AddIdentityCore<User>(x =>
-{
-    x.User.RequireUniqueEmail = true;
-    x.SignIn.RequireConfirmedEmail = true;
-    x.Password.RequiredLength = 8;
-}).AddEntityFrameworkStores<GameSyncContext>().AddDefaultTokenProviders();
+    {
+        x.User.RequireUniqueEmail = true;
+        x.SignIn.RequireConfirmedEmail = true;
+        x.Password.RequiredLength = 8;
+    })
+    .AddUserManager<UserManager<User>>()
+    .AddSignInManager()
+    .AddEntityFrameworkStores<GameSyncContext>()
+    .AddDefaultTokenProviders();
+
+
+// TODO : Change the key to a secured one
 
 builder.Services.AddJWTBearerAuth("TokenSigningKey").AddAuthentication();
+
 builder.Services.AddAuthorization();
 builder.Services.AddCors();
 

@@ -1,52 +1,58 @@
-﻿using Duende.IdentityServer.Configuration;
-using FastEndpoints.Security;
-using GameSync.Api.Identity;
+﻿using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 
 namespace GameSync.Api.Endpoints.Users;
 
-public class SignUpRequest
+public class SignInRequest
 {
-    public required string Email { get; set; }
-    public required string Password { get; set; }
+    public required string Email { get; init; }
+    public required string Password { get; init; }
 }
 
-public class SignUpValidResponse
+public class SuccessfulSignInResponse
 {
-    public required string Email { get; set; }
+    public required string Email { get; init; }
 }
 
-[AllowAnonymous]
-[HttpPost("users/sign-in")]
-public class SignInEndpoint : Endpoint<SignUpRequest, Results<BadRequest<IEnumerable<IdentityError>>, Ok<SignUpValidResponse>>>
+public class SignInEndpoint : Endpoint<SignInRequest, Results<Ok<SuccessfulSignInResponse>, BadRequest<SignInResult>>>
 {
-    private readonly UserManager<User> userManager;
+    private readonly SignInManager<User> signInManager;
 
-    public SignInEndpoint(UserManager<User> userManager)
+    public SignInEndpoint(SignInManager<User> signInManager)
     {
-        this.userManager = userManager;
+        this.signInManager = signInManager;
     }
 
-    public override async Task<Results<BadRequest<IEnumerable<IdentityError>>, Ok<SignUpValidResponse>>> ExecuteAsync(SignUpRequest req, CancellationToken ct)
+    public override void Configure()
     {
-        var newUser = new User
+        Post("sign-in");
+        Group<UserAuthGroup>();
+    }
+
+    public override async Task<Results<Ok<SuccessfulSignInResponse>, BadRequest<SignInResult>>> ExecuteAsync(SignInRequest req, CancellationToken ct)
+    {
+        var user = new User
         {
             Email = req.Email,
-            UserName = req.Email
+            UserName = req.Email 
         };
 
-        var tryCreateUser = await userManager.CreateAsync(newUser, req.Password);
-
-        if (!tryCreateUser.Succeeded)
+        if (await signInManager.UserManager.CheckPasswordAsync(user, req.Password))
         {
-            return TypedResults.BadRequest(tryCreateUser.Errors);
+            return TypedResults.BadRequest(SignInResult.Failed);
         }
 
-        return TypedResults.Ok(new SignUpValidResponse
-        {
-            Email = req.Email
-        });
+        user = await signInManager.UserManager.FindByEmailAsync(req.Email);
+
+        var signInResult = await signInManager.CheckPasswordSignInAsync(user, req.Password, false);
+
+        return signInResult.Succeeded 
+            ? TypedResults.Ok(new SuccessfulSignInResponse { Email = req.Email }) 
+            : TypedResults.BadRequest(signInResult);
     }
+
+
+
 }

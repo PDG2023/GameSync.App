@@ -26,6 +26,6 @@ public class MockMailService : IAuthMailService
             Mails[toEmail] = mailConfirmationToken;
         }
         
-        return Task.FromResult(_shouldFail);
+        return Task.FromResult(!_shouldFail);
     }
 }

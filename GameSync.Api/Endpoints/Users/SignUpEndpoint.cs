@@ -2,6 +2,7 @@
 using GameSync.Business.Auth;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using System.Net;
 
 namespace GameSync.Api.Endpoints.Users;
 
@@ -16,7 +17,7 @@ public class SuccessfulSignUpResponse
     public required string Email { get; set; }
 }
 
-public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequest<IEnumerable<IdentityError>>, Ok<SuccessfulSignUpResponse>>>
+public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequest<IEnumerable<IdentityError>>, StatusCodeHttpResult, Ok<SuccessfulSignUpResponse>>>
 {
     private readonly UserManager<User> userManager;
     private readonly IAuthMailService authMailService;
@@ -34,7 +35,7 @@ public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequest<IEnumer
         Group<UsersGroup>();
     }
 
-    public override async Task<Results<BadRequest<IEnumerable<IdentityError>>, Ok<SuccessfulSignUpResponse>>> ExecuteAsync(SignUpRequest req, CancellationToken ct)
+    public override async Task<Results<BadRequest<IEnumerable<IdentityError>>, StatusCodeHttpResult, Ok<SuccessfulSignUpResponse>>> ExecuteAsync(SignUpRequest req, CancellationToken ct)
     {
         var newUser = new User
         {
@@ -50,11 +51,19 @@ public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequest<IEnumer
         }
 
         var mailToken = await userManager.GenerateEmailConfirmationTokenAsync(newUser);
-        await authMailService.SendEmailConfirmationAsync(newUser.Email, mailToken);
+        if (!await authMailService.SendEmailConfirmationAsync(newUser.Email, mailToken))
+        {
+            // delete the newly created user
+            await userManager.DeleteAsync(newUser);
+
+            // Send an error
+            return TypedResults.StatusCode((int)HttpStatusCode.ServiceUnavailable);
+        }
 
         return TypedResults.Ok(new SuccessfulSignUpResponse
         {
             Email = req.Email
         });
     }
+
 }

@@ -19,6 +19,7 @@ public class SignUpTests
         _factory = integrationTestFactory;
     }
 
+
     [Fact]
     public async Task SecurePassword_ProduceNoError()
     {

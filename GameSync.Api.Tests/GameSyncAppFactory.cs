@@ -11,6 +11,9 @@ using Xunit;
 
 namespace GameSync.Api.Tests;
 
+[CollectionDefinition("FullApp")]
+public class GameSyncAppFactoryFixture : ICollectionFixture<GameSyncAppFactory> { }
+
 public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
 

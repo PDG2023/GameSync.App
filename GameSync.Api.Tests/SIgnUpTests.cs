@@ -8,7 +8,9 @@ using Xunit.Abstractions;
 
 namespace GameSync.Api.Tests;
 
-public class SignUpTests : IClassFixture<GameSyncAppFactory>
+
+[Collection("FullApp")]
+public class SignUpTests
 {
     private readonly GameSyncAppFactory _factory;
 

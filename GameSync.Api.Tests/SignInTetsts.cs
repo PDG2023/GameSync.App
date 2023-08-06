@@ -13,11 +13,9 @@ using Xunit.Abstractions;
 
 namespace GameSync.Api.Tests;
 
-public class SignInTests : IClassFixture<GameSyncAppFactory>
+[Collection("FullApp")]
+public class SignInTests
 {
-    private const string _password = "$UX#%A!qaphEL2";
-    private readonly SignInRequest _signInRequest;
-    private readonly User _user;
     private readonly GameSyncAppFactory _factory;
     private readonly ITestOutputHelper output;
     private readonly HttpClient _client;
@@ -27,33 +25,50 @@ public class SignInTests : IClassFixture<GameSyncAppFactory>
         _factory = integrationTestFactory;
         this.output = output;
         _client = _factory.CreateClient();
+    }
 
-        _signInRequest = new()
-        {
-            Email = new Internet().Email(),
-            Password = _password
-        };
+    [Theory]
+    [InlineData("non-existing-mail@gmail.com", "")]
+    public async Task LogIn_with_false_credentials_is_not_successful(string mail, string password)
+    {
+        // arrange
+        var request = new SignInRequest { Email = mail, Password = password };
 
-        _user = new()
-        {
-            Email = _signInRequest.Email,
-            UserName = _signInRequest.Email
-        };
+        // act
+        var (response, result) = await _client.POSTAsync<SignInEndpoint, SignInRequest, SignInResult>(request);
+
+        // assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.False(result.Succeeded);
     }
 
     [Fact]
     public async Task LogIn_with_correct_credentials_is_successful_and_produce_correct_jwt()
     {
         // arrange : create an account and validate it directly
+        const string password = "$UX#%A!qaphEL2";
+        var mail = new Internet().Email();
+        var user = new User
+        {
+            Email = mail,
+            UserName = mail
+        };
+
         using var scope = _factory.Services.CreateScope();
         var userManager = scope.Resolve<UserManager<User>>();
-        await userManager.CreateAsync(_user, _password);
-        var confirmationToken = await userManager.GenerateEmailConfirmationTokenAsync(_user);
-        await userManager.ConfirmEmailAsync(_user, confirmationToken);
+        await userManager.CreateAsync(user, password);
+        var confirmationToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
+        await userManager.ConfirmEmailAsync(user, confirmationToken);
         var configuration = _factory.Services.GetRequiredService<IConfiguration>();
-        
+
+        var signInRequest = new SignInRequest
+        {
+            Email = mail,
+            Password = "$UX#%A!qaphEL2"
+        };
+
         // act
-        var (response, result) = await _client.POSTAsync<SignInEndpoint, SignInRequest, SuccessfulSignInResponse>(_signInRequest);
+        var (response, result) = await _client.POSTAsync<SignInEndpoint, SignInRequest, SuccessfulSignInResponse>(signInRequest);
 
         // assert
         try
@@ -67,7 +82,7 @@ public class SignInTests : IClassFixture<GameSyncAppFactory>
         }
 
         Assert.NotNull(result);
-        Assert.Equal(result.Email, _user.Email);
+        Assert.Equal(result.Email, user.Email);
 
         // In some cases, asp.net co+e add cookies in the header. We assert it isn't the case
         Assert.False(response.Headers.TryGetValues("Cookie", out _));
@@ -81,7 +96,7 @@ public class SignInTests : IClassFixture<GameSyncAppFactory>
         meResponse.EnsureSuccessStatusCode();
 
         // clean
-        await userManager.DeleteAsync(_user);
+        await userManager.DeleteAsync(user);
     }
 
 

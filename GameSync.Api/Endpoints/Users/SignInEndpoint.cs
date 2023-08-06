@@ -42,6 +42,12 @@ public class SignInEndpoint : Endpoint<SignInRequest, Results<Ok<SuccessfulSignI
     {
         
         var user = await signInManager.UserManager.FindByEmailAsync(req.Email);
+
+        if (user is null)
+        {
+            return TypedResults.BadRequest(SignInResult.Failed);
+        }
+
         var signInResult = await signInManager.CheckPasswordSignInAsync(user, req.Password, false);
 
         if (!signInResult.Succeeded)

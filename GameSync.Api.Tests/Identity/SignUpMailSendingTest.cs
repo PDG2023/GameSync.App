@@ -23,12 +23,32 @@ public class SignUpMailSendingTest
         _factory = factory;
     }
 
+    [Fact]
+    public async Task Disabled_mail_service_should_produce_errors()
+    {
+        // arrange
+        var mockService = new MockMailService(true);
+        using var scope = _factory.Services.CreateScope();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+        var endpoint = new SignUpEndpoint(userManager, mockService);
+
+        // act
+        var response = await endpoint.ExecuteAsync(TestRequest, CancellationToken.None);
+
+        var result = (response.Result as BadRequest<ProblemDetails>)?.Value;
+
+        // assert
+        Assert.NotNull(result);
+        var errorCode = Assert.Single(result.Errors).Code;
+        Assert.Equal("MailNotSend", errorCode);
+
+    }
 
     [Fact]
     public async Task Creating_new_correct_account_should_send_mail()
     {
         // arrange
-        var mockService = new MockMailService();
+        var mockService = new MockMailService(false);
 
         using var scope = _factory.Services.CreateScope();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();

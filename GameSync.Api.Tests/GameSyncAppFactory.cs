@@ -56,7 +56,7 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
     private void SetupMockMailService(IServiceCollection services)
     {
         services.RemoveService<IAuthMailService>();
-        services.AddSingleton<IAuthMailService>(new MockMailService());
+        services.AddSingleton<IAuthMailService>(new MockMailService(false));
     }
 
     private static void SetupFakeConfiguration(IServiceCollection services)

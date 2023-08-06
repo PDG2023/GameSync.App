@@ -5,6 +5,14 @@ networks:
         driver: bridge
 
 services:
+
+    mail:
+        image: maildev/maildev
+        restart: always
+        container_name: mail
+        ports: 
+            - "1080:1080"
+            - "1025:1025"
     db:
         image: postgres:alpine
         restart: always

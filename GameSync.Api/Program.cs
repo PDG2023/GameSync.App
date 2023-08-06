@@ -65,6 +65,7 @@ builder.Services.AddCors();
 
 builder.Services.AddSingleton<IGameSearcher, BoardGameGeekClient>();
 builder.Services.AddSingleton<IAuthMailService, SmtpAuthMailService>();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.Configure<JsonOptions>(o =>
 {

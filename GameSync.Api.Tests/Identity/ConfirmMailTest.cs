@@ -29,7 +29,7 @@ public class ConfirmMailTest
         var request = new ConfirmRequest { Email = "starfoullah waters", ConfirmationToken = fakeToken };
 
         // act
-        var (response, result) = await _client.POSTAsync<ConfirmEndpoint, ConfirmRequest, EmptyResponse>(request);
+        var (response, result) = await _client.GETAsync<ConfirmEndpoint, ConfirmRequest, EmptyResponse>(request);
         
         // assert
 
@@ -63,7 +63,7 @@ public class ConfirmMailTest
         var request = new ConfirmRequest { ConfirmationToken = token, Email = mail };
 
         // act
-        var (response, result) = await _client.POSTAsync<ConfirmEndpoint, ConfirmRequest, EmptyResponse>(request); // confirm the mail
+        var (response, result) = await _client.GETAsync<ConfirmEndpoint, ConfirmRequest, EmptyResponse>(request); // confirm the mail
 
         // asert
         response.EnsureSuccessStatusCode();

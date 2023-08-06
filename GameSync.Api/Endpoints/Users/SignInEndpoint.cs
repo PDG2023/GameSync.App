@@ -1,4 +1,5 @@
-﻿using GameSync.Api.Persistence.Entities;
+﻿using FluentValidation.Results;
+using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -23,7 +24,7 @@ public class SuccessfulSignInResponse
     public required string Token { get; init; }
 }
 
-public class SignInEndpoint : Endpoint<SignInRequest, Results<Ok<SuccessfulSignInResponse>,  ProblemDetails>>
+public class SignInEndpoint : Endpoint<SignInRequest, Results<Ok<SuccessfulSignInResponse>,  BadRequestWhateverError>>
 {
     private readonly SignInManager<User> signInManager;
     private readonly IConfiguration config;
@@ -41,15 +42,14 @@ public class SignInEndpoint : Endpoint<SignInRequest, Results<Ok<SuccessfulSignI
         Group<UsersGroup>();
     }
 
-    public override async Task<Results<Ok<SuccessfulSignInResponse>, ProblemDetails>> ExecuteAsync(SignInRequest req, CancellationToken ct)
+    public override async Task<Results<Ok<SuccessfulSignInResponse>, BadRequestWhateverError>> ExecuteAsync(SignInRequest req, CancellationToken ct)
     {
         
         var user = await signInManager.UserManager.FindByEmailAsync(req.Email);
-
         if (user is null)
         {
             AddNotFoundCredentialsErrors();
-            return new ProblemDetails(ValidationFailures);
+            return new BadRequestWhateverError(ValidationFailures);
         }
 
         var signInResult = await signInManager.CheckPasswordSignInAsync(user, req.Password, false);
@@ -64,8 +64,7 @@ public class SignInEndpoint : Endpoint<SignInRequest, Results<Ok<SuccessfulSignI
             {
                 AddNotFoundCredentialsErrors();
             }
-
-            return new ProblemDetails(ValidationFailures);
+            return new BadRequestWhateverError(ValidationFailures);
         }
 
 

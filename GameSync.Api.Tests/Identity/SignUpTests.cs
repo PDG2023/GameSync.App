@@ -1,8 +1,11 @@
 ﻿using Bogus.DataSets;
+using FastEndpoints;
 using GameSync.Api.Endpoints.Users;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using Org.BouncyCastle.Ocsp;
 using System.Net;
 using System.Net.Http.Json;
 using Xunit;
@@ -14,10 +17,12 @@ namespace GameSync.Api.Tests.Identity;
 public class SignUpTests
 {
     private readonly GameSyncAppFactory _factory;
+    private readonly HttpClient _client;
 
     public SignUpTests(GameSyncAppFactory integrationTestFactory)
     {
         _factory = integrationTestFactory;
+        _client = _factory.CreateClient();
     }
 
 
@@ -28,14 +33,12 @@ public class SignUpTests
         var testRequest = GetNewAccountRequest("$UX#%A!qaphEL2");
 
         // act
-        var response = await SendAccountCreationRequest(testRequest);
+        var (response, result) = await _client.POSTAsync<SignUpEndpoint, SignUpRequest, SuccessfulSignUpResponse>(testRequest);
 
         // assert
         response.EnsureSuccessStatusCode();
-        var payload = await response.Content.ReadFromJsonAsync<SuccessfulSignUpResponse>();
-        Assert.NotNull(payload);
-        Assert.Equal(testRequest.Email, payload.Email);
-
+        Assert.NotNull(result);
+        Assert.Equal(testRequest.Email, result.Email);
     }
 
     [Fact]
@@ -45,7 +48,7 @@ public class SignUpTests
         var newAccountRequest = GetNewAccountRequest("Ws%uf^n7iB9nK#e&b");
 
         // act
-        var response = await SendAccountCreationRequest(newAccountRequest);
+        var (response, result) = await _client.POSTAsync<SignUpEndpoint, SignUpRequest, BadRequestWhateverError>(newAccountRequest);
 
         // assert
         response.EnsureSuccessStatusCode();
@@ -67,10 +70,10 @@ public class SignUpTests
         var testRequest = GetNewAccountRequest(password);
 
         // act
-        var response = await SendAccountCreationRequest(testRequest);
+        var testResult = await _client.POSTAsync<SignUpEndpoint, SignUpRequest, BadRequestWhateverError>(testRequest);
 
         // assert
-        await AssertProduceError(expectedError, response);
+        await AssertProduceError(expectedError, testResult);
     }
 
 
@@ -80,9 +83,9 @@ public class SignUpTests
     {
         var badlyFormMail = new SignUpRequest { Email = "ab", Password = "$UX#%A!qaphEL2a23" };
 
-        var response = await SendAccountCreationRequest(badlyFormMail);
+        var testResult = await _client.POSTAsync<SignUpEndpoint, SignUpRequest, BadRequestWhateverError>(badlyFormMail);
 
-        await AssertProduceError("InvalidEmail", response);
+        await AssertProduceError("InvalidEmail", testResult);
     }
 
 
@@ -92,20 +95,16 @@ public class SignUpTests
         Password = password
     };
 
-    private async Task<HttpResponseMessage> SendAccountCreationRequest(SignUpRequest req)
+    private async Task AssertProduceError(string errorCode, TestResult<BadRequestWhateverError>? testResult)
     {
-        var client = _factory.CreateClient();
-        return await client.PostAsJsonAsync("/api/users/sign-up", req);
-    }
+        Assert.NotNull(testResult);
 
-    private async Task AssertProduceError(string errorCode, HttpResponseMessage response)
-    {
+        var (response, result) = testResult;
+
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var typedResponse = await response.Content.ReadFromJsonAsync<IEnumerable<IdentityError>>();
-        Assert.NotNull(typedResponse);
-        var error = Assert.Single(typedResponse);
+        Assert.NotNull(result);
+
+        var error = Assert.Single(result.Errors);
         Assert.Equal(errorCode, error.Code);
     }
-
-
 }

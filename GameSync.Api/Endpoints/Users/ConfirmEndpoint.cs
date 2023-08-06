@@ -14,13 +14,8 @@ public class ConfirmRequest
     public required string Email { get; init; }
 }
 
-public class ConfirmResult
-{
 
-
-}
-
-public class ConfirmEndpoint : Endpoint<ConfirmRequest, Results<NotFound, NoContent, BadRequest<IEnumerable<IdentityError>>>>
+public class ConfirmEndpoint : Endpoint<ConfirmRequest, Results<NotFound, NoContent, BadRequestWhateverError>>
 {
     private readonly UserManager<User> userManager;
 
@@ -36,7 +31,7 @@ public class ConfirmEndpoint : Endpoint<ConfirmRequest, Results<NotFound, NoCont
         this.userManager = userManager;
     }
 
-    public override async Task<Results<NotFound, NoContent, BadRequest<IEnumerable<IdentityError>>>> ExecuteAsync(ConfirmRequest req, CancellationToken ct)
+    public override async Task<Results<NotFound, NoContent, BadRequestWhateverError>> ExecuteAsync(ConfirmRequest req, CancellationToken ct)
     {
         var user = await userManager.FindByEmailAsync(req.Email);
 
@@ -49,7 +44,7 @@ public class ConfirmEndpoint : Endpoint<ConfirmRequest, Results<NotFound, NoCont
 
         if (!identityResult.Succeeded)
         {
-            return TypedResults.BadRequest(identityResult.Errors);
+            return new BadRequestWhateverError(identityResult.Errors);
         }
 
         return TypedResults.NoContent();

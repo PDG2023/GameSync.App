@@ -11,12 +11,12 @@ public class SignUpRequest
     public required string Password { get; set; }
 }
 
-public class SucessfulSignUpResponse
+public class SuccessfulSignUpResponse
 {
     public required string Email { get; set; }
 }
 
-public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequest<IEnumerable<IdentityError>>, Ok<SucessfulSignUpResponse>>>
+public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequest<IEnumerable<IdentityError>>, Ok<SuccessfulSignUpResponse>>>
 {
     private readonly UserManager<User> userManager;
     private readonly IAuthMailService authMailService;
@@ -34,7 +34,7 @@ public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequest<IEnumer
         Group<UsersGroup>();
     }
 
-    public override async Task<Results<BadRequest<IEnumerable<IdentityError>>, Ok<SucessfulSignUpResponse>>> ExecuteAsync(SignUpRequest req, CancellationToken ct)
+    public override async Task<Results<BadRequest<IEnumerable<IdentityError>>, Ok<SuccessfulSignUpResponse>>> ExecuteAsync(SignUpRequest req, CancellationToken ct)
     {
         var newUser = new User
         {
@@ -51,7 +51,7 @@ public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequest<IEnumer
 
 
 
-        return TypedResults.Ok(new SucessfulSignUpResponse
+        return TypedResults.Ok(new SuccessfulSignUpResponse
         {
             Email = req.Email
         });

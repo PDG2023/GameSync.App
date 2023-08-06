@@ -3,6 +3,7 @@ using GameSync.Api.Endpoints.Users;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Business.Auth;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -51,7 +52,8 @@ public class SignUpMailSendingTest
 
         // act
         var response = await endpoint.ExecuteAsync(request, CancellationToken.None);
-        var result = (SucessfulSignUpResponse)response.Result;
+        var status = (Ok<SuccessfulSignUpResponse>)response.Result;
+        var result = status.Value;
 
         // assert
         var addedMail = Assert.Single(mockService._mailStore).Value;

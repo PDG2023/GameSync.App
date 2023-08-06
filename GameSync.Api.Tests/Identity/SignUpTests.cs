@@ -33,7 +33,7 @@ public class SignUpTests
         var response = await SendAccountCreationRequest(testRequest);
 
         // assert
-        var payload = await response.Content.ReadFromJsonAsync<SucessfulSignUpResponse>();
+        var payload = await response.Content.ReadFromJsonAsync<SuccessfulSignUpResponse>();
         Assert.NotNull(payload);
         Assert.Equal(testRequest.Email, payload.Email);
 

@@ -6,7 +6,7 @@ using System.Net.Http.Json;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GameSync.Api.Tests;
+namespace GameSync.Api.Tests.Identity;
 
 
 [Collection("FullApp")]
@@ -27,7 +27,7 @@ public class SignUpTests
 
         // act
         var response = await TryCreateAccount(testRequest);
-        
+
         // assert
         var payload = await response.Content.ReadFromJsonAsync<SucessfulSignUpResponse>();
         Assert.NotNull(payload);

@@ -4,6 +4,7 @@ global using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
+using GameSync.Business.Auth;
 using GameSync.Business.BoardGamesGeek;
 using GameSync.Business.Features.Search;
 using Microsoft.AspNetCore.Http.Json;
@@ -63,6 +64,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddCors();
 
 builder.Services.AddSingleton<IGameSearcher, BoardGameGeekClient>();
+builder.Services.AddSingleton<IAuthMailService, SmtpAuthMailService>();
 
 builder.Services.Configure<JsonOptions>(o =>
 {

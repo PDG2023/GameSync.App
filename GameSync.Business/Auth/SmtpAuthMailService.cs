@@ -28,7 +28,7 @@ namespace GameSync.Business.Auth
             var client = new SmtpClient(_config["Host"], int.Parse(_config["Port"]));
             try
             {
-                await client.SendMailAsync(_config["From"], toEmail, "Validate your token", $"""<a href="{url}">Click here to validate</a>""");
+                await client.SendMailAsync(_config["From"], toEmail, "Validate your token", url);
             }
             catch (Exception e) 
             {

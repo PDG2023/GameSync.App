@@ -43,34 +43,16 @@ public class ConfirmMailTest
         // assert
         try
         {
-            Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(System.Net.HttpStatusCode.NoContent, response.StatusCode);
         }
         catch (Exception ex)
         {
             _output.WriteLine(await response.Content.ReadAsStringAsync());
+            _output.WriteLine(token);
             throw;
         }
         await EnsureMailConfirmed(mail);
 
-    }
-
-
-    [Fact]
-    public async Task Confirm_existing_account_with_valid_token_enables_signin()
-    {
-        // arrange 
-        var mail = new Internet().Email();
-
-        string token = await CreateUserAndGetToken(mail);
-
-        var request = new ConfirmRequest { ConfirmationToken = token, Email = mail };
-
-        // act
-        var (response, result) = await _client.GETAsync<ConfirmEndpoint, ConfirmRequest, EmptyResponse>(request); // confirm the mail
-
-        // asert
-        response.EnsureSuccessStatusCode();
-        await EnsureMailConfirmed(mail);
     }
 
     private async Task EnsureMailConfirmed(string mail)

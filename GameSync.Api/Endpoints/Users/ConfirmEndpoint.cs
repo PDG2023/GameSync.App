@@ -1,6 +1,8 @@
 ﻿using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
 
 namespace GameSync.Api.Endpoints.Users;
 
@@ -40,7 +42,9 @@ public class ConfirmEndpoint : Endpoint<ConfirmRequest, Results<NotFound, NoCont
             return TypedResults.NotFound();
         }
 
-        var identityResult = await userManager.ConfirmEmailAsync(user, req.ConfirmationToken);
+        var decoded = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(req.ConfirmationToken));
+
+        var identityResult = await userManager.ConfirmEmailAsync(user, decoded);
 
         if (!identityResult.Succeeded)
         {

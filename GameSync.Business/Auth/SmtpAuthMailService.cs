@@ -10,18 +10,20 @@ namespace GameSync.Business.Auth
         private readonly IConfigurationSection _config;
         private readonly ILogger<SmtpAuthMailService> _logger;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly ConfirmationMailLinkProvider provider;
 
-        public SmtpAuthMailService(IConfiguration config, ILogger<SmtpAuthMailService> logger, IHttpContextAccessor httpContextAccessor)
+        public SmtpAuthMailService(IConfiguration config, ILogger<SmtpAuthMailService> logger, IHttpContextAccessor httpContextAccessor, ConfirmationMailLinkProvider provider)
         {
             this._config = config.GetSection("Smtp");
             this._logger = logger;
             this.httpContextAccessor = httpContextAccessor;
+            this.provider = provider;
         }
 
         public async Task<bool> SendEmailConfirmationAsync(string toEmail, string mailConfirmationToken)
         {
             var currentRequest = httpContextAccessor.HttpContext.Request;
-            var url = $"{currentRequest.Scheme}://{currentRequest.Host}/api/users/confirm?token={mailConfirmationToken}&email={toEmail}";
+            var url = provider.GetConfirmationMailLink(toEmail, mailConfirmationToken, currentRequest.Scheme, currentRequest.Host.ToString());
 
             var client = new SmtpClient(_config["Host"], int.Parse(_config["Port"]));
             try

@@ -1,3 +1,5 @@
+
+
 global using FastEndpoints;
 global using FastEndpoints.Security;
 
@@ -65,6 +67,7 @@ builder.Services.AddCors();
 
 builder.Services.AddSingleton<IGameSearcher, BoardGameGeekClient>();
 builder.Services.AddSingleton<IAuthMailService, SmtpAuthMailService>();
+builder.Services.AddSingleton<ConfirmationMailLinkProvider>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.Configure<JsonOptions>(o =>

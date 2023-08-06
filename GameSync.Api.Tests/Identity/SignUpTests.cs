@@ -24,7 +24,7 @@ public class SignUpTests
 
 
     [Fact]
-    public async Task SecurePassword_ProduceNoError()
+    public async Task Secure_password_produces_no_error()
     {
         // arrange
         var testRequest = GetNewAccountRequest("$UX#%A!qaphEL2");
@@ -33,6 +33,7 @@ public class SignUpTests
         var response = await SendAccountCreationRequest(testRequest);
 
         // assert
+        response.EnsureSuccessStatusCode();
         var payload = await response.Content.ReadFromJsonAsync<SuccessfulSignUpResponse>();
         Assert.NotNull(payload);
         Assert.Equal(testRequest.Email, payload.Email);
@@ -49,6 +50,7 @@ public class SignUpTests
         var response = await SendAccountCreationRequest(newAccountRequest);
 
         // assert
+        response.EnsureSuccessStatusCode();
         using var scope = _factory.Services.CreateScope();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
         var user = await userManager.FindByEmailAsync(newAccountRequest.Email);

@@ -16,17 +16,6 @@ namespace GameSync.Api.Tests.Identity;
 public class SignUpMailSendingTest
 {
 
-    private class MockMailService : IAuthMailService
-    {
-        public Dictionary<string, string> Mails { get; private set; } = new Dictionary<string, string>();
-
-        public Task<bool> SendEmailConfirmationAsync(string toEmail, string mailConfirmationToken)
-        {
-            Mails[toEmail] = mailConfirmationToken;
-            return Task.FromResult(true);
-        }
-    }
-
     private readonly GameSyncAppFactory _factory;
 
     public SignUpMailSendingTest(GameSyncAppFactory factory)
@@ -40,25 +29,26 @@ public class SignUpMailSendingTest
     {
         // arrange
         var mockService = new MockMailService();
-        var request = new SignUpRequest
-        {
-            Email = new Bogus.DataSets.Internet().Email(),
-            Password = "%7#FMe*ArfFLWb4h2"
-        };
 
         using var scope = _factory.Services.CreateScope();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
         var endpoint = new SignUpEndpoint(userManager, mockService);
 
         // act
-        var response = await endpoint.ExecuteAsync(request, CancellationToken.None);
+        var response = await endpoint.ExecuteAsync(TestRequest, CancellationToken.None);
         var status = (Ok<SuccessfulSignUpResponse>)response.Result;
         var result = status.Value;
 
         // assert
         var addedMail = Assert.Single(mockService.Mails).Key;
-        Assert.Equal(request.Email, addedMail);
+        Assert.Equal(TestRequest.Email, addedMail);
     }
+
+    private static SignUpRequest TestRequest { get; } =  new()
+    {
+        Email = new Bogus.DataSets.Internet().Email(),
+        Password = "%7#FMe*ArfFLWb4h2"
+    };
 
 }
 

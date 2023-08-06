@@ -1,5 +1,7 @@
 ﻿using FakeItEasy;
 using GameSync.Api.Persistence;
+using GameSync.Api.Tests.Identity;
+using GameSync.Business.Auth;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -47,7 +49,14 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
             AddContextWithTempContainerAsSource(services);
             EnsureSchemaCreated(services);
             SetupFakeConfiguration(services);
+            SetupMockMailService(services);
         });
+    }
+
+    private void SetupMockMailService(IServiceCollection services)
+    {
+        services.RemoveService<IAuthMailService>();
+        services.AddSingleton<IAuthMailService>(new MockMailService());
     }
 
     private static void SetupFakeConfiguration(IServiceCollection services)

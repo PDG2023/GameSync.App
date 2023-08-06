@@ -1,8 +1,11 @@
 ﻿using Bogus.DataSets;
 using GameSync.Api.Endpoints.Users;
+using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Net.Http.Json;
+using System.Security.Cryptography.X509Certificates;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -24,10 +27,10 @@ public class SignUpTests
     public async Task SecurePassword_ProduceNoError()
     {
         // arrange
-        var testRequest = GetTestRequest("$UX#%A!qaphEL2");
+        var testRequest = GetNewAccountRequest("$UX#%A!qaphEL2");
 
         // act
-        var response = await TryCreateAccount(testRequest);
+        var response = await SendAccountCreationRequest(testRequest);
 
         // assert
         var payload = await response.Content.ReadFromJsonAsync<SucessfulSignUpResponse>();
@@ -36,42 +39,60 @@ public class SignUpTests
 
     }
 
+    [Fact]
+    public async Task Newly_created_account_is_not_confirmed()
+    {
+        // arrange
+        var newAccountRequest = GetNewAccountRequest("Ws%uf^n7iB9nK#e&b");
+
+        // act
+        var response = await SendAccountCreationRequest(newAccountRequest);
+
+        // assert
+        using var scope = _factory.Services.CreateScope();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+        var user = await userManager.FindByEmailAsync(newAccountRequest.Email);
+        Assert.False(await userManager.IsEmailConfirmedAsync(user));
+
+    }
 
     [Theory]
     [InlineData("asfWJIj1421", "PasswordRequiresNonAlphanumeric")]
     [InlineData("$1241245ds125", "PasswordRequiresUpper")]
     [InlineData("$XaBaBweqgRw", "PasswordRequiresDigit")]
     [InlineData("$X3%A!q", "PasswordTooShort")]
-    public async Task BadlyFormedPassword(string password, string expectedError)
+    public async Task Badly_formed_password_produces_an_error(string password, string expectedError)
     {
         // arrange
-        var testRequest = GetTestRequest(password);
+        var testRequest = GetNewAccountRequest(password);
 
         // act
-        var response = await TryCreateAccount(testRequest);
+        var response = await SendAccountCreationRequest(testRequest);
 
         // assert
         await AssertProduceError(expectedError, response);
     }
 
+
+
     [Fact]
-    public async Task BadlyFormedMail()
+    public async Task Badly_formed_mail_produces_an_error()
     {
         var badlyFormMail = new SignUpRequest { Email = "ab", Password = "$UX#%A!qaphEL2a23" };
 
-        var response = await TryCreateAccount(badlyFormMail);
+        var response = await SendAccountCreationRequest(badlyFormMail);
 
         await AssertProduceError("InvalidEmail", response);
     }
 
 
-    private static SignUpRequest GetTestRequest(string password) => new SignUpRequest
+    private static SignUpRequest GetNewAccountRequest(string password) => new()
     {
         Email = new Internet().Email(),
         Password = password
     };
 
-    private async Task<HttpResponseMessage> TryCreateAccount(SignUpRequest req)
+    private async Task<HttpResponseMessage> SendAccountCreationRequest(SignUpRequest req)
     {
         var client = _factory.CreateClient();
         return await client.PostAsJsonAsync("/api/users/sign-up", req);

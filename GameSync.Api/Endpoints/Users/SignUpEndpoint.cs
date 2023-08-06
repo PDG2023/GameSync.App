@@ -49,7 +49,8 @@ public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequest<IEnumer
             return TypedResults.BadRequest(tryCreateUser.Errors);
         }
 
-
+        var mailToken = await userManager.GenerateEmailConfirmationTokenAsync(newUser);
+        await authMailService.SendEmailConfirmationAsync(newUser.Email, mailToken);
 
         return TypedResults.Ok(new SuccessfulSignUpResponse
         {

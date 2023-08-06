@@ -2,5 +2,5 @@
 
 public interface IAuthMailService
 {
-    Task<bool> SendEmailConfirmation(string toEmail, string mailConfirmationToken);
+    Task<bool> SendEmailConfirmationAsync(string toEmail, string mailConfirmationToken);
 }

@@ -2,7 +2,7 @@
 {
     public class SmtpAuthMailService : IAuthMailService
     {
-        public Task<bool> SendEmailConfirmation(string toEmail, string mailConfirmationToken)
+        public Task<bool> SendEmailConfirmationAsync(string toEmail, string mailConfirmationToken)
         {
             throw new NotImplementedException();
         }

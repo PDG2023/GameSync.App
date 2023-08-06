@@ -18,11 +18,11 @@ public class SignUpMailSendingTest
 
     private class MockMailService : IAuthMailService
     {
-        public readonly Dictionary<string, string> _mailStore = new();
+        public Dictionary<string, string> Mails { get; private set; } = new Dictionary<string, string>();
 
-        public Task<bool> SendEmailConfirmation(string toEmail, string mailConfirmationToken)
+        public Task<bool> SendEmailConfirmationAsync(string toEmail, string mailConfirmationToken)
         {
-            _mailStore[toEmail] = mailConfirmationToken;
+            Mails[toEmail] = mailConfirmationToken;
             return Task.FromResult(true);
         }
     }
@@ -56,7 +56,7 @@ public class SignUpMailSendingTest
         var result = status.Value;
 
         // assert
-        var addedMail = Assert.Single(mockService._mailStore).Value;
+        var addedMail = Assert.Single(mockService.Mails).Key;
         Assert.Equal(request.Email, addedMail);
     }
 

@@ -1,9 +1,11 @@
 ﻿using Bogus.DataSets;
-using FakeItEasy;
 using FastEndpoints;
 using GameSync.Api.Endpoints.Users;
 using GameSync.Api.Persistence.Entities;
+using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using Xunit;
@@ -35,22 +37,21 @@ public class SignInTests : IClassFixture<GameSyncAppFactory>
         _user = new()
         {
             Email = _signInRequest.Email,
-            UserName = _signInRequest.Email,
-            EmailConfirmed = true,
-            PhoneNumberConfirmed = true
+            UserName = _signInRequest.Email
         };
     }
 
     [Fact]
     public async Task LogIn_with_correct_credentials_is_successful_and_produce_correct_jwt()
     {
-        // arrange 
+        // arrange : create an account and validate it directly
         using var scope = _factory.Services.CreateScope();
         var userManager = scope.Resolve<UserManager<User>>();
         await userManager.CreateAsync(_user, _password);
-        var confirmationTokn = await userManager.GenerateEmailConfirmationTokenAsync(_user);
-        var d = await userManager.ConfirmEmailAsync(_user, confirmationTokn);
-
+        var confirmationToken = await userManager.GenerateEmailConfirmationTokenAsync(_user);
+        await userManager.ConfirmEmailAsync(_user, confirmationToken);
+        var configuration = _factory.Services.GetRequiredService<IConfiguration>();
+        
         // act
         var (response, result) = await _client.POSTAsync<SignInEndpoint, SignInRequest, SuccessfulSignInResponse>(_signInRequest);
 
@@ -66,20 +67,23 @@ public class SignInTests : IClassFixture<GameSyncAppFactory>
         }
 
         Assert.NotNull(result);
-        Assert.Equal(result.Email, result.Email);
+        Assert.Equal(result.Email, _user.Email);
+
+        // In some cases, asp.net co+e add cookies in the header. We assert it isn't the case
+        Assert.False(response.Headers.TryGetValues("Cookie", out _));
+
+        var token = result.Token;
+        _client.SetToken(JwtBearerDefaults.AuthenticationScheme, token);
+
+        // Try accessing an authorized endpoint
+        var (meResponse, meResult) = await _client.GETAsync<MeEndpoint, MeResult>();
+
+        meResponse.EnsureSuccessStatusCode();
 
         // clean
         await userManager.DeleteAsync(_user);
     }
 
 
-    private SignInManager<User> MockSignManager()
-    {
-        var mockSignIn = A.Fake<SignInManager<User>>();
-
-        A.CallTo(() => mockSignIn.CheckPasswordSignInAsync(_user, _password, false))
-            .Returns(Task.FromResult(SignInResult.Success));
-        return mockSignIn;
-    }
 
 }

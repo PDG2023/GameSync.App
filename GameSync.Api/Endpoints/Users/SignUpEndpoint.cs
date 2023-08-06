@@ -18,18 +18,17 @@ public class SucessfulSignUpResponse
 public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequest<IEnumerable<IdentityError>>, Ok<SucessfulSignUpResponse>>>
 {
     private readonly UserManager<User> userManager;
-    private readonly IUserValidator<User> validator;
 
-    public SignUpEndpoint(UserManager<User> userManager, IUserValidator<User> validator)
+    public SignUpEndpoint(UserManager<User> userManager)
     {
         this.userManager = userManager;
-        this.validator = validator;
     }
 
     public override void Configure()
     {
+        AllowAnonymous();
         Post("sign-up");
-        Group<UserAuthGroup>();
+        Group<UsersGroup>();
     }
 
     public override async Task<Results<BadRequest<IEnumerable<IdentityError>>, Ok<SucessfulSignUpResponse>>> ExecuteAsync(SignUpRequest req, CancellationToken ct)

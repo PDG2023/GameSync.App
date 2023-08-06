@@ -1,9 +1,4 @@
-using GameSync.Api.Persistence;
-using GameSync.Business.BoardGamesGeek;
 using GameSync.Business.Features.Search;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System.Net;
 using System.Net.Http.Json;
 using Xunit;
 

@@ -39,7 +39,25 @@ builder.Services.AddIdentityCore<User>(x =>
 
 // TODO : Change the key to a secured one
 
-builder.Services.AddJWTBearerAuth("TokenSigningKey").AddAuthentication();
+builder.Services.AddJWTBearerAuth(
+    builder.Configuration["Jwt:SignKey"], 
+    JWTBearer.TokenSigningStyle.Symmetric,
+    tokenValidation: (validationParam) =>
+    {
+        validationParam.ValidateIssuerSigningKey = true;
+        validationParam.ValidAudience = builder.Configuration["Jwt:Issuer"];
+        validationParam.ValidateAudience = true;
+
+        validationParam.ValidIssuer = builder.Configuration["Jwt:Issuer"];
+        validationParam.ValidateIssuer = true;
+        validationParam.RequireExpirationTime = true;
+        validationParam.RequireSignedTokens = true;
+
+    },
+    bearerEvents: (e) => e.OnAuthenticationFailed = (ctx) =>
+    {
+        return Task.CompletedTask;
+    });
 
 builder.Services.AddAuthorization();
 builder.Services.AddCors();

@@ -1,11 +1,11 @@
-﻿using GameSync.Api.Persistence;
+﻿using FakeItEasy;
+using GameSync.Api.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Npgsql;
-using System.Runtime.InteropServices;
 using Testcontainers.PostgreSql;
 using Xunit;
 
@@ -15,7 +15,6 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
 
     private readonly PostgreSqlContainer _postgreSqlContainer;
-    private readonly WebApplicationFactoryClientOptions _opt;
 
     public GameSyncAppFactory()
     {
@@ -26,10 +25,8 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         .WithUsername("postgres")
         .WithPassword("postgres")
         .WithCleanUp(true)
+        .WithAutoRemove(true)
         .Build();
-
-
-        _opt = new WebApplicationFactoryClientOptions();
         
     }
 
@@ -43,10 +40,22 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
         builder.ConfigureTestServices(services =>
         {
-            RemoveDbContext(services);
+            services.RemoveService<DbContextOptions<GameSyncContext>>();
             AddContextWithTempContainerAsSource(services);
             EnsureSchemaCreated(services);
+            SetupFakeConfiguration(services);
         });
+    }
+
+    private static void SetupFakeConfiguration(IServiceCollection services)
+    {
+        // Create a mock config which returns a temp password signing key for the jwt token
+        const string mockKey = "yD2%#M3meB@nB6Q$%bFbL4naAEjpHdWSQXyUexgJimSkQrc6PMppoTN%";
+        var fakeConfig = A.Fake<IConfiguration>();
+        A.CallTo(() => fakeConfig["Jwt:SignKey"]).Returns(mockKey);
+        A.CallTo(() => fakeConfig["Jwt:Issuer"]).Returns("https://localhost");
+        services.RemoveService<IConfiguration>();
+        services.AddSingleton(fakeConfig);
     }
 
     private void AddContextWithTempContainerAsSource(IServiceCollection services)
@@ -62,12 +71,6 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         var scopedServices = scope.ServiceProvider;
         var context = scopedServices.GetRequiredService<GameSyncContext>();
         context.Database.Migrate();
-    }
-
-    private static void RemoveDbContext(IServiceCollection services)
-    {
-        var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<GameSyncContext>));
-        if (descriptor != null) services.Remove(descriptor);
     }
 
 }

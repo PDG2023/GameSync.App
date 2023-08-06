@@ -9,7 +9,8 @@ using Xunit;
 namespace GameSync.Api.Tests.Identity;
 
 
-public class ConfirmMailTest : IClassFixture<GameSyncAppFactory>
+[Collection("FullApp")]
+public class ConfirmMailTest 
 {
     private readonly GameSyncAppFactory _factory;
     private readonly HttpClient _client;

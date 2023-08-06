@@ -1,4 +1,5 @@
 ﻿using GameSync.Api.Persistence.Entities;
+using GameSync.Business.Auth;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 
@@ -18,10 +19,12 @@ public class SucessfulSignUpResponse
 public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequest<IEnumerable<IdentityError>>, Ok<SucessfulSignUpResponse>>>
 {
     private readonly UserManager<User> userManager;
+    private readonly IAuthMailService authMailService;
 
-    public SignUpEndpoint(UserManager<User> userManager)
+    public SignUpEndpoint(UserManager<User> userManager, IAuthMailService authMailService)
     {
         this.userManager = userManager;
+        this.authMailService = authMailService;
     }
 
     public override void Configure()
@@ -45,6 +48,8 @@ public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequest<IEnumer
         {
             return TypedResults.BadRequest(tryCreateUser.Errors);
         }
+
+
 
         return TypedResults.Ok(new SucessfulSignUpResponse
         {

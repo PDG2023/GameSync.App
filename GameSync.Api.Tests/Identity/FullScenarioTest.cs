@@ -9,7 +9,8 @@ using Xunit;
 namespace GameSync.Api.Tests.Identity;
 
 
-public class FullScenarioTest : IClassFixture<GameSyncAppFactory>
+[Collection("FullApp")]
+public class FullScenarioTest
 {
     private readonly GameSyncAppFactory _factory;
     private readonly HttpClient _client;

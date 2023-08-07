@@ -67,7 +67,16 @@ builder.Services.AddAuthorization();
 builder.Services.AddCors();
 
 builder.Services.AddSingleton<IGameSearcher, BoardGameGeekClient>();
-builder.Services.AddSingleton<IAuthMailService, SmtpAuthMailService>();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddSingleton<IAuthMailService, AzureAuthMailService>();
+}
+else
+{
+}
+
+
 builder.Services.AddSingleton<ConfirmationMailLinkProvider>();
 builder.Services.AddHttpContextAccessor();
 

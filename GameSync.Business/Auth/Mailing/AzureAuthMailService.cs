@@ -8,7 +8,10 @@ namespace GameSync.Business.Auth.Mailing
 
         public async Task<bool> SendEmailConfirmationAsync(string toEmail, string mailConfirmationToken)
         {
-            // This code demonstrates how to send email using Azure Communication Services.
+
+            var connectionString = Environment.GetEnvironmentVariable("AZURE_MAIL_CONNECTION_STRING");
+            var sender = Environment.GetEnvironmentVariable("AZURE_MAIL_SENDER");
+
             var emailClient = new EmailClient(connectionString);
             var message = BuildEmail(sender, toEmail, mailConfirmationToken);
 

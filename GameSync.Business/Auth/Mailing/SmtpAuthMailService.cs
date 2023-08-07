@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Net.Mail;
 
-namespace GameSync.Business.Auth
+namespace GameSync.Business.Auth.Mailing
 {
     public class SmtpAuthMailService : IAuthMailService
     {
@@ -14,8 +14,8 @@ namespace GameSync.Business.Auth
 
         public SmtpAuthMailService(IConfiguration config, ILogger<SmtpAuthMailService> logger, IHttpContextAccessor httpContextAccessor, ConfirmationMailLinkProvider provider)
         {
-            this._config = config.GetSection("Smtp");
-            this._logger = logger;
+            _config = config.GetSection("Smtp");
+            _logger = logger;
             this.httpContextAccessor = httpContextAccessor;
             this.provider = provider;
         }
@@ -30,7 +30,7 @@ namespace GameSync.Business.Auth
             {
                 await client.SendMailAsync(_config["From"], toEmail, "Validate your token", url);
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 _logger.LogError(e, $"Failed to confirmation token to {toEmail}");
                 return false;

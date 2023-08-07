@@ -1,5 +1,5 @@
 ﻿using GameSync.Api.Persistence.Entities;
-using GameSync.Business.Auth;
+using GameSync.Business.Auth.Mailing;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using NJsonSchema.Validation;

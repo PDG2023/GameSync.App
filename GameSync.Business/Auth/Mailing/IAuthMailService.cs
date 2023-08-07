@@ -1,4 +1,4 @@
-﻿namespace GameSync.Business.Auth;
+﻿namespace GameSync.Business.Auth.Mailing;
 
 public interface IAuthMailService
 {

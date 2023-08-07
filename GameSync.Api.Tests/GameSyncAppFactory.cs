@@ -1,7 +1,7 @@
 ﻿using FakeItEasy;
 using GameSync.Api.Persistence;
 using GameSync.Api.Tests.Identity;
-using GameSync.Business.Auth;
+using GameSync.Business.Auth.Mailing;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;

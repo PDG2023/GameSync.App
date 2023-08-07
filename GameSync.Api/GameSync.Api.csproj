@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Communication.Email" Version="1.0.0" />
     <PackageReference Include="FastEndpoints" Version="5.15.0" />
     <PackageReference Include="FastEndpoints.Attributes" Version="5.15.0" />
     <PackageReference Include="FastEndpoints.ClientGen" Version="5.15.0" />

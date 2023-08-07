@@ -7,6 +7,7 @@ using FastEndpoints.Swagger;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Business.Auth;
+using GameSync.Business.Auth.Mailing;
 using GameSync.Business.BoardGamesGeek;
 using GameSync.Business.Features.Search;
 using Microsoft.AspNetCore.Http.Json;

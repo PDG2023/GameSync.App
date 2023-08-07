@@ -1,4 +1,4 @@
-﻿using GameSync.Business.Auth;
+﻿using GameSync.Business.Auth.Mailing;
 using System;
 using System.Collections.Generic;
 using System.Linq;

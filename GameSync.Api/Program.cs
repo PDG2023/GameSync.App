@@ -1,37 +1,100 @@
+
+
+global using FastEndpoints;
+global using FastEndpoints.Security;
+
+using FastEndpoints.Swagger;
 using GameSync.Api.Persistence;
+using GameSync.Api.Persistence.Entities;
+using GameSync.Business.Auth;
+using GameSync.Business.Auth.Mailing;
+using GameSync.Business.BoardGamesGeek;
 using GameSync.Business.Features.Search;
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddFastEndpoints();
+builder.Services.SwaggerDocument();
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<GameSyncContext>(options =>
 {
-    options.UseSqlite(builder.Configuration.GetConnectionString("Default"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default"));
 });
 
-builder.Services.AddTransient<GameStoreSearcher>();
 
+builder.Services.AddIdentityCore<User>(x =>
+    {
+        x.User.RequireUniqueEmail = true;
+        x.SignIn.RequireConfirmedEmail = true;
+        x.Password.RequiredLength = 8;
+    })
+    .AddUserManager<UserManager<User>>()
+    .AddSignInManager()
+    .AddEntityFrameworkStores<GameSyncContext>()
+    .AddDefaultTokenProviders();
+
+
+// TODO : Change the key to a secured one
+
+builder.Services.AddJWTBearerAuth(
+    builder.Configuration["Jwt:SignKey"], 
+    JWTBearer.TokenSigningStyle.Symmetric,
+    tokenValidation: (validationParam) =>
+    {
+        validationParam.ValidateIssuerSigningKey = true;
+        validationParam.ValidAudience = builder.Configuration["Jwt:Issuer"];
+        validationParam.ValidateAudience = true;
+
+        validationParam.ValidIssuer = builder.Configuration["Jwt:Issuer"];
+        validationParam.ValidateIssuer = true;
+        validationParam.RequireExpirationTime = true;
+        validationParam.RequireSignedTokens = true;
+
+    });
+
+builder.Services.AddAuthorization();
+builder.Services.AddCors();
+
+builder.Services.AddSingleton<IGameSearcher, BoardGameGeekClient>();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddSingleton<IAuthMailService, SmtpAuthMailService>();
+}
+else
+{
+    builder.Services.AddSingleton<IAuthMailService, AzureAuthMailService>();
+}
+
+
+builder.Services.AddSingleton<ConfirmationMailLinkProvider>();
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.Configure<JsonOptions>(o =>
+{
+    o.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseCors(configuration => configuration.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 }
 
-app.UsePathBase("/api");
+app.UseFastEndpoints(c => c.Endpoints.RoutePrefix = "api");
 app.UseFileServer();
-
+app.UseAuthentication();
 app.UseAuthorization();
+app.UseSwaggerGen();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -40,5 +103,6 @@ using (var scope = app.Services.CreateScope())
         .Database.Migrate();
 }
 
-app.MapControllers();
 app.Run();
+
+public partial class Program { }

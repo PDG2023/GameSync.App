@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameSync - Coming Soon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.css"
+          integrity="sha512-otONSJGv1l0LjJXcgyqi2MeKXtnthkiXAleeQjFJOKYcVD5u+mOuPb7xCnlsb74Ld+N0ONbP7KYRmW2/OWrvaA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        * {
+            --cPrimary: #008094;
+        }
+
+        h3 {
+            padding-bottom: 16px;
+            margin-top: 16px;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            margin: 0;
+            padding-top: 4rem;
+        }
+
+
+        /* Style the sections */
+        #presentation-block {
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: circle 2.1s ease;
+            width: 100%;
+            height: 100%;
+            clip-path: circle(50% at 100% 50%);
+            background-color: var(--cPrimary);
+            display: flex;
+            align-content: center;
+            align-items: center;
+            justify-content: flex-end;
+            z-index: 1;
+        }
+
+        #secondPresBlock {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            clip-path: circle(50% at 100% -50%);
+            background-color: var(--cPrimary);
+            animation: circle2 2.1s ease;
+        }
+
+
+
+        #presentation-block img {
+            float: right;
+            height: 300px;
+            animation-delay: 2s !important;
+            transform: translate(100%);
+            animation-fill-mode: forwards !important;
+            animation: popFromRight 1.4s;
+        }
+
+
+        @keyframes popFromRight {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                transform: translate(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes circle {
+            0% {
+                clip-path: circle(0% at 100% 50%);
+            }
+
+            100% {
+                clip-path: circle(50% at 100% 50%);
+            }
+        }
+
+        @keyframes circle2 {
+            0% {
+                clip-path: circle(0% at 100% -50%);
+            }
+
+            100% {
+                clip-path: circle(50% at 100% -50%);
+            }
+        }
+
+
+        #welcome-content {
+            animation: fadein 2.5s ease;
+        }
+
+        #next-level {
+            animation: fadein 2.5s;
+            animation-delay: 2s;
+            opacity: 0;
+            animation-fill-mode: forwards !important;
+        }
+
+
+        #fullpage .section:nth-child(2) {
+        }
+
+        #fullpage .section:nth-child(3) {
+        }
+
+        #fullpage .section:nth-child(4) {
+        }
+
+
+        h1 {
+            font-size: 5rem;
+        }
+
+        h2 {
+            font-size: 3rem;
+        }
+
+        h3 {
+            font-size: 2rem;
+        }
+
+        .fp-arrow.fp-prev {
+            border-color: transparent var(--cPrimary) transparent transparent;
+        }
+
+        .fp-arrow.fp-next {
+            border-color: transparent transparent transparent var(--cPrimary);
+        }
+
+
+        .fp-arrow {
+            border-color: black;
+        }
+
+        #touristes {
+            display: grid;
+            grid-template-columns: repeat(4, 15%);
+            padding-left: 12rem;
+            padding-right: 12rem;
+            justify-content: space-between;
+            text-align: center;
+        }
+
+        .touriste {
+            border-bottom: 3px solid var(--cPrimary);
+            height: 90%
+        }
+
+
+            .touriste img {
+                max-height: 100%;
+                max-width: 100%;
+            }
+
+        .slide-content {
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        @media (max-width: 800px) {
+
+            .slide-content {
+                flex-direction: column;
+                display: flex;
+            }
+        }
+
+        @media (min-width: 800px) {
+
+            .slide-content {
+                display: grid;
+                text-align: left;
+                grid-template-columns: 50% 50%;
+            }
+
+                .slide-content h2 {
+                    padding-left: 12rem;
+                }
+        }
+
+
+        .slide > * {
+            height: 100%;
+        }
+
+        * {
+            color: var(--cPrimary);
+        }
+
+        #welcome-texts, #aboutus h1 {
+            padding-top: 12rem;
+            padding-left: 12rem;
+        }
+
+        .touriste {
+            opacity: 0;
+            animation-fill-mode: forwards !important;
+        }
+
+            .touriste h3 {
+                margin-bottom: 24px;
+            }
+
+            .touriste:nth-of-type(1) {
+                animation-name: popFromRight;
+                animation-duration: 1s;
+            }
+
+            .touriste:nth-of-type(2) {
+                animation-name: popFromRight;
+                animation-duration: 1s;
+                animation-delay: 0.5s !important;
+            }
+
+            .touriste:nth-of-type(3) {
+                animation-name: popFromRight;
+                animation-duration: 1s;
+                animation-delay: 1s !important;
+            }
+
+            .touriste:nth-of-type(4) {
+                animation-name: popFromRight;
+                animation-duration: 1s;
+                animation-delay: 1.5s !important;
+            }
+
+        @keyframes fadein {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="fullpage">
+        <div class="section" id="welcome">
+            <div id="welcome-texts">
+                <h1 id="welcome-content">GameSync</h1>
+
+                <h3 id="next-level">
+                    Passez au niveau supérieur.
+                </h3>
+            </div>
+            <div id="presentation-block">
+                <img src="img/welcome.png" />
+            </div>
+        </div>
+
+        <div class="section " id="features">
+            <div id="secondPresBlock"></div>
+            <div class="slide">
+                <div class="slide-content">
+                    <h2>Organisez des soirées mémorables.</h2>
+                    <img src="img/f1.jpg" style="max-height: 100%; max-width: 60%;" />
+                </div>
+            </div>
+            <div class="slide">
+                <div class="slide-content">
+                    <h2>Ne vous encombrez plus.<br />Votez pour votre jeu favori.</h2>
+                    <img src="img/f2.png" style="max-height: 100%; max-width: 60%;" />
+                </div>
+            </div>
+            <div class="slide">
+                <div class="slide-content">
+                    <h2>Ne vous encombrez plus. <br /> Créez et organisez vos collections.</h2>
+                    <img src="img/f3.jpg" style="max-height: 100%; max-width: 60%;" />
+                </div>
+            </div>
+
+            <div class="slide">
+                <div class="slide-content" style="grid-template-columns: 100%; text-align: center;">
+                    <h2 style="padding-left: 0;">Ne vous encombrez plus. <br />Des milliers de jeux, à quelques clics.</h2>
+                </div>
+            </div>
+        </div>
+        <div class="section" id="aboutus">
+            <h1 style="margin-bottom: 32px;"> Les Maîtres de Jeu.</h1>
+            <div id="touristes">
+                <div class="touriste">
+                    <img src="/bg.jpg" />
+                    <h3>Bastian</h3>
+                </div>
+
+                <div class="touriste">
+                    <img src="img/flavio.jpg" />
+                    <h3>Flavio</h3>
+                </div>
+
+                <div class="touriste">
+                    <img src="img/jorand.png" />
+                    <h3>Kévin</h3>
+                </div>
+
+
+                <div class="touriste">
+                    <img src="img/ferati.png" />
+                    <h3>Kevin 2</h3>
+                </div>
+            </div>
+        </div>
+        <div class="section" style="display: flex; justify-content: center; align-items: center;">
+            <h1>Bientôt disponible.</h1>
+            <h2>À vos jeux.</h2>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.js"
+            integrity="sha512-LGiXf+jHGTHcIybSsOWO3I/in+OObCkcEsWIZ7IyhzfD6RzD5qDUw2CK+JveuI7zTSEcDG//bIOvOpAJW2BWsg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        new fullpage('#fullpage', {
+            verticalCentered: false,
+            licenseKey: "gplv3-license"
+        });
+    </script>
+</body>
+
+</html>

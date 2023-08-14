@@ -1,9 +1,10 @@
 ﻿using GameSync.Api.Persistence.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameSync.Api.Persistence;
 
-public class GameSyncContext : DbContext
+public class GameSyncContext : IdentityDbContext<User>
 {
     public DbSet<Game> Games { get; set; }
 
@@ -11,4 +12,5 @@ public class GameSyncContext : DbContext
     public GameSyncContext() { }
 
     public GameSyncContext(DbContextOptions<GameSyncContext> options) : base(options) { }
+
 }

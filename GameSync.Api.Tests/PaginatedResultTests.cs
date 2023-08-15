@@ -21,6 +21,7 @@ public class PaginatedResultTests
         [Theory]
         [InlineData(5, 0, null, "http://localhost/?pageSize=5&page=1", 0, 1, 2, 3, 4)]
         [InlineData(2, 2, "http://localhost/?pageSize=2&page=1", "http://localhost/?pageSize=2&page=3", 4, 5)]
+        [InlineData(5, 1, "http://localhost/?pageSize=5&page=0", null, 5, 6, 7, 8, 9)]
         public void Collection_with_specified_elements_produce_specified_urls_and_items(int pageSize, int page, string? expectedPreviousUrl, string? expectedNextUrl, params int[] expectedItems)
         {
             // arrange
@@ -34,7 +35,6 @@ public class PaginatedResultTests
             Assert.Equal(expectedNextUrl, result.NextPage);
             Assert.Equal(expectedItems, result.Items);
         }
-
   
     }
 }

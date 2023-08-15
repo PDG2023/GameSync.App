@@ -6,7 +6,6 @@ using Xunit;
 
 namespace GameSync.Api.Tests.Azure
 {
-    [Collection("FullApp")]
     public class MailSendingTests 
     {
         [Fact]
@@ -17,7 +16,7 @@ namespace GameSync.Api.Tests.Azure
             var service = new AzureMailSender(mockLogger);
 
             // act
-            var mailSent = await service.SendMailAsync("unit tests", string.Empty, "cigox97887@vreaa.com");
+            var mailSent = await service.SendMailAsync("unit tests", "<b>test content</b>", "cigox97887@vreaa.com");
 
             // assert
             Assert.True(mailSent);

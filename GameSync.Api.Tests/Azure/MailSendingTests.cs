@@ -1,4 +1,7 @@
-﻿using GameSync.Business.Auth.Mailing;
+﻿using Castle.Core.Logging;
+using FakeItEasy;
+using GameSync.Business.Mailing;
+using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace GameSync.Api.Tests.Azure
@@ -10,10 +13,11 @@ namespace GameSync.Api.Tests.Azure
         public async Task Sending_mail_with_azure_communication_service_should_work()
         {
             // arrange
-            var service = new AzureAuthMailService();
+            var mockLogger = A.Fake<Logger<AzureMailSender>>();
+            var service = new AzureMailSender(mockLogger);
 
             // act
-            var mailSent = await service.SendEmailConfirmationAsync("ferati.kevin@gmail.com", "test");
+            var mailSent = await service.SendMailAsync("unit tests", string.Empty, "cigox97887@vreaa.com");
 
             // assert
             Assert.True(mailSent);

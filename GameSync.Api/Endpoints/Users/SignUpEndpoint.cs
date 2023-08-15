@@ -1,5 +1,5 @@
 ﻿using GameSync.Api.Persistence.Entities;
-using GameSync.Business.Auth.Mailing;
+using GameSync.Business.Auth;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using NJsonSchema.Validation;
@@ -21,9 +21,9 @@ public class SuccessfulSignUpResponse
 public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequestWhateverError, StatusCodeHttpResult, Ok<SuccessfulSignUpResponse>>>
 {
     private readonly UserManager<User> userManager;
-    private readonly IAuthMailService authMailService;
+    private readonly IConfirmationEmailSender authMailService;
 
-    public SignUpEndpoint(UserManager<User> userManager, IAuthMailService authMailService)
+    public SignUpEndpoint(UserManager<User> userManager, IConfirmationEmailSender authMailService)
     {
         this.userManager = userManager;
         this.authMailService = authMailService;

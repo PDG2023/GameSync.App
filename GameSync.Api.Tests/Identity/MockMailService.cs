@@ -1,4 +1,4 @@
-﻿using GameSync.Business.Auth.Mailing;
+﻿using GameSync.Business.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GameSync.Api.Tests.Identity;
 
-public class MockMailService : IAuthMailService
+public class MockMailService : IConfirmationEmailSender
 {
     private readonly bool _shouldFail;
 

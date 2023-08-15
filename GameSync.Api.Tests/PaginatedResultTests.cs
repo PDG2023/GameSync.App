@@ -17,39 +17,24 @@ public class PaginatedResultTests
             Assert.Empty(listWithoutCollection.Items);
         }
 
-        [Fact]
-        public void Collection_with_ten_elements_and_page_size_of_five_produces_five_items_without_a_previous_url_and_with_a_next_url()
+
+        [Theory]
+        [InlineData(5, 0, null, "http://localhost/?pageSize=5&page=1", 0, 1, 2, 3, 4)]
+        [InlineData(2, 2, "http://localhost/?pageSize=2&page=1", "http://localhost/?pageSize=2&page=3", 4, 5)]
+        public void Collection_with_specified_elements_produce_specified_urls_and_items(int pageSize, int page, string? expectedPreviousUrl, string? expectedNextUrl, params int[] expectedItems)
         {
             // arrange
-            const int pageSize = 5;
-            const int repeatedElement = 0;
-            var items = Enumerable.Repeat(repeatedElement, 10);
+            var items = Enumerable.Range(0, 10);
 
             // act
-            var result = new PaginatedResult<int>(items, pageSize, 0, "http://localhost/");
+            var result = new PaginatedResult<int>(items, pageSize, page, "http://localhost/");
 
             // assert
-            Assert.Null(result.PreviousPage);
-            Assert.Equal($"http://localhost/?pageSize=5&page=1", result.NextPage);
-            Assert.Equal(result.Items, Enumerable.Repeat(repeatedElement, pageSize));
+            Assert.Equal(expectedPreviousUrl, result.PreviousPage);
+            Assert.Equal(expectedNextUrl, result.NextPage);
+            Assert.Equal(expectedItems, result.Items);
         }
 
-        [Fact]
-        public void Collection_with_ten_elements_page_size_of_two_and_at_page_three_produces_both_urls()
-        {
-            // arrange 
-            const int pageSize = 2;
-            const int repeatedElement = 0;
-            var items = Enumerable.Range(repeatedElement, 10);
-
-            // act
-            var result = new PaginatedResult<int>(items, pageSize, 2, "http://localhost/");
-
-            // assert
-            Assert.Equal("http://localhost/?pageSize=2&page=1", result.PreviousPage);
-            Assert.Equal("http://localhost/?pageSize=2&page=3", result.NextPage);
-            Assert.Equal(new[] { 4, 5 }, result.Items);
-        }
-
+  
     }
 }

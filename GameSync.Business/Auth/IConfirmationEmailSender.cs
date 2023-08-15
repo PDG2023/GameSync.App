@@ -1,6 +1,6 @@
-﻿namespace GameSync.Business.Auth.Mailing;
+﻿namespace GameSync.Business.Auth;
 
-public interface IAuthMailService
+public interface IConfirmationEmailSender
 {
     Task<bool> SendEmailConfirmationAsync(string toEmail, string mailConfirmationToken);
 }

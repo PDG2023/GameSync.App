@@ -7,9 +7,9 @@ using FastEndpoints.Swagger;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Business.Auth;
-using GameSync.Business.Auth.Mailing;
 using GameSync.Business.BoardGamesGeek;
 using GameSync.Business.Features.Search;
+using GameSync.Business.Mailing;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -66,12 +66,14 @@ builder.Services.AddSingleton<IGameSearcher, BoardGameGeekClient>();
 
 if (builder.Environment.IsDevelopment())
 {
-    builder.Services.AddSingleton<IAuthMailService, SmtpAuthMailService>();
+    builder.Services.AddSingleton<IMailSender, SmtpMailSender>();
 }
 else
 {
-    builder.Services.AddSingleton<IAuthMailService, AzureAuthMailService>();
+    builder.Services.AddSingleton<IMailSender, AzureMailSender>();
 }
+
+builder.Services.AddSingleton<IConfirmationEmailSender, AuthMailService>();
 
 
 builder.Services.AddSingleton<ConfirmationMailLinkProvider>();

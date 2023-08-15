@@ -24,6 +24,11 @@ public class PaginatedResult<T>
 
         }
 
+        if (pageNumber > 0 && count > 0)
+        {
+            PreviousPage = BuildPageUrl(pageNumber - 1, pageSize, absoluteUrlToDestination);
+        }
+
         Items = collection.Skip(offset).Take(pageSize).ToList();
 
     }

@@ -17,6 +17,7 @@ permissions:
 jobs:
   validation:
     uses: ./.github/workflows/tests.yml
+    secrets: inherit
   release:
     needs: [validation]
     runs-on: ubuntu-latest

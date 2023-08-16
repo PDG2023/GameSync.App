@@ -9,43 +9,16 @@ env:
   TAG: gamesync.azurecr.io/gamesyncapi:latest
 on:
   push:
-    branches: [ "main", "dev" ]
-  pull_request:
     branches: [ "main" ]
     
 permissions:
   contents: read
   
 jobs:
-  validate-api:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 7.0.x
-    - run: dotnet test GameSync.sln -c Release
-      env:
-        AZURE_MAIL_CONNECTION_STRING: ${{ secrets.AZURE_MAIL_CONNECTION_STRING }}
-        AZURE_MAIL_SENDER: ${{ secrets.AZURE_MAIL_SENDER }}
-    
-  validate-front: 
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 20
-        cache: "npm"
-        cache-dependency-path: GameSync.Front/package-lock.json
-        
-    - run: npm ci
-      working-directory: ./GameSync.Front
-    - run: npm test
-      working-directory: ./GameSync.Front
-    
+  validation:
+    uses: ./.github/workflows/tests.yml
   release:
-    needs: [validate-api, validate-front]
+    needs: [validation]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3

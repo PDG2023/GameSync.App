@@ -1,12 +1,26 @@
-<div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
-  <mat-toolbar color="primary" class="example-toolbar">
-    <button mat-icon-button (click)="snav.toggle()">
-      <mat-icon>casino</mat-icon>
-    </button>
-    <h1 class="example-app-name">GameSync</h1>
+<div class="content-container" [class.is-mobile]="mobileQuery.matches">
+  <mat-toolbar color="primary" class="toolbar">
+    <div class="button-logo-container">
+      <button mat-icon-button (click)="snav.toggle()">
+        <mat-icon>casino</mat-icon>
+      </button>
+      <h1 class="app-name">GameSync</h1>
+    </div>
+    <div class="search-container">
+      <app-search></app-search>
+    </div>
+    <div class="login-container">
+      <div class="spacer"></div>
+      <div>
+        <a routerLink="/" mat-list-item>
+          <mat-icon matListItemIcon>account_circle</mat-icon>
+          S'identifier
+        </a>
+      </div>
+    </div>
   </mat-toolbar>
 
-  <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+  <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
     <mat-sidenav #snav opened="true" [mode]="mobileQuery.matches ? 'over' : 'side'"
                  [fixedInViewport]="mobileQuery.matches"
                  fixedTopGap="56">

@@ -14,10 +14,10 @@ export class SideNavComponent implements OnDestroy {
   constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this.mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this.mobileQueryListener);
+    this.mobileQuery.addEventListener('change', this.mobileQueryListener);
   }
 
   ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this.mobileQueryListener);
+    this.mobileQuery.removeEventListener('change', this.mobileQueryListener);
   }
 }

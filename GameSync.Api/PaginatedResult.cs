@@ -1,7 +1,11 @@
-﻿namespace GameSync.Api;
+﻿using System.Text.Json.Serialization;
+
+namespace GameSync.Api;
 
 public class PaginatedResult<T>
 {
+
+    public PaginatedResult() { }
 
     public PaginatedResult(IEnumerable<T> collection, int pageSize, int pageNumber, string absoluteUrlToDestination)
     {
@@ -34,9 +38,9 @@ public class PaginatedResult<T>
     }
 
 
-    public IEnumerable<T> Items { get; set; }
-    public string? NextPage { get; private set; }
-    public string? PreviousPage { get; private set; }
+    public IEnumerable<T>? Items { get; init; }
+    public string? NextPage { get; init; }
+    public string? PreviousPage { get; init; }
 
     private string BuildPageUrl(int page, int pageSize, string absoluteUrl)
     {

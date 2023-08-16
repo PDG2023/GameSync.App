@@ -22,11 +22,14 @@ public class GameSearchTests
     {
         var client = _factory.CreateClient();
 
-        var response = await client.GetAsync("/api/games/search?query=Vimto Cluedo");
+        var response = await client.GetAsync("/api/games/search?query=Vimto Cluedo&pageSize=10&page=0");
         response.EnsureSuccessStatusCode();
-        var searchResult = await response.Content.ReadFromJsonAsync<IEnumerable<BoardGameSearchResult>>();
+        var searchResult = await response.Content.ReadFromJsonAsync<PaginatedResult<BoardGameSearchResult>>();
 
-        var actual = Assert.Single(searchResult);
+        Assert.Null(searchResult.PreviousPage);
+        Assert.Null(searchResult.NextPage);
+
+        var actual = Assert.Single(searchResult!.Items);
         var expected = new BoardGameSearchResult
         {
             Id = 72917,

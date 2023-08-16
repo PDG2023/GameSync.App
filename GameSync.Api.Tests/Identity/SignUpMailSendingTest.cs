@@ -69,7 +69,8 @@ public class SignUpMailSendingTest
     private static SignUpRequest CreateTestUser() => new SignUpRequest
     {
         Email = new Bogus.DataSets.Internet().Email(),
-        Password = "%7#FMe*ArfFLWb4h2"
+        Password = "%7#FMe*ArfFLWb4h2",
+        UserName = new Bogus.DataSets.Name().FirstName(),
     };
 
 }

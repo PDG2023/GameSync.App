@@ -45,7 +45,7 @@ public class ConfirmMailTest
         {
             Assert.Equal(System.Net.HttpStatusCode.NoContent, response.StatusCode);
         }
-        catch (Exception ex)
+        catch
         {
             _output.WriteLine(await response.Content.ReadAsStringAsync());
             _output.WriteLine(token);

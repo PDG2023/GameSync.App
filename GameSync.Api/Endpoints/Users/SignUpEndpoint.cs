@@ -9,6 +9,7 @@ namespace GameSync.Api.Endpoints.Users;
 
 public class SignUpRequest
 {
+    public required string UserName { get; set; }
     public required string Email { get; set; }
     public required string Password { get; set; }
 }
@@ -16,6 +17,7 @@ public class SignUpRequest
 public class SuccessfulSignUpResponse
 {
     public required string Email { get; set; }
+    public required string UserName { get; set; }
 }
 
 public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequestWhateverError, StatusCodeHttpResult, Ok<SuccessfulSignUpResponse>>>
@@ -41,7 +43,7 @@ public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequestWhatever
         var newUser = new User
         {
             Email = req.Email,
-            UserName = req.Email
+            UserName = req.UserName
         };
 
         var tryCreateUser = await userManager.CreateAsync(newUser, req.Password);
@@ -64,7 +66,8 @@ public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequestWhatever
 
         return TypedResults.Ok(new SuccessfulSignUpResponse
         {
-            Email = req.Email
+            Email = req.Email,
+            UserName = req.UserName,
         });
     }
 

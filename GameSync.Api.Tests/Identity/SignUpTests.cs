@@ -4,10 +4,7 @@ using GameSync.Api.Endpoints.Users;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using Org.BouncyCastle.Ocsp;
 using System.Net;
-using System.Net.Http.Json;
 using Xunit;
 
 namespace GameSync.Api.Tests.Identity;
@@ -55,7 +52,7 @@ public class SignUpTests
         using var scope = _factory.Services.CreateScope();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
         var user = await userManager.FindByEmailAsync(newAccountRequest.Email);
-        Assert.False(await userManager.IsEmailConfirmedAsync(user));
+        Assert.False(await userManager.IsEmailConfirmedAsync(user!));
 
     }
 
@@ -73,7 +70,7 @@ public class SignUpTests
         var testResult = await _client.POSTAsync<SignUpEndpoint, SignUpRequest, BadRequestWhateverError>(testRequest);
 
         // assert
-        await AssertProduceError(expectedError, testResult);
+        AssertProduceError(expectedError, testResult);
     }
 
 
@@ -81,21 +78,22 @@ public class SignUpTests
     [Fact]
     public async Task Badly_formed_mail_produces_an_error()
     {
-        var badlyFormMail = new SignUpRequest { Email = "ab", Password = "$UX#%A!qaphEL2a23" };
+        var badlyFormMail = new SignUpRequest { Email = "ab", Password = "$UX#%A!qaphEL2a23", UserName = "cd" };
 
         var testResult = await _client.POSTAsync<SignUpEndpoint, SignUpRequest, BadRequestWhateverError>(badlyFormMail);
 
-        await AssertProduceError("InvalidEmail", testResult);
+        AssertProduceError("InvalidEmail", testResult);
     }
 
 
     private static SignUpRequest GetNewAccountRequest(string password) => new()
     {
         Email = new Internet().Email(),
-        Password = password
+        Password = password,
+        UserName = new Name().FirstName(),
     };
 
-    private async Task AssertProduceError(string errorCode, TestResult<BadRequestWhateverError>? testResult)
+    private void AssertProduceError(string errorCode, TestResult<BadRequestWhateverError>? testResult)
     {
         Assert.NotNull(testResult);
 

@@ -54,8 +54,8 @@ public class SignInTests
 
         var errors = await response.Content.ReadFromJsonAsync<JsonObject>(_failedSignInOpt);
         Assert.NotNull(errors?["errors"]);
-        var error = Assert.Single(errors["errors"].AsArray());
-        Assert.Equal("NotFound", error["code"].ToString());
+        var error = Assert.Single(errors!["errors"]!.AsArray());
+        Assert.Equal("NotFound", error!["code"]!.ToString());
     }
 
     [Fact]
@@ -85,8 +85,8 @@ public class SignInTests
 
         var errors = await response.Content.ReadFromJsonAsync<JsonObject>(_failedSignInOpt);
         Assert.NotNull(errors?["errors"]);
-        var error = Assert.Single(errors["errors"].AsArray());
-        Assert.Equal("ConfirmationNeeded", error["code"].ToString());
+        var error = Assert.Single(errors["errors"]!.AsArray());
+        Assert.Equal("ConfirmationNeeded", error!["code"]!.ToString());
     }
 
     [Fact]
@@ -123,7 +123,7 @@ public class SignInTests
         {
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
-        catch (Exception e)
+        catch
         {
             output.WriteLine(await response.Content.ReadAsStringAsync());
             throw;

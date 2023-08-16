@@ -7,6 +7,8 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
 import {RouterTestingModule} from "@angular/router/testing";
 import {MatListModule} from "@angular/material/list";
+import {MediaMatcher} from "@angular/cdk/layout";
+import {ChangeDetectorRef} from "@angular/core";
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -18,6 +20,20 @@ describe('AppComponent', () => {
       MatIconModule,
       RouterTestingModule,
       MatListModule
+    ],
+    providers: [
+      {
+        provide: MediaMatcher,
+        useValue: {
+          matchMedia: () => ({
+            addEventListener: () => {
+            },
+            removeEventListener: () => {
+            },
+          }),
+        },
+      },
+      ChangeDetectorRef,
     ]
   }));
 

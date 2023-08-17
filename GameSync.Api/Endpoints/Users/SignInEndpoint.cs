@@ -40,6 +40,7 @@ public class SignInEndpoint : Endpoint<SignInRequest, Results<Ok<SuccessfulSignI
         AllowAnonymous();
         Post("sign-in");
         Group<UsersGroup>();
+       
     }
 
     public override async Task<Results<Ok<SuccessfulSignInResponse>, BadRequestWhateverError>> ExecuteAsync(SignInRequest req, CancellationToken ct)

@@ -4,8 +4,10 @@
     {
         public CollectionGroup()
         {
-
-            Configure("collection", _ => { });
+            Configure("collection", x => {
+                x.DontAutoTag();
+                x.Options(y => y.WithTags("Collection"));
+            });
         }
     }
 }

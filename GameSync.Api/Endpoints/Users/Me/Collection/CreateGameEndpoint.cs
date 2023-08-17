@@ -22,6 +22,11 @@ public class CreateGameResponse
 
 public class CreateGameEndpoint : Endpoint<CreateGameRequest, CreateGameResponse>
 {
+    public override void Configure()
+    {
+        Post(string.Empty);
+        Group<CollectionGroup>();
+    }
     public override Task<CreateGameResponse> ExecuteAsync(CreateGameRequest req, CancellationToken ct)
     {
         return Task.FromResult(new CreateGameResponse

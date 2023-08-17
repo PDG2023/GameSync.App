@@ -11,9 +11,8 @@ public class MeEndpoint : EndpointWithoutRequest<MeResult>
 
     public override void Configure()
     {
-        Get("me");
-        Claims("userid");
-        Group<UsersGroup>();
+        Get(string.Empty);
+        Group<MeGroup>();
     }
 
     public override Task<MeResult> ExecuteAsync(CancellationToken ct)

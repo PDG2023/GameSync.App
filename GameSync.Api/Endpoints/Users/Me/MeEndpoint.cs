@@ -1,4 +1,4 @@
-﻿namespace GameSync.Api.Endpoints.Users;
+﻿namespace GameSync.Api.Endpoints.Users.Me;
 
 public class MeResult
 {

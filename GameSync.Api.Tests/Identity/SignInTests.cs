@@ -1,6 +1,7 @@
 ﻿using Bogus.DataSets;
 using FastEndpoints;
 using GameSync.Api.Endpoints.Users;
+using GameSync.Api.Endpoints.Users.Me;
 using GameSync.Api.Persistence.Entities;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

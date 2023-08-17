@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GameSync.Api.Persistence.Migrations
 {
     [DbContext(typeof(GameSyncContext))]
-    [Migration("20230817155249_GameStringForId")]
-    partial class GameStringForId
+    [Migration("20230817181847_AddGamesInfo")]
+    partial class AddGamesInfo
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,13 +27,16 @@ namespace GameSync.Api.Persistence.Migrations
 
             modelBuilder.Entity("GameSync.Api.Persistence.Entities.Game", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<int?>("Duration")
+                    b.Property<int?>("DurationMinute")
                         .HasColumnType("integer");
 
                     b.Property<int>("MaxPlayer")

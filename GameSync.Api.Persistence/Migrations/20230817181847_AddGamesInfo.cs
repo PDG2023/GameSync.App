@@ -5,7 +5,7 @@
 namespace GameSync.Api.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class GameStringForId : Migration
+    public partial class AddGamesInfo : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +17,7 @@ namespace GameSync.Api.Persistence.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<int>(
-                name: "Duration",
+                name: "DurationMinute",
                 table: "Games",
                 type: "integer",
                 nullable: true);
@@ -80,7 +80,7 @@ namespace GameSync.Api.Persistence.Migrations
                 table: "Games");
 
             migrationBuilder.DropColumn(
-                name: "Duration",
+                name: "DurationMinute",
                 table: "Games");
 
             migrationBuilder.DropColumn(

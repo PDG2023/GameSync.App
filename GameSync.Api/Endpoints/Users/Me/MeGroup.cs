@@ -6,7 +6,7 @@ public class MeGroup : SubGroup<UsersGroup>
     {
         Configure("me", definition =>
         {
-            definition.Claims("userid");
+            definition.Claims(ClaimsNames.UserId);
         });
     }
 }

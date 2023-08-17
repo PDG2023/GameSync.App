@@ -99,15 +99,7 @@ public class SignInTests
         var (response, result) = await _client.POSTAsync<SignInEndpoint, SignInRequest, SuccessfulSignInResponse>(signInRequest);
 
         // assert
-        try
-        {
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        }
-        catch
-        {
-            output.WriteLine(await response.Content.ReadAsStringAsync());
-            throw;
-        }
+        await response.EnsureSuccessAndDumpBodyIfNot(output);
 
         Assert.NotNull(result);
         Assert.Equal(result.Email, mail);

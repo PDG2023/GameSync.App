@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GameSync.Business.Features.Search;
+using GameSync.Business.Search;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Server.HttpSys;
 using System.Web;

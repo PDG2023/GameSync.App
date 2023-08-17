@@ -13,6 +13,11 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {CollectionComponent} from './features/collection/collection.component';
 import {PartiesComponent} from './features/parties/parties.component';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatInputModule} from "@angular/material/input";
+import {ReactiveFormsModule} from "@angular/forms";
+import {SearchComponent} from './common/search/search.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +26,7 @@ import {PartiesComponent} from './features/parties/parties.component';
     SideNavComponent,
     CollectionComponent,
     PartiesComponent,
+    SearchComponent,
   ],
   imports: [
     BrowserModule,
@@ -30,7 +36,11 @@ import {PartiesComponent} from './features/parties/parties.component';
     MatListModule,
     MatToolbarModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatFormFieldModule,
+    MatAutocompleteModule,
+    MatInputModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

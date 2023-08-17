@@ -9,17 +9,24 @@ import {RouterTestingModule} from "@angular/router/testing";
 import {MatListModule} from "@angular/material/list";
 import {MediaMatcher} from "@angular/cdk/layout";
 import {ChangeDetectorRef} from "@angular/core";
+import {SearchComponent} from "./common/search/search.component";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    declarations: [AppComponent, SideNavComponent],
+    declarations: [AppComponent, SideNavComponent, SearchComponent],
     imports: [
       MatToolbarModule,
       MatSidenavModule,
       BrowserAnimationsModule,
       MatIconModule,
       RouterTestingModule,
-      MatListModule
+      MatListModule,
+      MatFormFieldModule,
+      MatInputModule,
+      MatAutocompleteModule
     ],
     providers: [
       {

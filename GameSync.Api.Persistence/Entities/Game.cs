@@ -13,7 +13,6 @@ public class Game
     public int? DurationMinute { get; set; }
 
     public string? Description { get; set; }
-    public string? ImageAbsoluteUrl { get; set; }
 
     public required string UserId { get; init; }
 }

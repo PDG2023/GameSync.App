@@ -1,5 +1,7 @@
-﻿using GameSync.Api.Persistence;
+﻿using FluentValidation;
+using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
 using System.Net;
 
 namespace GameSync.Api.Endpoints.Users.Me.Collection;
@@ -15,8 +17,20 @@ public class CreateGameRequest
     public int? DurationMinute { get; init; }
 }
 
+public class CreateGameValidator : Validator<CreateGameRequest>
+{
+    public CreateGameValidator() 
+    {
+        RuleFor(x => x.Name).NotEmpty();
+        RuleFor(x => x.MinPlayer).GreaterThan(0);
+        RuleFor(x => x.MaxPlayer).GreaterThan(0);
+        RuleFor(x => x.MinAge).GreaterThan(0).LessThan(120);
+        RuleFor(x => x.DurationMinute).GreaterThan(0);
+        RuleFor(x => x.Description).MaximumLength(500);
+    }
+}
 
-public class CreateGameEndpoint : Endpoint<CreateGameRequest, Game>
+public class CreateGameEndpoint : Endpoint<CreateGameRequest, Results<Ok<Game>, BadRequestWhateverError>>
 {
     private readonly GameSyncContext _context;
     public CreateGameEndpoint(GameSyncContext context)
@@ -26,15 +40,20 @@ public class CreateGameEndpoint : Endpoint<CreateGameRequest, Game>
 
     public override void Configure()
     {
+        DontThrowIfValidationFails();
         Post(string.Empty);
         Group<CollectionGroup>();
     }
 
-    public override async Task<Game> ExecuteAsync(CreateGameRequest req, CancellationToken ct)
+    public override async Task<Results<Ok<Game>, BadRequestWhateverError>> ExecuteAsync(CreateGameRequest req, CancellationToken ct)
     {
+        if (ValidationFailed)
+        {
+            return new BadRequestWhateverError(ValidationFailures);
+        }
         var trackingGame = await _context.Games.AddAsync(RequestToGame(req), ct);
         await _context.SaveChangesAsync(ct);
-        return trackingGame.Entity;
+        return TypedResults.Ok(trackingGame.Entity);
     }
 
     public  Game RequestToGame(CreateGameRequest r)

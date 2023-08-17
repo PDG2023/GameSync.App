@@ -3,12 +3,7 @@ using FastEndpoints;
 using GameSync.Api.Endpoints.Users;
 using GameSync.Api.Endpoints.Users.Me.Collection;
 using GameSync.Api.Persistence.Entities;
-using GameSync.Api.Persistence.Migrations;
-using GameSync.Business.BoardGamesGeek.Schemas;
 using IdentityModel.Client;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using System.Net.Mail;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -29,6 +24,25 @@ public class CreateGameTests : IAsyncLifetime
         _client = factory.CreateClient();
         _factory = factory;
         _output = output;
+    }
+
+    [Fact]
+    public async Task Invalid_properties_should_produce_errors()
+    {
+
+        var newGameRequest = new CreateGameRequest
+        {
+            MaxPlayer = -10,
+            MinPlayer = -3,
+            MinAge = -2,
+            Name = string.Empty,
+            Description = string.Empty,
+            DurationMinute = -5
+        };
+
+        var (response, result) = await _client.POSTAsync<CreateGameEndpoint, CreateGameRequest, BadRequestWhateverError>(newGameRequest);
+        Assert.NotNull(result);
+        Assert.Equal(5, result.Errors.Count());
     }
 
     [Fact]

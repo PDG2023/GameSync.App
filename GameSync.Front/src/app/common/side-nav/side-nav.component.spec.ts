@@ -8,6 +8,11 @@ import {MatListModule} from '@angular/material/list';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {ChangeDetectorRef} from '@angular/core';
 import {RouterTestingModule} from "@angular/router/testing";
+import {SearchComponent} from "../search/search.component";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {ReactiveFormsModule} from "@angular/forms";
 
 describe('SideNavComponent', () => {
   let component: SideNavComponent;
@@ -15,14 +20,18 @@ describe('SideNavComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SideNavComponent],
+      declarations: [SideNavComponent, SearchComponent],
       imports: [
         MatToolbarModule,
         MatSidenavModule,
         MatIconModule,
         NoopAnimationsModule,
         MatListModule,
-        RouterTestingModule
+        RouterTestingModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatAutocompleteModule,
+        ReactiveFormsModule
       ],
       providers: [
         ChangeDetectorRef,

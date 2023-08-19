@@ -397,3 +397,4 @@ FodyWeavers.xsd
 /data
 .idea/
 /pushImage.ps1
+/xsdgen

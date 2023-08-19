@@ -31,6 +31,25 @@ public class CreateOrUpdateGameValidatorTests
         Assert.Empty(result.Errors);
     }
 
+
+    [Fact]
+    public void MaxPlayer_must_be_greater_than_min_player()
+    {
+        var newGameRequest = new CreateGameRequest
+        {
+            MaxPlayer = 4,
+            MinPlayer = 5,
+            MinAge = 5,
+            Name = "name"
+        };
+
+        var result = _validator.Validate(newGameRequest);
+
+        Assert.False(result.IsValid);
+        Assert.Equal(nameof(CreateGameRequest.MaxPlayer), Assert.Single(result.Errors).PropertyName);
+
+    }
+
     [Fact]
     public void When_duration_is_negative_or_description_is_whitespace_validation_should_fail()
     {

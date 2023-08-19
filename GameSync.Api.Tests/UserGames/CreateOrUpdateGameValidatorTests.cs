@@ -13,6 +13,26 @@ public class CreateOrUpdateGameValidatorTests
     private CreateOrUpdateGameValidator _validator = new();
 
     [Fact]
+    public void If_all_properties_are_correctly_set_no_errors_should_be_thrown()
+    {
+        var newGameRequest = new CreateGameRequest
+        {
+            MaxPlayer = 6,
+            MinPlayer = 5,
+            MinAge = 5,
+            Name = "name",
+            Description = "My description",
+            DurationMinutes = 45
+        };
+
+
+        var result = _validator.Validate(newGameRequest);
+
+        Assert.True(result.IsValid);
+        Assert.Empty(result.Errors);
+    }
+
+    [Fact]
     public void Non_required_properties_should_be_ignored_if_null()
     {
         var newGameRequest = new CreateGameRequest
@@ -22,7 +42,7 @@ public class CreateOrUpdateGameValidatorTests
             MinAge = 5,
             Name = "name",
             Description = null,
-            DurationMinute = null
+            DurationMinutes = null
         };
 
         var result = _validator.Validate(newGameRequest);
@@ -60,7 +80,7 @@ public class CreateOrUpdateGameValidatorTests
             MinAge = 5,
             Name = "name",
             Description = " ",
-            DurationMinute = -4
+            DurationMinutes = -4
         };
 
         var result = _validator.Validate(newGameRequest);

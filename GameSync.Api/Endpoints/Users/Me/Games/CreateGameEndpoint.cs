@@ -13,7 +13,7 @@ public class CreateGameRequest
     public required int MaxPlayer { get; init; }
     public required int MinAge { get; init; }
     public string? Description { get; init; }
-    public int? DurationMinute { get; init; }
+    public int? DurationMinutes { get; init; }
 }
 
 public class CreateGameEndpoint : Endpoint<CreateGameRequest, Results<Ok<Game>, BadRequestWhateverError>>
@@ -52,7 +52,7 @@ public class CreateGameEndpoint : Endpoint<CreateGameRequest, Results<Ok<Game>, 
             MinAge = r.MinAge,
             UserId = User.ClaimValue(ClaimsNames.UserId)!,
             Description = WebUtility.HtmlEncode(r.Description),
-            DurationMinute = r.DurationMinute
+            DurationMinute = r.DurationMinutes
         };
     }
 }

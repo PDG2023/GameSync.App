@@ -39,6 +39,29 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         
     }
 
+
+
+    public async Task<Game> CreateTestGame(string userId, int id)
+    {
+        var game = new Game
+        {
+            Id = id,
+            MaxPlayer = 10,
+            MinPlayer = 5,
+            DurationMinute = 5,
+            UserId = userId,
+            MinAge = 5,
+            Name = "game",
+            Description = "Game's description"
+        };
+
+        using var scope = Services.CreateScope();
+        var ctx = scope.Resolve<GameSyncContext>();
+        await ctx.Games.AddAsync(game);
+        await ctx.SaveChangesAsync();
+        return game;
+    }
+
     public async Task CreateUnconfirmedUser(string mail, string username, string password)
     {
         var user = new User

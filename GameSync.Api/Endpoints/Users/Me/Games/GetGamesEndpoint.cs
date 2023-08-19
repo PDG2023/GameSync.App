@@ -23,6 +23,9 @@ public class GetGamesEndpoint : EndpointWithoutRequest<IEnumerable<Game>>
     public override async Task<IEnumerable<Game>> ExecuteAsync(CancellationToken ct)
     {
         var userId = User.ClaimValue(ClaimsTypes.UserId);
-        return await _context.Games.Where(game => game.UserId == userId).ToListAsync(cancellationToken: ct);
+        return await _context.Games
+            .AsNoTracking()
+            .Where(game => game.UserId == userId)
+            .ToListAsync(cancellationToken: ct);
     }
 }

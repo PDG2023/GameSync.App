@@ -28,6 +28,6 @@ public class TestsWithLoggedUser : IAsyncLifetime
         await Factory.CreateConfirmedUser(Mail, Mail, Password);
 
         var (response, result) = await Client.POSTAsync<SignInEndpoint, SignInRequest, SuccessfulSignInResponse>(new SignInRequest { Email = Mail, Password = Password});
-        Client.SetBearerToken(result.Token);
+        Client.SetBearerToken(result!.Token);
     }
 }

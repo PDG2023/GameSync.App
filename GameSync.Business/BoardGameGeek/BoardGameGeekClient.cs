@@ -37,7 +37,7 @@ public class BoardGameGeekClient : IGameSearcher
 
     private TOutput Deserialize<TOutput>(Stream stream)
     {
-        return (TOutput)new XmlSerializer(typeof(TOutput)).Deserialize(stream);
+        return (TOutput)new XmlSerializer(typeof(TOutput)).Deserialize(stream)!;
     }
 
     public async Task<IEnumerable<BoardGameSearchResult>> SearchBoardGamesAsync(string term)

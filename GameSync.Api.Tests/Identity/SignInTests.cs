@@ -1,6 +1,7 @@
 ﻿using Bogus.DataSets;
 using FastEndpoints;
 using GameSync.Api.Endpoints.Users;
+using GameSync.Api.Endpoints.Users.Me;
 using GameSync.Api.Persistence.Entities;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -64,17 +65,9 @@ public class SignInTests
         // arrange
         const string pwd = "%C$iS2z*gUZR3Hud7"; 
         var mail = new Internet().Email();
-        var user = new User
-        {
-            Email = mail,
-            UserName = mail
-        };
+        await _factory.CreateUnconfirmedUser(mail, mail, pwd);
 
-        using var scope = _factory.Services.CreateScope();
-        var userManager = scope.Resolve<UserManager<User>>();
-        await userManager.CreateAsync(user, pwd);
-
-        var req = new SignInRequest { Email = user.Email, Password = pwd };
+        var req = new SignInRequest { Email = mail, Password = pwd };
 
         // act
         var response  = await _client.PostAsJsonAsync("api/users/sign-in", req);
@@ -95,42 +88,21 @@ public class SignInTests
         // arrange : create an account and validate it directly
         const string password = "$UX#%A!qaphEL2";
         var mail = new Internet().Email();
-        var user = new User
-        {
-            Email = mail,
-            UserName = mail
-        };
-
-        using var scope = _factory.Services.CreateScope();
-        var userManager = scope.Resolve<UserManager<User>>();
-        await userManager.CreateAsync(user, password);
-
-        var confirmationToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
-        await userManager.ConfirmEmailAsync(user, confirmationToken);
-        var configuration = _factory.Services.GetRequiredService<IConfiguration>();
-
+        await _factory.CreateConfirmedUser(mail, mail, password);
         var signInRequest = new SignInRequest
         {
-            Email = user.Email,
-            Password = "$UX#%A!qaphEL2"
+            Email = mail,
+            Password = password
         };
 
         // act
         var (response, result) = await _client.POSTAsync<SignInEndpoint, SignInRequest, SuccessfulSignInResponse>(signInRequest);
 
         // assert
-        try
-        {
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        }
-        catch
-        {
-            output.WriteLine(await response.Content.ReadAsStringAsync());
-            throw;
-        }
+        await response.EnsureSuccessAndDumpBodyIfNot(output);
 
         Assert.NotNull(result);
-        Assert.Equal(result.Email, user.Email);
+        Assert.Equal(result.Email, mail);
 
         // In some cases, asp.net co+e add cookies in the header. We assert it isn't the case
         Assert.False(response.Headers.TryGetValues("Cookie", out _));
@@ -143,8 +115,6 @@ public class SignInTests
 
         meResponse.EnsureSuccessStatusCode();
 
-        // clean
-        await userManager.DeleteAsync(user);
     }
 
 }

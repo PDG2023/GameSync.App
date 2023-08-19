@@ -40,6 +40,7 @@ public class SignInEndpoint : Endpoint<SignInRequest, Results<Ok<SuccessfulSignI
         AllowAnonymous();
         Post("sign-in");
         Group<UsersGroup>();
+       
     }
 
     public override async Task<Results<Ok<SuccessfulSignInResponse>, BadRequestWhateverError>> ExecuteAsync(SignInRequest req, CancellationToken ct)
@@ -75,7 +76,7 @@ public class SignInEndpoint : Endpoint<SignInRequest, Results<Ok<SuccessfulSignI
             
             expireAt: DateTime.UtcNow.AddDays(1),
             priviledges: u => {
-                u.Claims.Add(("userid", user.Id));
+                u.Claims.Add((ClaimsNames.UserId,  user.Id));
             });
 
 

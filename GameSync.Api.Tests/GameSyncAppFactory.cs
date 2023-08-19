@@ -1,8 +1,11 @@
 ﻿using FakeItEasy;
+using FastEndpoints;
 using GameSync.Api.Persistence;
+using GameSync.Api.Persistence.Entities;
 using GameSync.Api.Tests.Identity;
 using GameSync.Business.Auth;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +36,29 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         .WithAutoRemove(true)
         .Build();
         
+    }
+
+    public async Task CreateUnconfirmedUser(string mail, string username, string password)
+    {
+        var user = new User
+        {
+            Email = mail,
+            UserName = username
+        };
+
+        using var scope = Services.CreateScope();
+        var manager = scope.Resolve<UserManager<User>>();
+        await manager.CreateAsync(user, password);
+    }
+
+    public async Task CreateConfirmedUser(string mail, string username, string password)
+    {
+        await CreateUnconfirmedUser(mail, username, password);
+        using var scope = Services.CreateScope();
+        var manager = scope.Resolve<UserManager<User>>();
+        var user = await manager.FindByEmailAsync(mail);
+        var confirmationToken = await manager.GenerateEmailConfirmationTokenAsync(user!);
+        await manager.ConfirmEmailAsync(user!, confirmationToken);
     }
 
 

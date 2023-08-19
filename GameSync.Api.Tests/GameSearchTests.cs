@@ -1,4 +1,4 @@
-using GameSync.Business.Features.Search;
+using GameSync.Business.Search;
 using System.Net.Http.Json;
 using Xunit;
 

@@ -1,7 +1,6 @@
 ﻿using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
 namespace GameSync.Api.Persistence;
 
 public class GameSyncContext : IdentityDbContext<User>

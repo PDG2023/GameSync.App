@@ -8,19 +8,18 @@ using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Business.Auth;
 using GameSync.Business.BoardGamesGeek;
-using GameSync.Business.Features.Search;
 using GameSync.Business.Mailing;
+using GameSync.Business.Search;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddFastEndpoints();
-builder.Services.SwaggerDocument();
+builder.Services.SwaggerDocument(x => x.ShortSchemaNames = true);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddDbContext<GameSyncContext>(options =>
@@ -61,7 +60,6 @@ builder.Services.AddJWTBearerAuth(
 
 builder.Services.AddAuthorization();
 builder.Services.AddCors();
-
 builder.Services.AddSingleton<IGameSearcher, BoardGameGeekClient>();
 
 if (builder.Environment.IsDevelopment())

@@ -3,6 +3,7 @@ using System;
 using GameSync.Api.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GameSync.Api.Persistence.Migrations
 {
     [DbContext(typeof(GameSyncContext))]
-    partial class GameSyncContextModelSnapshot : ModelSnapshot
+    [Migration("20230817181847_AddGamesInfo")]
+    partial class AddGamesInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

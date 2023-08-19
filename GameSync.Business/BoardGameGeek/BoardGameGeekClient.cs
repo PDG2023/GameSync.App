@@ -1,5 +1,5 @@
 ﻿using GameSync.Business.BoardGamesGeek.Schemas;
-using GameSync.Business.Features.Search;
+using GameSync.Business.Search;
 using System.Net.Http;
 using System.Text;
 using System.Xml.Serialization;

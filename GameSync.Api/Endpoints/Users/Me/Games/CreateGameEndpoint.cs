@@ -33,6 +33,7 @@ public class CreateGameValidator : Validator<CreateGameRequest>
 {
     public CreateGameValidator()
     {
+        RuleFor(r => r.Name).NotEmpty();
         Include(new GameValidator());
     }
 }

@@ -1,16 +1,12 @@
 ﻿using GameSync.Api.Endpoints.Users.Me.Games;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace GameSync.Api.Tests.UserGames;
+namespace GameSync.Api.Tests.UserGames.Validators;
 
-public class GameValidatorTests
+public class Create
 {
-    private GameValidator _validator = new();
+
+    private readonly CreateGameValidator _validator = new();
 
     [Fact]
     public void If_all_properties_are_correctly_set_no_errors_should_be_thrown()

@@ -16,7 +16,7 @@ public class CreateGameRequest : IGame
     public required int MaxPlayer { get; init; }
     public required int MinAge { get; init; }
     public string? Description { get; init; }
-    public int? DurationMinutes { get; init; }
+    public int? DurationMinute { get; init; }
 
     [JsonIgnore]
     int? IGame.MinPlayer => MinPlayer;
@@ -73,7 +73,7 @@ public class CreateGameEndpoint : Endpoint<CreateGameRequest, Results<Ok<Game>, 
             MinAge = r.MinAge,
             UserId = User.ClaimValue(ClaimsTypes.UserId)!,
             Description = WebUtility.HtmlEncode(r.Description),
-            DurationMinute = r.DurationMinutes
+            DurationMinute = r.DurationMinute
         };
     }
 }

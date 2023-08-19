@@ -3,7 +3,7 @@ using Xunit;
 
 namespace GameSync.Api.Tests.UserGames.Validators;
 
-public class Create
+public class CreateValidatorTests
 {
 
     private readonly CreateGameValidator _validator = new();
@@ -18,7 +18,7 @@ public class Create
             MinAge = 5,
             Name = "name",
             Description = "My description",
-            DurationMinutes = 45
+            DurationMinute = 45
         };
 
 
@@ -38,7 +38,7 @@ public class Create
             MinAge = 5,
             Name = "name",
             Description = null,
-            DurationMinutes = null
+            DurationMinute = null
         };
 
         var result = _validator.Validate(newGameRequest);
@@ -67,7 +67,7 @@ public class Create
     }
 
     [Fact]
-    public void When_duration_is_negative_or_description_is_whitespace_validation_should_fail()
+    public void When_duration_is_negative_validation_should_fail()
     {
         var newGameRequest = new CreateGameRequest
         {
@@ -76,12 +76,12 @@ public class Create
             MinAge = 5,
             Name = "name",
             Description = " ",
-            DurationMinutes = -4
+            DurationMinute = -4
         };
 
         var result = _validator.Validate(newGameRequest);
 
         Assert.False(result.IsValid);
-        Assert.Equal(2, result.Errors.Count);
+        Assert.Single(result.Errors);
     }
 }

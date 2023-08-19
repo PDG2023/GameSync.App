@@ -28,7 +28,7 @@ public class CreateGameTests : TestsWithLoggedUser
             MinAge = -2,
             Name = string.Empty,
             Description = string.Empty,
-            DurationMinutes = -5
+            DurationMinute = -5
         };
 
         var (response, result) = await Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, BadRequestWhateverError>(newGameRequest);
@@ -47,7 +47,7 @@ public class CreateGameTests : TestsWithLoggedUser
             MinAge = 1,
             Name = "<b>test-game</b>",
             Description = "<b>description</b>",
-            DurationMinutes = 10
+            DurationMinute = 10
         };
 
         // act
@@ -59,7 +59,7 @@ public class CreateGameTests : TestsWithLoggedUser
         Assert.NotNull(result);
         Assert.Equal("&lt;b&gt;test-game&lt;/b&gt;", result.Name);
         Assert.Equal("&lt;b&gt;description&lt;/b&gt;", result.Description);
-        Assert.Equal(newGameRequest.DurationMinutes, result.DurationMinute);
+        Assert.Equal(newGameRequest.DurationMinute, result.DurationMinute);
         Assert.Equal(newGameRequest.MinPlayer, result.MinPlayer);
         Assert.Equal(newGameRequest.MaxPlayer, result.MaxPlayer);
         Assert.Equal(newGameRequest.MinAge, result.MinAge);

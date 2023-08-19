@@ -46,6 +46,7 @@ public class BadRequestWhateverError : IResult, IEndpointMetadataProvider
     {
         public string? Code { get; init; }
         public string? Description { get; init; }
+        public string? Property { get; init; }
 
         public Error(IdentityError error)
         {
@@ -57,6 +58,7 @@ public class BadRequestWhateverError : IResult, IEndpointMetadataProvider
         {
             Code = failure.ErrorCode;
             Description = failure.ErrorMessage;
+            Property = failure.PropertyName;
         }
 
         public Error () { }

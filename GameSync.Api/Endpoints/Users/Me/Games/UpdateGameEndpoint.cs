@@ -3,11 +3,11 @@ using FluentValidation;
 using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
-using IdentityModel;
+using GameSync.Api.Resources;
+using GameSync.Business.BoardGamesGeek.Schemas;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
-using System.Linq.Expressions;
+using System.Net;
 
 namespace GameSync.Api.Endpoints.Users.Me.Games;
 
@@ -20,7 +20,7 @@ public class UpdateGameRequest : IGame
     public int? MaxPlayer { get; init; }
     public int? MinAge { get; init; }
     public string? Description { get; init; }
-    public int? DurationMinutes { get; init; }
+    public int? DurationMinute { get; init; }
 }
 
 public class UpdateGameValidator : Validator<UpdateGameRequest>
@@ -36,7 +36,7 @@ public class UpdateGameEndpoint : Endpoint<UpdateGameRequest, Results<NotFound, 
 {
     private readonly GameSyncContext _context;
 
-    public UpdateGameEndpoint(GameSyncContext context) 
+    public UpdateGameEndpoint(GameSyncContext context)
     {
         _context = context;
     }
@@ -57,42 +57,68 @@ public class UpdateGameEndpoint : Endpoint<UpdateGameRequest, Results<NotFound, 
             return TypedResults.NotFound();
         }
 
-        if (req.MaxPlayer is not null)
+        UpdateProperties(game, req);
+
+        if (ValidationFailed)
         {
-            game.MaxPlayer = req.MaxPlayer.Value;
+            return new BadRequestWhateverError(ValidationFailures);
         }
+
         _context.Games.Update(game);
         await _context.SaveChangesAsync();
-        
+
         return TypedResults.Ok(game);
-            //Expression<Func<SetPropertyCalls<Game>, SetPropertyCalls<Game>>> fieldsToUpdate = calls => calls;
-
-        
-            //if (req.MaxPlayer is not null)
-            //{
-            //    fieldsToUpdate = AppendColumnToUpdate(fieldsToUpdate, s => s.SetProperty(game => game.MaxPlayer, req.MaxPlayer));
-            //}
-
-
-            //var colUpdated = await _context.Games.Where(game => game.Id == req.GameId && game.UserId == userId)
-            //    .ExecuteUpdateAsync(fieldsToUpdate);
-
-            //if (colUpdated == 0)
-            //{
-            //    return TypedResults.NotFound();
-            //}
-
-
 
     }
 
-
-    private Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> AppendColumnToUpdate<TEntity>(
-        Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> set,
-        Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> newColumn)
+    private void UpdateProperties(Game game, UpdateGameRequest req)
     {
-        var replace = new ReplacingExpressionVisitor(set.Parameters, new[] { set.Body });
-        var combined = replace.Visit(newColumn.Body);
-        return Expression.Lambda<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>>(combined, set.Parameters);
+
+        if (req.MinPlayer is not null)
+        {
+            if (req.MinPlayer > game.MaxPlayer)
+            {
+                AddError(x => x.MinPlayer, Resource.MaxPlayerLowerThanMinPlayer, nameof(Resource.MaxPlayerLowerThanMinPlayer));
+            }
+            else
+            {
+                game.MinPlayer = req.MinPlayer.Value;
+            }
+        }
+
+        if (req.MaxPlayer is not null)
+        {
+            if (req.MaxPlayer < game.MinPlayer)
+            {
+                AddError(x => x.MaxPlayer, Resource.MaxPlayerLowerThanMinPlayer, nameof(Resource.MaxPlayerLowerThanMinPlayer));
+            }
+            else
+            {
+                game.MaxPlayer = req.MaxPlayer.Value;
+            }
+        }
+
+
+        if (req.Name is not null)
+        {
+            game.Name = WebUtility.HtmlEncode(req.Name);
+        }
+
+        if (req.Description is not null)
+        {
+            game.Description = WebUtility.HtmlEncode(req.Description);
+        }
+
+        if (req.DurationMinute is not null)
+        {
+            game.DurationMinute = req.DurationMinute;
+        }
+
+        if (req.MinAge is not null)
+        {
+            game.MinAge = req.MinAge.Value;
+        }
+
     }
+
 }

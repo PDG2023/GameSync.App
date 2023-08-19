@@ -7,6 +7,6 @@
         public int? MaxPlayer { get;  }
         public int? MinAge { get; }
         public string? Description { get;  }
-        public int? DurationMinutes { get;  }
+        public int? DurationMinute { get;  }
     }
 }

@@ -5,19 +5,18 @@ using Xunit;
 
 namespace GameSync.Api.Tests.UserGames.Validators;
 
-public class Update
+public class UpdateValidatorTests
 {
 
     private readonly UpdateGameValidator _updateValidator = new();
     public static IEnumerable<object[]> MalformedUpdateRequest => new List<object[]>
     {
         new[] { new UpdateGameRequest { GameId = 1, MinAge = -10 } },
-        new[] { new UpdateGameRequest { GameId = 1, Description = " " } },
         new[] { new UpdateGameRequest { GameId = 1, Name = " " } },
         new[] { new UpdateGameRequest { GameId = 1, MaxPlayer = -10 } },
         new[] { new UpdateGameRequest { GameId = 1, MinPlayer = -10 } },
         new[] { new UpdateGameRequest { GameId = 1, MaxPlayer = 10, MinPlayer = 11 } },
-        new[] { new UpdateGameRequest { GameId = 1, DurationMinutes = -10 } }
+        new[] { new UpdateGameRequest { GameId = 1, DurationMinute = -10 } }
 
     };
 

@@ -10,6 +10,7 @@ public class TestsWithLoggedUser : IAsyncLifetime
 
     protected string Mail { get; } = new Bogus.DataSets.Internet().Email();
     protected string Password { get; } = "uPY994@euuK9&TPny#wSv5b";
+    protected string UserId { get; private set; }
     protected HttpClient Client { get; } 
     protected GameSyncAppFactory Factory { get; }
 
@@ -23,10 +24,9 @@ public class TestsWithLoggedUser : IAsyncLifetime
     {
         return Task.CompletedTask;
     }
-    public async Task InitializeAsync()
+    public virtual async Task InitializeAsync()
     {
-        await Factory.CreateConfirmedUser(Mail, Mail, Password);
-
+        UserId = await Factory.CreateConfirmedUser(Mail, Mail, Password);
         var (response, result) = await Client.POSTAsync<SignInEndpoint, SignInRequest, SuccessfulSignInResponse>(new SignInRequest { Email = Mail, Password = Password});
         Client.SetBearerToken(result!.Token);
     }

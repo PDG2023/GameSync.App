@@ -11,9 +11,9 @@ using Xunit;
 namespace GameSync.Api.Tests.UserGames;
 
 [Collection("FullApp")]
-public class DeleteGameTests : TestsWithLoggedUser
+public class DeletesGameTests : TestsWithLoggedUser
 {
-    public DeleteGameTests(GameSyncAppFactory factory) : base(factory)
+    public DeletesGameTests(GameSyncAppFactory factory) : base(factory)
     {
     }
 
@@ -31,7 +31,7 @@ public class DeleteGameTests : TestsWithLoggedUser
         var request = new DeleteGamesRequest { GamesId = new[] { 801, 803 } };
 
         // act
-        var (response, result) = await Client.DELETEAsync<DeleteGameEndpoint, DeleteGamesRequest, NotFound<List<int>>>(request);
+        var (response, result) = await Client.DELETEAsync<DeleteGamesEndpoint, DeleteGamesRequest, NotFound<List<int>>>(request);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -59,7 +59,7 @@ public class DeleteGameTests : TestsWithLoggedUser
         var request = new DeleteGamesRequest { GamesId = new[] { 1000, 1001 } };
 
         // act
-        var (response, result) = await Client.DELETEAsync<DeleteGameEndpoint, DeleteGamesRequest, Ok>(request);
+        var (response, result) = await Client.DELETEAsync<DeleteGamesEndpoint, DeleteGamesRequest, Ok>(request);
 
         // assert
         response.EnsureSuccessStatusCode();

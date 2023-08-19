@@ -19,11 +19,11 @@ public class DeleteGamesValidator : Validator<DeleteGamesRequest>
     }
 }
 
-public class DeleteGameEndpoint : Endpoint<DeleteGamesRequest, Results<BadRequestWhateverError, NotFound<List<int>>, Ok>>
+public class DeleteGamesEndpoint : Endpoint<DeleteGamesRequest, Results<BadRequestWhateverError, NotFound<List<int>>, Ok>>
 {
     private readonly GameSyncContext _context;
 
-    public DeleteGameEndpoint(GameSyncContext context)
+    public DeleteGamesEndpoint(GameSyncContext context)
     {
         _context = context;
     }

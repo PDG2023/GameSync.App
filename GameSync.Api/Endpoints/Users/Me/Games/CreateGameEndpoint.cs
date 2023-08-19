@@ -42,7 +42,7 @@ public class CreateGameEndpoint : Endpoint<CreateGameRequest, Results<Ok<Game>, 
         return TypedResults.Ok(trackingGame.Entity);
     }
 
-    public  Game RequestToGame(CreateGameRequest r)
+    private  Game RequestToGame(CreateGameRequest r)
     {
         return new Game
         {
@@ -50,7 +50,7 @@ public class CreateGameEndpoint : Endpoint<CreateGameRequest, Results<Ok<Game>, 
             MinPlayer = r.MinPlayer,
             Name = WebUtility.HtmlEncode(r.Name),
             MinAge = r.MinAge,
-            UserId = User.ClaimValue(ClaimsNames.UserId)!,
+            UserId = User.ClaimValue(ClaimsTypes.UserId)!,
             Description = WebUtility.HtmlEncode(r.Description),
             DurationMinute = r.DurationMinutes
         };

@@ -76,7 +76,7 @@ public class SignInEndpoint : Endpoint<SignInRequest, Results<Ok<SuccessfulSignI
             
             expireAt: DateTime.UtcNow.AddDays(1),
             priviledges: u => {
-                u.Claims.Add((ClaimsNames.UserId,  user.Id));
+                u.Claims.Add((ClaimsTypes.UserId,  user.Id));
             });
 
 

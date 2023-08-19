@@ -55,7 +55,7 @@ public class BadRequestWhateverError : IResult, IEndpointMetadataProvider
 
         public Error(ValidationFailure failure)
         {
-            Code = failure.PropertyName;
+            Code = failure.ErrorCode;
             Description = failure.ErrorMessage;
         }
 

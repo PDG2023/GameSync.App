@@ -1,12 +1,15 @@
-﻿using GameSync.Api.Persistence;
+﻿using FluentValidation;
+using GameSync.Api.Endpoints.Users.Me.Games;
+using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Net;
+using System.Text.Json.Serialization;
 
-namespace GameSync.Api.Endpoints.Users.Me.Collection;
+namespace GameSync.Api.Endpoints.Users.Me.Games;
 
 
-public class CreateGameRequest
+public class CreateGameRequest : IGame
 {
     public required string Name { get; init; }
     public required int MinPlayer { get; init; }
@@ -14,6 +17,24 @@ public class CreateGameRequest
     public required int MinAge { get; init; }
     public string? Description { get; init; }
     public int? DurationMinutes { get; init; }
+
+    [JsonIgnore]
+    int? IGame.MinPlayer => MinPlayer;
+
+    [JsonIgnore]
+    int? IGame.MaxPlayer => MaxPlayer;
+
+    [JsonIgnore]
+    int? IGame.MinAge => MinAge;
+}
+
+
+public class CreateGameValidator : Validator<CreateGameRequest>
+{
+    public CreateGameValidator()
+    {
+        Include(new GameValidator());
+    }
 }
 
 public class CreateGameEndpoint : Endpoint<CreateGameRequest, Results<Ok<Game>, BadRequestWhateverError>>
@@ -26,7 +47,6 @@ public class CreateGameEndpoint : Endpoint<CreateGameRequest, Results<Ok<Game>, 
 
     public override void Configure()
     {
-        DontThrowIfValidationFails();
         Post(string.Empty);
         Group<CollectionGroup>();
     }

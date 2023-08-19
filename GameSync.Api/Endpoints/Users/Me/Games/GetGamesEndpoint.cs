@@ -1,4 +1,4 @@
-﻿using GameSync.Api.Endpoints.Users.Me.Collection;
+﻿using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;

@@ -18,7 +18,7 @@ using System.Text.Json;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddFastEndpoints();
+builder.Services.AddFastEndpoints( o => o.IncludeAbstractValidators = true);
 builder.Services.SwaggerDocument(x => x.ShortSchemaNames = true);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

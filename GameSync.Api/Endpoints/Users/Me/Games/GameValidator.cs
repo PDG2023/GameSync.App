@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 
-namespace GameSync.Api.Endpoints.Users.Me.Collection;
+namespace GameSync.Api.Endpoints.Users.Me.Games;
 
-public class CreateOrUpdateGameValidator : Validator<CreateGameRequest>
+public class GameValidator : AbstractValidator<IGame>
 {
 
-    public CreateOrUpdateGameValidator() 
+    public GameValidator() 
     {
         RuleFor(x => x.Name).NotEmpty();
         RuleFor(x => x.MinPlayer).GreaterThan(0);

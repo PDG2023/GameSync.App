@@ -1,5 +1,5 @@
 ﻿using FastEndpoints;
-using GameSync.Api.Endpoints.Users.Me.Collection;
+using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Persistence.Entities;
 using Xunit;
 using Xunit.Abstractions;

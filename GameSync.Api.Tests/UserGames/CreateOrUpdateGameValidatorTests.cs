@@ -29,13 +29,24 @@ public class CreateOrUpdateGameValidatorTests
 
         Assert.True(result.IsValid);
         Assert.Empty(result.Errors);
-        
-
     }
 
     [Fact]
-    public void When_description_and_duration_are_negative_validation_should_fail()
+    public void When_duration_is_negative_or_description_is_whitespace_validation_should_fail()
     {
-       
+        var newGameRequest = new CreateGameRequest
+        {
+            MaxPlayer = 6,
+            MinPlayer = 5,
+            MinAge = 5,
+            Name = "name",
+            Description = " ",
+            DurationMinute = -4
+        };
+
+        var result = _validator.Validate(newGameRequest);
+
+        Assert.False(result.IsValid);
+        Assert.Equal(2, result.Errors.Count);
     }
 }

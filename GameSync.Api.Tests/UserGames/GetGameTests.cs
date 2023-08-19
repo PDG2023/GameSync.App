@@ -45,18 +45,11 @@ public class GetGameTests
         [Fact]
         public async void Getting_games_of_user_with_two_games_should_return_them_all()
         {
-
             // arrange : add said games
-            using var scope = Factory.Services.CreateScope();
-            var user = await scope.Resolve<UserManager<User>>().FindByEmailAsync(Mail);
-            var games = new List<Game>
-            {
-                GetTestGame(user.Id, "first"),
-                GetTestGame(user.Id, "second"),
-            };
-            var ctx = scope.Resolve<GameSyncContext>();
-            await ctx.Games.AddRangeAsync(games);
-            await ctx.SaveChangesAsync();
+            var games = await Task.WhenAll(
+                Factory.CreateTestGame(UserId, 50),
+                Factory.CreateTestGame(UserId, 51)
+            );
 
             // act 
            var (response, result) = await Client.GETAsync<GetGamesEndpoint, IEnumerable<Game>>();
@@ -65,21 +58,10 @@ public class GetGameTests
             Assert.NotNull(result);
             response.EnsureSuccessStatusCode();
             Assert.Collection(result,
-                first => Assert.Equal("first", first.Name),
-                second => Assert.Equal("second", second.Name));
+                first => Assert.Equal(50, first.Id),
+                second => Assert.Equal(51, second.Id));
         }
-
-
-        private static Game GetTestGame(string userId, string name) => new Game
-        {
-            MaxPlayer = 5,
-            MinAge = 5,
-            MinPlayer = 5,
-            Name = name,
-            UserId = userId
-        };
     }
-
 
 }
 

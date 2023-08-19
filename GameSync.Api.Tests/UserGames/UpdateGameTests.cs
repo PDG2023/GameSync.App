@@ -38,7 +38,7 @@ public class UpdateGameTests : TestsWithLoggedUser
     {
         // arrange
         var id = new Random().Next();
-        var game = await CreateTestGame(id);
+        var game = await Factory.CreateTestGame(UserId, id);
 
         var requestsToTests = GetMalformedRequests(game);
 
@@ -59,7 +59,7 @@ public class UpdateGameTests : TestsWithLoggedUser
     {
         // arrange
         var id = new Random().Next();
-        await CreateTestGame(id);
+        await Factory.CreateTestGame(UserId, id);
         var request = new UpdateGameRequest
         {
             GameId = id,
@@ -85,27 +85,6 @@ public class UpdateGameTests : TestsWithLoggedUser
 
     }
 
-
-    private async Task<Game> CreateTestGame(int id)
-    {
-        var game = new Game
-        {
-            Id = id,
-            MaxPlayer = 10,
-            MinPlayer = 5,
-            DurationMinute = 5,
-            UserId = UserId,
-            MinAge = 5,
-            Name = "game",
-            Description = "Game's description"
-        };
-
-        using var scope = Factory.Services.CreateScope();
-        var ctx = scope.Resolve<GameSyncContext>();
-        await ctx.Games.AddAsync(game);
-        await ctx.SaveChangesAsync();
-        return game;
-    }
 
     private static IEnumerable<(UpdateGameRequest req, string expectedErrorCode)> GetMalformedRequests(Game originalGame)
     {

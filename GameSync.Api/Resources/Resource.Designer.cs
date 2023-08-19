@@ -61,6 +61,15 @@ namespace GameSync.Api.Resources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Le(s) jeu(x) suivant(s) n&apos;existe(nt) pas :.
+        /// </summary>
+        public static string GamesNotFound {
+            get {
+                return ResourceManager.GetString("GamesNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Le nombre de joueur maximum ne peut pas être supérieur au nombre de joueur minimum..
         /// </summary>
         public static string MaxPlayerLowerThanMinPlayer {

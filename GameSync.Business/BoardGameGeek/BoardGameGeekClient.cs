@@ -59,7 +59,7 @@ public class BoardGameGeekClient : IGameSearcher
                 Id = int.Parse(searchResult.Id),
                 Name = searchResult.Name.Value,
                 IsExpansion = searchResult.Type == ExpansionType,
-                YearPublished = int.Parse(searchResult.YearPublished.Value),
+                YearPublished = int.Parse(searchResult.YearPublished?.Value ?? "0"),
                 ImageUrl = boardGame.Image,
                 ThumbnailUrl = boardGame.Thumbnail,
             };

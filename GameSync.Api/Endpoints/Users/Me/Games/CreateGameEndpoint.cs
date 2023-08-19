@@ -1,12 +1,15 @@
-﻿using GameSync.Api.Persistence;
+﻿using FluentValidation;
+using GameSync.Api.Endpoints.Users.Me.Games;
+using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Net;
+using System.Text.Json.Serialization;
 
-namespace GameSync.Api.Endpoints.Users.Me.Collection;
+namespace GameSync.Api.Endpoints.Users.Me.Games;
 
 
-public class CreateGameRequest
+public class CreateGameRequest : IGame
 {
     public required string Name { get; init; }
     public required int MinPlayer { get; init; }
@@ -14,6 +17,25 @@ public class CreateGameRequest
     public required int MinAge { get; init; }
     public string? Description { get; init; }
     public int? DurationMinute { get; init; }
+
+    [JsonIgnore]
+    int? IGame.MinPlayer => MinPlayer;
+
+    [JsonIgnore]
+    int? IGame.MaxPlayer => MaxPlayer;
+
+    [JsonIgnore]
+    int? IGame.MinAge => MinAge;
+}
+
+
+public class CreateGameValidator : Validator<CreateGameRequest>
+{
+    public CreateGameValidator()
+    {
+        RuleFor(r => r.Name).NotEmpty();
+        Include(new GameValidator());
+    }
 }
 
 public class CreateGameEndpoint : Endpoint<CreateGameRequest, Results<Ok<Game>, BadRequestWhateverError>>
@@ -26,7 +48,6 @@ public class CreateGameEndpoint : Endpoint<CreateGameRequest, Results<Ok<Game>, 
 
     public override void Configure()
     {
-        DontThrowIfValidationFails();
         Post(string.Empty);
         Group<CollectionGroup>();
     }
@@ -42,7 +63,7 @@ public class CreateGameEndpoint : Endpoint<CreateGameRequest, Results<Ok<Game>, 
         return TypedResults.Ok(trackingGame.Entity);
     }
 
-    public  Game RequestToGame(CreateGameRequest r)
+    private  Game RequestToGame(CreateGameRequest r)
     {
         return new Game
         {
@@ -50,7 +71,7 @@ public class CreateGameEndpoint : Endpoint<CreateGameRequest, Results<Ok<Game>, 
             MinPlayer = r.MinPlayer,
             Name = WebUtility.HtmlEncode(r.Name),
             MinAge = r.MinAge,
-            UserId = User.ClaimValue(ClaimsNames.UserId)!,
+            UserId = User.ClaimValue(ClaimsTypes.UserId)!,
             Description = WebUtility.HtmlEncode(r.Description),
             DurationMinute = r.DurationMinute
         };

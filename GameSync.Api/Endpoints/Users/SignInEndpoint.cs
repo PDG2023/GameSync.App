@@ -70,13 +70,13 @@ public class SignInEndpoint : Endpoint<SignInRequest, Results<Ok<SuccessfulSignI
 
 
         var token = JWTBearer.CreateToken(
-            signingKey: config["Jwt:SignKey"],
-            issuer: config["Jwt:Issuer"],
-            audience: config["Jwt:Issuer"],
+            signingKey: config["Jwt:SignKey"]!,
+            issuer: config["Jwt:Issuer"]!,
+            audience: config["Jwt:Issuer"]!,
             
             expireAt: DateTime.UtcNow.AddDays(1),
             priviledges: u => {
-                u.Claims.Add((ClaimsNames.UserId,  user.Id));
+                u.Claims.Add((ClaimsTypes.UserId,  user.Id));
             });
 
 

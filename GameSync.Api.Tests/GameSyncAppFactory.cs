@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
 using Xunit;
 
+
 namespace GameSync.Api.Tests;
 
 [CollectionDefinition("FullApp")]
@@ -51,7 +52,7 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         await manager.CreateAsync(user, password);
     }
 
-    public async Task CreateConfirmedUser(string mail, string username, string password)
+    public async Task<string> CreateConfirmedUser(string mail, string username, string password)
     {
         await CreateUnconfirmedUser(mail, username, password);
         using var scope = Services.CreateScope();
@@ -59,6 +60,8 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         var user = await manager.FindByEmailAsync(mail);
         var confirmationToken = await manager.GenerateEmailConfirmationTokenAsync(user!);
         await manager.ConfirmEmailAsync(user!, confirmationToken);
+        return user.Id;
+
     }
 
 

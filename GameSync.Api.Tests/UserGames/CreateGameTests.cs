@@ -1,28 +1,19 @@
-﻿using Bogus.DataSets;
-using FastEndpoints;
-using GameSync.Api.Endpoints.Users;
-using GameSync.Api.Endpoints.Users.Me.Collection;
+﻿using FastEndpoints;
+using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Persistence.Entities;
-using IdentityModel.Client;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GameSync.Api.Tests.Collections;
+namespace GameSync.Api.Tests.UserGames;
 
 
 [Collection("FullApp")]
-public class CreateGameTests : IAsyncLifetime
+public class CreateGameTests : TestsWithLoggedUser
 {
-    private readonly string mail = new Internet().Email();
-    private const string password = "uPY994@euuK9&TPny#wSv5b";
 
-    private readonly GameSyncAppFactory _factory;
     private readonly ITestOutputHelper _output;
-    private HttpClient _client;   
-    public CreateGameTests(GameSyncAppFactory factory, ITestOutputHelper output)
+    public CreateGameTests(GameSyncAppFactory factory, ITestOutputHelper output) : base(factory)
     {
-        _client = factory.CreateClient();
-        _factory = factory;
         _output = output;
     }
 
@@ -40,9 +31,9 @@ public class CreateGameTests : IAsyncLifetime
             DurationMinute = -5
         };
 
-        var (response, result) = await _client.POSTAsync<CreateGameEndpoint, CreateGameRequest, BadRequestWhateverError>(newGameRequest);
+        var (response, result) = await Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, BadRequestWhateverError>(newGameRequest);
         Assert.NotNull(result);
-        Assert.Equal(5, result.Errors.Count());
+        Assert.Equal(7, result.Errors.Count());
     }
 
     [Fact]
@@ -60,7 +51,7 @@ public class CreateGameTests : IAsyncLifetime
         };
 
         // act
-        var (response, result) = await _client.POSTAsync<CreateGameEndpoint, CreateGameRequest, Game>(newGameRequest);
+        var (response, result) = await Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, Game>(newGameRequest);
 
         // assert
         await response.EnsureSuccessAndDumpBodyIfNot(_output);
@@ -74,16 +65,4 @@ public class CreateGameTests : IAsyncLifetime
         Assert.Equal(newGameRequest.MinAge, result.MinAge);
     }
 
-    public Task DisposeAsync()
-    {
-        return Task.CompletedTask;
-    }
-
-    public async Task InitializeAsync()
-    {
-        await _factory.CreateConfirmedUser(mail, mail, password);
-
-        var (response, result) = await _client.POSTAsync<SignInEndpoint, SignInRequest, SuccessfulSignInResponse>(new SignInRequest { Email = mail, Password = password });
-        _client.SetBearerToken(result.Token);
-    }
 }

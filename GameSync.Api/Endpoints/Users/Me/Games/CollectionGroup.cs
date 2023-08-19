@@ -4,9 +4,9 @@
     {
         public CollectionGroup()
         {
-            Configure("collection", x => {
+            Configure("games", x => {
                 x.DontAutoTag();
-                x.Options(y => y.WithTags("Collection"));
+                x.Options(y => y.WithTags("User's games"));
             });
         }
     }

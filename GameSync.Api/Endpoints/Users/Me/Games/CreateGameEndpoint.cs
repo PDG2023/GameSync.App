@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using GameSync.Api.Persistence;
+﻿using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Net;
@@ -15,19 +14,6 @@ public class CreateGameRequest
     public required int MinAge { get; init; }
     public string? Description { get; init; }
     public int? DurationMinute { get; init; }
-}
-
-public class CreateGameValidator : Validator<CreateGameRequest>
-{
-    public CreateGameValidator() 
-    {
-        RuleFor(x => x.Name).NotEmpty();
-        RuleFor(x => x.MinPlayer).GreaterThan(0);
-        RuleFor(x => x.MaxPlayer).GreaterThan(0);
-        RuleFor(x => x.MinAge).GreaterThan(0).LessThan(120);
-        RuleFor(x => x.DurationMinute).GreaterThan(0);
-        RuleFor(x => x.Description).MaximumLength(500);
-    }
 }
 
 public class CreateGameEndpoint : Endpoint<CreateGameRequest, Results<Ok<Game>, BadRequestWhateverError>>

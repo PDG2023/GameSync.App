@@ -1,4 +1,4 @@
-﻿using GameSync.Business.BoardGameGeek.Models;
+﻿using GameSync.Business.BoardGameGeek.Model;
 using GameSync.Business.BoardGamesGeek;
 using Xunit;
 

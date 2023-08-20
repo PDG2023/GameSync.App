@@ -6,10 +6,14 @@ namespace GameSync.Api.Persistence;
 public class GameSyncContext : IdentityDbContext<User>
 {
     public DbSet<Game> Games { get; set; }
+    public DbSet<BoardGameGeekGame> BoardGameGeekGames { get; set; }
 
     // Needed for migrations
     public GameSyncContext() { }
 
-    public GameSyncContext(DbContextOptions<GameSyncContext> options) : base(options) { }
+    public GameSyncContext(DbContextOptions<GameSyncContext> options) : base(options) {
+    
+    }
+
 
 }

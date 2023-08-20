@@ -47,7 +47,6 @@ public class AddGameFromBggEndpoint : Endpoint<AddGameFromBggRequest, Results<No
         }
 
 
-
         return await base.ExecuteAsync(req, ct);
     }
 }

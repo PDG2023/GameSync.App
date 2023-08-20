@@ -1,4 +1,4 @@
-﻿namespace GameSync.Business.BoardGameGeek.Models;
+﻿namespace GameSync.Business.BoardGameGeek.Model;
 
 public class BoardGameSearchResult
 {

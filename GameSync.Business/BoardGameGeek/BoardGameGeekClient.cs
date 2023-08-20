@@ -1,4 +1,4 @@
-﻿using GameSync.Business.BoardGameGeek.Models;
+﻿using GameSync.Business.BoardGameGeek.Model;
 using GameSync.Business.BoardGamesGeek.Schemas.Search;
 using GameSync.Business.BoardGamesGeek.Schemas.Thing;
 using System.Xml.Serialization;
@@ -83,7 +83,7 @@ public class BoardGameGeekClient
             MinPlayer = thing.MinPlayers.ValueAsInt,
             DurationMinute = thing.PlayingTime.ValueAsInt,
             MinAge = thing.MinAge.ValueAsInt,
-            Name = thing.Names.FirstOrDefault(x => x.Type == "primary")?.Value
+            Name = thing.Names.FirstOrDefault(x => x.Type == "primary")?.Value ?? thing.Names.FirstOrDefault()?.Value
         });
     }
 

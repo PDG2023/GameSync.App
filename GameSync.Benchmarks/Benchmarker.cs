@@ -1,4 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Diagnosers;
+using BenchmarkDotNet.Diagnostics.Windows;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using GameSync.Business.BoardGameGeek;
@@ -7,14 +10,14 @@ using GameSync.Business.BoardGamesGeek;
 using Microsoft.Extensions.Caching.Memory;
 
 
-[SimpleJob(BenchmarkDotNet.Engines.RunStrategy.Monitoring, RuntimeMoniker.Net70)]
+[SimpleJob(RuntimeMoniker.Net70)]
 [IterationCount(5)]
 public class BggClient
 {
 
     private static BoardGameGeekClient _noCacheClient = new();
     private static CachedBoardGameGeekClient _cachedClient = new(new MemoryCache(new MemoryCacheOptions()));
-    private static IEnumerable<int> ids = Enumerable.Range(1000, 1100).ToList();
+    private static IEnumerable<int> ids = Enumerable.Range(1000, 1200).ToList();
 
 
     [Benchmark]
@@ -33,13 +36,13 @@ public class BggClient
     [Benchmark]
     public async Task<List<BoardGameSearchResult>> SearchCluedoNoCache()
     {
-        return (await _noCacheClient.SearchBoardGamesAsync("Cluedo")).ToList();
+        return (await _noCacheClient.SearchBoardGamesAsync("Clu")).ToList();
     }
 
     [Benchmark]
     public async Task<List<BoardGameSearchResult>> SearchCluedoCache()
     {
-        return (await _cachedClient.SearchBoardGamesAsync("Cluedo")).ToList();
+        return (await _cachedClient.SearchBoardGamesAsync("Clu")).ToList();
     }
 
 
@@ -48,8 +51,8 @@ public class BggClient
 
 public class Benchmarker
 {
-    public static void Main()
+    public static void Main(string[] args)
     {
-        var summary = BenchmarkRunner.Run(typeof(Benchmarker).Assembly);
+        BenchmarkSwitcher.FromAssembly(typeof(Benchmarker).Assembly).Run(args);
     }
 }

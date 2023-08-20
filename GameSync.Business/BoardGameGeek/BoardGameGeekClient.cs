@@ -45,7 +45,7 @@ public class BoardGameGeekClient
         var body = await Client.GetStreamAsync($"search?type={Both}&query={term}");
 
         var searchResults = Deserialize<SearchResults>(body)!.Items;
-        var itemsId = searchResults.Select(item => item.Id).ToList();
+        var itemsId = searchResults.Select(item => item.Id);
 
         var boardGames = await GetDetailedThingsAsync(itemsId);
 
@@ -61,7 +61,7 @@ public class BoardGameGeekClient
                 ImageUrl = boardGame.Image,
                 ThumbnailUrl = boardGame.Thumbnail,
             };
-        }).ToList();
+        });
     }
 
     protected virtual async Task<IEnumerable<ThingItem>> GetDetailedThingsAsync(IEnumerable<string> ids)
@@ -85,7 +85,7 @@ public class BoardGameGeekClient
             DurationMinute = thing.PlayingTime?.ValueAsInt,
             MinAge = thing.MinAge?.ValueAsInt,
             Name = thing.Names?.FirstOrDefault(x => x.Type == "primary")?.Value ?? thing.Names.FirstOrDefault()?.Value
-        }).ToList();
+        });
     }
 
 }

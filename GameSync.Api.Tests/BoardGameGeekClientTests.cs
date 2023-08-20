@@ -1,5 +1,5 @@
-﻿using GameSync.Business.BoardGamesGeek;
-using GameSync.Business.Search;
+﻿using GameSync.Business.BoardGameGeek.Models;
+using GameSync.Business.BoardGamesGeek;
 using Xunit;
 
 namespace GameSync.Api.Tests;

@@ -1,14 +1,11 @@
-﻿using GameSync.Business.BoardGamesGeek.Schemas;
+﻿using GameSync.Business.BoardGameGeek.Models;
 using GameSync.Business.BoardGamesGeek.Schemas.Search;
 using GameSync.Business.BoardGamesGeek.Schemas.Thing;
-using GameSync.Business.Search;
-using System.Net.Http;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace GameSync.Business.BoardGamesGeek;
 // https://boardgamegeek.com/wiki/page/BGG_XML_API2
-public class BoardGameGeekClient : IGameSearcher
+public class BoardGameGeekClient 
 {
 
     public const string BoardGameType = "boardgame";

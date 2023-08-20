@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
-using GameSync.Business.Search;
+using GameSync.Business.BoardGameGeek.Models;
+using GameSync.Business.BoardGamesGeek;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Server.HttpSys;
 using System.Web;
@@ -34,16 +35,16 @@ public class SearchEndpoint : Endpoint<SearchGameRequest, PaginatedResult<BoardG
 {
     public const string ENDPOINT_ROUTE = "games/search";
 
-    private readonly IGameSearcher gameSearcher;
+    private readonly BoardGameGeekClient _client;
 
-    public SearchEndpoint(IGameSearcher gameSearcher)
+    public SearchEndpoint(BoardGameGeekClient client)
     {
-        this.gameSearcher = gameSearcher;
+        _client = client;
     }
 
     public override async Task<PaginatedResult<BoardGameSearchResult>> ExecuteAsync(SearchGameRequest req, CancellationToken ct)
     {
-        var collection = await gameSearcher.SearchBoardGamesAsync(req.Query);
+        var collection = await _client.SearchBoardGamesAsync(req.Query);
         var request = HttpContext.Request;
         return new PaginatedResult<BoardGameSearchResult>(
             collection,

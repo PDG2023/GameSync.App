@@ -40,4 +40,12 @@ public class BoardGameGeekClientTests
 
     }
 
+    [Fact]
+    public async Task Retrieving_non_existing_game_should_return_empty_collection()
+    {
+        var result = await _client.GetBoardGamesDetailAsync(new[] { 498445616 });
+        Assert.Empty(result);
+
+    }
+
 }

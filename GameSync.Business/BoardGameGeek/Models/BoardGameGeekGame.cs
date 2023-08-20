@@ -1,8 +1,9 @@
 ﻿namespace GameSync.Business.BoardGameGeek.Models;
 
-public class BoardGameGeekGame : IGame
+public class BoardGameGeekGame
 {
-    public string? Name { get; init; }
+    public required int Id { get; init; }
+    public required string? Name { get; init; }
 
     public int? MinPlayer { get; init; }
 

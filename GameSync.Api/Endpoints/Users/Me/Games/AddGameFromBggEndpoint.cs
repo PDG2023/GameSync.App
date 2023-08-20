@@ -21,7 +21,7 @@ public class AddGameFromBggValidator : Validator<AddGameFromBggRequest>
     }
 }
 
-public class AddGameFromBggEndpoint : Endpoint<AddGameFromBggRequest, Results<NotFound<List<int>>, Ok>>
+public class AddGameFromBggEndpoint : Endpoint<AddGameFromBggRequest, Results<NotFound<IEnumerable<int>>, Ok>>
 {
     private readonly BoardGameGeekClient _client;
 
@@ -36,11 +36,18 @@ public class AddGameFromBggEndpoint : Endpoint<AddGameFromBggRequest, Results<No
         Group<CollectionGroup>();
     }
 
-    public override Task<Results<NotFound<List<int>>, Ok>> ExecuteAsync(AddGameFromBggRequest req, CancellationToken ct)
+    public override async Task<Results<NotFound<IEnumerable<int>>, Ok>> ExecuteAsync(AddGameFromBggRequest req, CancellationToken ct)
     {
+        var games = await _client.GetBoardGamesDetailAsync(req.IDs);
+        var retrievedIds = games.Select(game => game.Id);
+        if (games.Count() != req.IDs.Count())
+        {
+            var nonExistingIds = req.IDs.Except(retrievedIds);
+            return TypedResults.NotFound(nonExistingIds);
+        }
 
 
 
-        return base.ExecuteAsync(req, ct);
+        return await base.ExecuteAsync(req, ct);
     }
 }

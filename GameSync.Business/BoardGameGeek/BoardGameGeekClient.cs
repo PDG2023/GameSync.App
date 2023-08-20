@@ -72,11 +72,12 @@ public class BoardGameGeekClient
 
     }
 
-    public async Task<IEnumerable<IGame>> GetBoardGamesDetailAsync(IEnumerable<int> ids)
+    public async Task<IEnumerable<BoardGameGeekGame>> GetBoardGamesDetailAsync(IEnumerable<int> ids)
     {
         var detail = await GetDetailedThingsAsync(ids.Select(x => x.ToString()));
         return detail.Select(thing => new BoardGameGeekGame
         {
+            Id = thing.Id,
             Description = thing.Description,
             MaxPlayer = thing.MaxPlayers.ValueAsInt,
             MinPlayer = thing.MinPlayers.ValueAsInt,

@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameSync.Business", "GameSy
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameSync.Api.Persistence", "GameSync.Api.Persistence\GameSync.Api.Persistence.csproj", "{7C9F5CC4-D790-4682-B36D-A62D8196C516}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameSync.Business.Benchmarks", "GameSync.Business.Benchmarks\GameSync.Business.Benchmarks.csproj", "{94C9CB81-1384-463F-8CBB-4A755C89CC7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameSync.Benchmarks", "GameSync.Benchmarks\GameSync.Benchmarks.csproj", "{94C9CB81-1384-463F-8CBB-4A755C89CC7D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

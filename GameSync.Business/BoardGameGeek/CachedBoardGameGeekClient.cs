@@ -2,14 +2,11 @@
 using GameSync.Business.BoardGamesGeek;
 using GameSync.Business.BoardGamesGeek.Schemas.Thing;
 using Microsoft.Extensions.Caching.Memory;
-using System.Runtime.InteropServices;
 
 namespace GameSync.Business.BoardGameGeek;
 
 public class CachedBoardGameGeekClient : BoardGameGeekClient
 {
-
-    private static Dictionary<string, ThingItem> testCache = new Dictionary<string, ThingItem>();
     private readonly IMemoryCache _memoryCache;
 
     public CachedBoardGameGeekClient(IMemoryCache cache)
@@ -26,7 +23,6 @@ public class CachedBoardGameGeekClient : BoardGameGeekClient
         {
             if (_memoryCache.TryGetValue<ThingItem>(id, out var game))
             {
-                Console.WriteLine("hit");
                 fetchedGames.Add(game!);
             }
             else
@@ -34,18 +30,20 @@ public class CachedBoardGameGeekClient : BoardGameGeekClient
                 gamesToFetch.Add(id);
             }
         }
-
-        var newGames = await base.GetDetailedThingsAsync(gamesToFetch);
-
-        foreach (var newGame in newGames)
+        if (gamesToFetch.Count > 0)
         {
-            using var entry = _memoryCache.CreateEntry(newGame.Id);
-            entry.Value = newGame;
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
-            
-        }
+            var newGames = await base.GetDetailedThingsAsync(gamesToFetch);
 
-        fetchedGames.AddRange(newGames);
+            foreach (var newGame in newGames)
+            {
+                using var entry = _memoryCache.CreateEntry(newGame.Id.ToString());
+                entry.Value = newGame;
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
+
+            }
+
+            fetchedGames.AddRange(newGames);
+        }
 
         return fetchedGames;
 

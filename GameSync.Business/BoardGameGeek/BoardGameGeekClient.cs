@@ -39,6 +39,7 @@ public class BoardGameGeekClient
         return (TOutput)new XmlSerializer(typeof(TOutput)).Deserialize(stream)!;
     }
 
+
     public async Task<IEnumerable<BoardGameSearchResult>> SearchBoardGamesAsync(string term)
     {
         var body = await Client.GetStreamAsync($"search?type={Both}&query={term}");
@@ -60,7 +61,7 @@ public class BoardGameGeekClient
                 ImageUrl = boardGame.Image,
                 ThumbnailUrl = boardGame.Thumbnail,
             };
-        });
+        }).ToList();
     }
 
     protected virtual async Task<IEnumerable<ThingItem>> GetDetailedThingsAsync(IEnumerable<string> ids)
@@ -84,7 +85,7 @@ public class BoardGameGeekClient
             DurationMinute = thing.PlayingTime?.ValueAsInt,
             MinAge = thing.MinAge?.ValueAsInt,
             Name = thing.Names?.FirstOrDefault(x => x.Type == "primary")?.Value ?? thing.Names.FirstOrDefault()?.Value
-        });
+        }).ToList();
     }
 
 }

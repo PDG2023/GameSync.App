@@ -10,14 +10,14 @@ WORKDIR /src
 COPY GameSync.*/*.csproj ./
 
 # reproduce the directory hierarchy according to the source folder
-# taken from : https://andrewlock.net/optimising-asp-net-core-apps-in-docker-avoiding-manually-copying-csproj-files-part-2/
-RUN for file in $(ls *.csproj); do mkdir -p ./${file%.*}/ && mv $file ./${file%.*}/; done
+COPY ./GameSync.Api/GameSync.Api.csproj ./GameSync.Api/GameSync.Api.csproj
+COPY ./GameSync.Api.Persistence/GameSync.Api.Persistence.csproj ./GameSync.Api.Persistence/GameSync.Api.Persistence.csproj
+COPY ./GameSync.Business/GameSync.Business.csproj ./GameSync.Business/GameSync.Business.csproj
 
 # Restore csprojs
 RUN for file in $(ls **/*.csproj); do dotnet restore ${file}; done
 
 # All except GameSync.Front
-# Must be manually copied to keep the same directory structures ...
 COPY ./GameSync.Api/ ./GameSync.Api/
 COPY ./GameSync.Api.Persistence/ ./GameSync.Api.Persistence/
 COPY ./GameSync.Business/ ./GameSync.Business/

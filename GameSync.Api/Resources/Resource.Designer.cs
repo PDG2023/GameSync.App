@@ -61,6 +61,15 @@ namespace GameSync.Api.Resources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Le jeu a déjà été ajouté.
+        /// </summary>
+        public static string GameAlreadyAdded {
+            get {
+                return ResourceManager.GetString("GameAlreadyAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Le(s) jeu(x) suivant(s) n&apos;existe(nt) pas :.
         /// </summary>
         public static string GamesNotFound {

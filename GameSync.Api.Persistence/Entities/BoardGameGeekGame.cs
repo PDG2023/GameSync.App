@@ -2,7 +2,7 @@
 
 namespace GameSync.Api.Persistence.Entities;
 
-[Index(nameof(BoardGameGeekId), IsUnique = true)]
+[Index(nameof(BoardGameGeekId), nameof(UserId), IsUnique = true)]
 public class BoardGameGeekGame : Game
 {
 

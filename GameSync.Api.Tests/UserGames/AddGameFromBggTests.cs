@@ -2,7 +2,6 @@
 using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Org.BouncyCastle.Crypto;
 using System.Net;
 using Xunit;
 using Xunit.Abstractions;
@@ -33,7 +32,7 @@ public class AddGameFromBggTests : TestsWithLoggedUser
         };
 
         // act
-        var (response, result) = await Client.POSTAsync<AddGameFromBggEndpoint, Endpoints.Users.Me.Games.AddGameFromBggRequest, NotFound<IEnumerable<int>>>(addExistingGameRequest);
+        var (response, result) = await Client.POSTAsync<AddGameFromBggEndpoint, AddGameFromBggRequest, NotFound<IEnumerable<int>>>(addExistingGameRequest);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -53,7 +52,7 @@ public class AddGameFromBggTests : TestsWithLoggedUser
         var (response, result) = await Client.POSTAsync<AddGameFromBggEndpoint, AddGameFromBggRequest, Ok>(addExistingGameRequest);
         var (secondResponse, secondResult) = await Client.POSTAsync<AddGameFromBggEndpoint, AddGameFromBggRequest, BadRequestWhateverError>(addExistingGameRequest);
 
-        response.EnsureSuccessAndDumpBodyIfNot(_output);
+        response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
         Assert.Equal(HttpStatusCode.BadRequest, secondResponse.StatusCode);
     }
 
@@ -72,8 +71,8 @@ public class AddGameFromBggTests : TestsWithLoggedUser
         var (getResponse, listOfGames) = await Client.GETAsync<GetGamesEndpoint, IEnumerable<Game>>();
 
         // assert
-        await response.EnsureSuccessAndDumpBodyIfNot(_output);
-        await getResponse.EnsureSuccessAndDumpBodyIfNot(_output);
+        await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
+        await getResponse.EnsureSuccessAndDumpBodyIfNotAsync(_output);
         Assert.NotNull(listOfGames);
         Assert.Collection(listOfGames,
             game =>

@@ -63,7 +63,7 @@ public class BoardGameGeekClient
         });
     }
 
-    private async Task<IEnumerable<ThingItem>> GetDetailedThingsAsync(IEnumerable<string> ids)
+    protected virtual async Task<IEnumerable<ThingItem>> GetDetailedThingsAsync(IEnumerable<string> ids)
     {
         var idsQueryParam = string.Join(',', ids);
         var things = await Client.GetStreamAsync($"thing?id={idsQueryParam}");
@@ -75,15 +75,15 @@ public class BoardGameGeekClient
     public async Task<IEnumerable<BoardGameGeekGame>> GetBoardGamesDetailAsync(IEnumerable<int> ids)
     {
         var detail = await GetDetailedThingsAsync(ids.Select(x => x.ToString()));
-        return detail.Select(thing => new BoardGameGeekGame
+        return detail.Where(x => x is not null).Select(thing => new BoardGameGeekGame
         {
             Id = thing.Id,
             Description = thing.Description,
-            MaxPlayer = thing.MaxPlayers.ValueAsInt,
-            MinPlayer = thing.MinPlayers.ValueAsInt,
-            DurationMinute = thing.PlayingTime.ValueAsInt,
-            MinAge = thing.MinAge.ValueAsInt,
-            Name = thing.Names.FirstOrDefault(x => x.Type == "primary")?.Value ?? thing.Names.FirstOrDefault()?.Value
+            MaxPlayer = thing.MaxPlayers?.ValueAsInt,
+            MinPlayer = thing.MinPlayers?.ValueAsInt,
+            DurationMinute = thing.PlayingTime?.ValueAsInt,
+            MinAge = thing.MinAge?.ValueAsInt,
+            Name = thing.Names?.FirstOrDefault(x => x.Type == "primary")?.Value ?? thing.Names.FirstOrDefault()?.Value
         });
     }
 

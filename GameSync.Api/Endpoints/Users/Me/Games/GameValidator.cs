@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using GameSync.Api.Resources;
+using GameSync.Business;
 
 namespace GameSync.Api.Endpoints.Users.Me.Games;
 

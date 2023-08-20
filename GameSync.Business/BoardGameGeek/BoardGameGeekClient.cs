@@ -72,4 +72,18 @@ public class BoardGameGeekClient
 
     }
 
+    public async Task<IEnumerable<IGame>> GetBoardGamesDetailAsync(IEnumerable<int> ids)
+    {
+        var detail = await GetDetailedThingsAsync(ids.Select(x => x.ToString()));
+        return detail.Select(thing => new BoardGameGeekGame
+        {
+            Description = thing.Description,
+            MaxPlayer = thing.MaxPlayers.ValueAsInt,
+            MinPlayer = thing.MinPlayers.ValueAsInt,
+            DurationMinute = thing.PlayingTime.ValueAsInt,
+            MinAge = thing.MinAge.ValueAsInt,
+            Name = thing.Names.FirstOrDefault(x => x.Type == "primary")?.Value
+        });
+    }
+
 }

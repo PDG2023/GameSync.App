@@ -1,9 +1,9 @@
 ﻿using FastEndpoints.Security;
 using FluentValidation;
-using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Api.Resources;
+using GameSync.Business;
 using GameSync.Business.BoardGamesGeek.Schemas;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;

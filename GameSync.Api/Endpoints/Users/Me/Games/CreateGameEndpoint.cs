@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
+using GameSync.Business;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Net;
 using System.Text.Json.Serialization;

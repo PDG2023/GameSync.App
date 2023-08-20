@@ -1,5 +1,6 @@
 ﻿using Duende.IdentityServer.Events;
 using FluentValidation;
+using GameSync.Business.BoardGamesGeek;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Text.Json.Serialization;
 
@@ -22,6 +23,12 @@ public class AddGameFromBggValidator : Validator<AddGameFromBggRequest>
 
 public class AddGameFromBggEndpoint : Endpoint<AddGameFromBggRequest, Results<NotFound<List<int>>, Ok>>
 {
+    private readonly BoardGameGeekClient _client;
+
+    public AddGameFromBggEndpoint(BoardGameGeekClient client)
+    {
+        _client = client;
+    }
 
     public override void Configure()
     {

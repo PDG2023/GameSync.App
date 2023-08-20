@@ -25,6 +25,9 @@ namespace Common
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("value")]
         public string Value { get; set; }
+
+        public int ValueAsInt => int.Parse(Value);
+
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.864.0")]

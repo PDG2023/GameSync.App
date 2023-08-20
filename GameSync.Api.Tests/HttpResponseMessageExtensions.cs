@@ -5,7 +5,7 @@ namespace GameSync.Api.Tests
 {
     internal static class HttpResponseMessageExtensions
     {
-        public static async Task EnsureSuccessAndDumpBodyIfNot(this HttpResponseMessage message, ITestOutputHelper output)
+        public static async Task EnsureSuccessAndDumpBodyIfNotAsync(this HttpResponseMessage message, ITestOutputHelper output)
         {
             try
             {

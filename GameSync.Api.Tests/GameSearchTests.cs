@@ -25,7 +25,7 @@ public class GameSearchTests
         var client = _factory.CreateClient();
 
         var response = await client.GetAsync("/api/games/search?query=Vimto Cluedo&pageSize=10&page=0");
-        await response.EnsureSuccessAndDumpBodyIfNot(_output);
+        await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
         var searchResult = await response.Content.ReadFromJsonAsync<PaginatedResult<BoardGameSearchResult>>();
 
         Assert.Null(searchResult.PreviousPage);

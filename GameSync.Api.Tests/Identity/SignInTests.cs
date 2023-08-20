@@ -99,7 +99,7 @@ public class SignInTests
         var (response, result) = await _client.POSTAsync<SignInEndpoint, SignInRequest, SuccessfulSignInResponse>(signInRequest);
 
         // assert
-        await response.EnsureSuccessAndDumpBodyIfNot(output);
+        await response.EnsureSuccessAndDumpBodyIfNotAsync(output);
 
         Assert.NotNull(result);
         Assert.Equal(result.Email, mail);

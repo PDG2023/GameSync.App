@@ -12,7 +12,7 @@
 // XmlSchemaClassGenerator.Console .\v2\search.xsd
 using System.Xml.Serialization;
 
-namespace GameSync.Business.BoardGamesGeek.Schemas
+namespace GameSync.Business.BoardGamesGeek.Schemas.Search
 {
     
     
@@ -70,7 +70,7 @@ namespace GameSync.Business.BoardGamesGeek.Schemas
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRoot("items")]
-    public partial class Results
+    public partial class SearchResults
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -102,9 +102,9 @@ namespace GameSync.Business.BoardGamesGeek.Schemas
         }
         
         /// <summary>
-        /// <para xml:lang="en">Initializes a new instance of the <see cref="Results" /> class.</para>
+        /// <para xml:lang="en">Initializes a new instance of the <see cref="SearchResults" /> class.</para>
         /// </summary>
-        public Results()
+        public SearchResults()
         {
             this._item = new System.Collections.ObjectModel.Collection<Item>();
         }

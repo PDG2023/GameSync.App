@@ -1,5 +1,6 @@
 ﻿using FastEndpoints.Security;
 using FluentValidation;
+using GameSync.Api.Common;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Api.Resources;
@@ -10,10 +11,8 @@ using System.Net;
 
 namespace GameSync.Api.Endpoints.Users.Me.Games;
 
-public class UpdateGameRequest : GameRequest
+public class UpdateGameRequest : SingleGameRequest, IGameRequest
 {
-    public required int GameId { get; init; }
-
     public string? Name { get; init; }
     public int? MinPlayer { get; init; }
     public int? MaxPlayer { get; init; }
@@ -26,8 +25,8 @@ public class UpdateGameValidator : Validator<UpdateGameRequest>
 {
     public UpdateGameValidator()
     {
-        RuleFor(x => x.GameId).GreaterThan(0);
         Include(new GameValidator());
+        Include(new SingleGameRequestValidator());
     }
 }
 
@@ -42,7 +41,7 @@ public class UpdateGameEndpoint : Endpoint<UpdateGameRequest, Results<NotFound, 
 
     public override void Configure()
     {
-        Patch(string.Empty);
+        Patch("{Id}");
         Group<CollectionGroup>();
     }
 
@@ -57,7 +56,7 @@ public class UpdateGameEndpoint : Endpoint<UpdateGameRequest, Results<NotFound, 
 
         var userId = User.ClaimValue(ClaimsTypes.UserId);
 
-        var game = await _context.Games.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == req.GameId);
+        var game = await _context.Games.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == req.Id);
         if (game is null)
         {
             return TypedResults.NotFound();

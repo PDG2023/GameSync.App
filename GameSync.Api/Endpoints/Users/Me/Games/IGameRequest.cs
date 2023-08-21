@@ -1,6 +1,6 @@
 ﻿namespace GameSync.Api.Endpoints.Users.Me.Games;
 
-public interface GameRequest
+public interface IGameRequest
 {
     public string? Name { get; }
     public int? MinPlayer { get; }

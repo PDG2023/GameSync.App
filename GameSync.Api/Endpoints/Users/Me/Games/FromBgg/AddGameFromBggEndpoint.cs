@@ -6,10 +6,10 @@ using GameSync.Business.BoardGamesGeek;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameSync.Api.Endpoints.Users.Me.Games;
+namespace GameSync.Api.Endpoints.Users.Me.Games.FromBgg;
 
 
-public class AddGameFromBggEndpoint : Endpoint<SingleGameRequest, Results<NotFound<IEnumerable<int>>, Ok, BadRequestWhateverError>>
+public class AddGameFromBggEndpoint : Endpoint<SingleGameRequest, Results<NotFound, Ok, BadRequestWhateverError>>
 {
     private readonly BoardGameGeekClient _client;
     private readonly GameSyncContext _context;
@@ -26,7 +26,7 @@ public class AddGameFromBggEndpoint : Endpoint<SingleGameRequest, Results<NotFou
         Group<CollectionGroup>();
     }
 
-    public override async Task<Results<NotFound<IEnumerable<int>>, Ok, BadRequestWhateverError>> ExecuteAsync(SingleGameRequest req, CancellationToken ct)
+    public override async Task<Results<NotFound, Ok, BadRequestWhateverError>> ExecuteAsync(SingleGameRequest req, CancellationToken ct)
     {
         if (ValidationFailed)
         {
@@ -37,7 +37,7 @@ public class AddGameFromBggEndpoint : Endpoint<SingleGameRequest, Results<NotFou
         var game = games.FirstOrDefault();
         if (game is null)
         {
-            return TypedResults.NotFound(ids.AsEnumerable());
+            return TypedResults.NotFound();
         }
 
         var userId = User.ClaimValue(ClaimsTypes.UserId);
@@ -60,7 +60,7 @@ public class AddGameFromBggEndpoint : Endpoint<SingleGameRequest, Results<NotFou
             DurationMinute = game.DurationMinute,
             UserId = userId!
         };
-        
+
         await _context.BoardGameGeekGames.AddAsync(entityGame);
         await _context.SaveChangesAsync();
 

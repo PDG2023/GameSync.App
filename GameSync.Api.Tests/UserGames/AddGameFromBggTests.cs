@@ -1,6 +1,7 @@
 ﻿using FastEndpoints;
 using GameSync.Api.Common;
 using GameSync.Api.Endpoints.Users.Me.Games;
+using GameSync.Api.Endpoints.Users.Me.Games.FromBgg;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Net;
@@ -33,11 +34,10 @@ public class AddGameFromBggTests : TestsWithLoggedUser
         };
 
         // act
-        var (response, result) = await Client.POSTAsync<AddGameFromBggEndpoint, SingleGameRequest, NotFound<IEnumerable<int>>>(addExistingGameRequest);
+        var (response, result) = await Client.POSTAsync<AddGameFromBggEndpoint, SingleGameRequest, NotFound>(addExistingGameRequest);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        Assert.Equal($"[{nonExistingId}]", await response.Content.ReadAsStringAsync());
 
     }
 

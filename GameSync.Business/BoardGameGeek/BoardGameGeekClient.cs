@@ -84,6 +84,7 @@ public class BoardGameGeekClient
             MinPlayer = thing.MinPlayers?.ValueAsInt,
             DurationMinute = thing.PlayingTime?.ValueAsInt,
             MinAge = thing.MinAge?.ValueAsInt,
+            ImageUrl = thing.Image,
             Name = thing.Names?.FirstOrDefault(x => x.Type == "primary")?.Value ?? thing.Names.FirstOrDefault()?.Value
         });
     }

@@ -6,6 +6,10 @@ public class GamesGroup : Group
 
     public GamesGroup()
     {
-        Configure(Prefix, x => x.AllowAnonymous());
+        Configure(Prefix, x =>
+        {
+            x.AllowAnonymous();
+            x.DontThrowIfValidationFails();
+        });
     }
 }

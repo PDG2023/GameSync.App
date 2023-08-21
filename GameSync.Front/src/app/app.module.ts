@@ -18,7 +18,7 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
 import {SearchComponent} from './common/search/search.component';
-import {LocationStrategy, PathLocationStrategy} from "@angular/common";
+import {LocationStrategy, HashLocationStrategy} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -46,7 +46,7 @@ import {LocationStrategy, PathLocationStrategy} from "@angular/common";
   providers: [
     {
       provide: LocationStrategy,
-      useClass: PathLocationStrategy
+      useClass: HashLocationStrategy
     }
   ],
   bootstrap: [AppComponent]

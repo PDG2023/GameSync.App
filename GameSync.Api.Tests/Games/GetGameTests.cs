@@ -1,4 +1,5 @@
 ﻿using FastEndpoints;
+using GameSync.Api.Common;
 using GameSync.Api.Endpoints.Games;
 using GameSync.Business.BoardGameGeek.Model;
 using GameSync.Business.BoardGamesGeek;
@@ -23,9 +24,9 @@ public class GetGameTests
     [Fact]
     public async Task Retrieving_details_of_non_existing_game_produces_not_found()
     {
-        var detailGameRequest = new GetGameRequest() { Id = 5644415 };
+        var detailGameRequest = new SingleGameRequest { Id = 5644415 };
 
-        var (response, result) = await _client.GETAsync<GetGameEndpoint, GetGameRequest, NotFound>(detailGameRequest);
+        var (response, result) = await _client.GETAsync<GetGameEndpoint, SingleGameRequest, NotFound>(detailGameRequest);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -33,9 +34,9 @@ public class GetGameTests
     [Fact]
     public async Task Retrieving_details_of_existing_game_should_return_it()
     {
-        var detailGameRequest = new GetGameRequest() { Id = 1087 };
+        var detailGameRequest = new SingleGameRequest { Id = 1087 };
 
-        var (response, result) = await _client.GETAsync<GetGameEndpoint, GetGameRequest, BoardGameGeekGame>(detailGameRequest);
+        var (response, result) = await _client.GETAsync<GetGameEndpoint, SingleGameRequest, BoardGameGeekGame>(detailGameRequest);
 
         response.EnsureSuccessStatusCode();
 

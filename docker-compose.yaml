@@ -10,6 +10,8 @@ services:
         image: maildev/maildev
         restart: always
         container_name: mail
+        networks:
+            - dev
         ports: 
             - "1080:1080"
             - "1025:1025"
@@ -43,6 +45,9 @@ services:
         environment:
             - "ConnectionStrings__Default=User ID=postgres;Password=postgres;Host=db;Port=5432;Database=gamesync;"
             - "ASPNETCORE_ENVIRONMENT=Development"
+            - "Smtp__Host=mail"
+            - "Smtp__Port=1025"
+            - "Smtp__From=no-reply@gamesync.com"
         networks:
             - dev
         ports:

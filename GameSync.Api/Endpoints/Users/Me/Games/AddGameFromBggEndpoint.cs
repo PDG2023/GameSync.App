@@ -1,29 +1,15 @@
 ﻿using FluentValidation;
+using GameSync.Api.Common;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Business.BoardGamesGeek;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
 
 namespace GameSync.Api.Endpoints.Users.Me.Games;
 
-public class AddGameFromBggRequest
-{
-    [FromRoute]
-    public required int Id { get; set; }
-}
 
-public class AddGameFromBggValidator : Validator<AddGameFromBggRequest>
-{
-    public AddGameFromBggValidator()
-    {
-        RuleFor(x => x.Id).GreaterThan(0);
-    }
-}
-
-public class AddGameFromBggEndpoint : Endpoint<AddGameFromBggRequest, Results<NotFound<IEnumerable<int>>, Ok, BadRequestWhateverError>>
+public class AddGameFromBggEndpoint : Endpoint<SingleGameRequest, Results<NotFound<IEnumerable<int>>, Ok, BadRequestWhateverError>>
 {
     private readonly BoardGameGeekClient _client;
     private readonly GameSyncContext _context;
@@ -40,7 +26,7 @@ public class AddGameFromBggEndpoint : Endpoint<AddGameFromBggRequest, Results<No
         Group<CollectionGroup>();
     }
 
-    public override async Task<Results<NotFound<IEnumerable<int>>, Ok, BadRequestWhateverError>> ExecuteAsync(AddGameFromBggRequest req, CancellationToken ct)
+    public override async Task<Results<NotFound<IEnumerable<int>>, Ok, BadRequestWhateverError>> ExecuteAsync(SingleGameRequest req, CancellationToken ct)
     {
         if (ValidationFailed)
         {

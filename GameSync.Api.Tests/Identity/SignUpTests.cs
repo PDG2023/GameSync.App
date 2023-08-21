@@ -2,10 +2,12 @@
 using FastEndpoints;
 using GameSync.Api.Endpoints.Users;
 using GameSync.Api.Persistence.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace GameSync.Api.Tests.Identity;
 
@@ -15,11 +17,13 @@ public class SignUpTests
 {
     private readonly GameSyncAppFactory _factory;
     private readonly HttpClient _client;
+    private readonly ITestOutputHelper _output;
 
-    public SignUpTests(GameSyncAppFactory integrationTestFactory)
+    public SignUpTests(GameSyncAppFactory integrationTestFactory, ITestOutputHelper output)
     {
         _factory = integrationTestFactory;
         _client = _factory.CreateClient();
+        _output = output;
     }
 
 
@@ -85,6 +89,32 @@ public class SignUpTests
         AssertProduceError("InvalidEmail", testResult);
     }
 
+
+    [Fact]
+    public async Task Multiple_user_with_same_username_can_exist()
+    {
+        var firstUser = GetNewAccountRequest("wE%LASrT4Nx25FeY^z#b^*@");
+        var secondUser = new SignUpRequest
+        {
+            Password = firstUser.Password,
+            UserName = firstUser.UserName,
+            Email = new Internet().Email()
+        };
+
+
+        var (firstResponse, firstResult) = await _client.POSTAsync<SignUpEndpoint, SignUpRequest, SuccessfulSignUpResponse>(firstUser);
+        var (secondResponse, secondResult) = await _client.POSTAsync<SignUpEndpoint, SignUpRequest, SuccessfulSignUpResponse>(secondUser);
+
+        firstResponse.EnsureSuccessStatusCode();
+        await secondResponse.EnsureSuccessAndDumpBodyIfNotAsync(_output);
+        
+        
+        Assert.NotNull(firstResult);
+        Assert.NotNull(secondResult);
+
+        Assert.Equal(firstUser.UserName, firstResult.UserName);
+        Assert.Equal(firstUser.UserName, secondResult.UserName);
+    }
 
     private static SignUpRequest GetNewAccountRequest(string password) => new()
     {

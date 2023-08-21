@@ -1,14 +1,11 @@
-﻿using GameSync.Business.BoardGamesGeek.Schemas;
+﻿using GameSync.Business.BoardGameGeek.Model;
 using GameSync.Business.BoardGamesGeek.Schemas.Search;
 using GameSync.Business.BoardGamesGeek.Schemas.Thing;
-using GameSync.Business.Search;
-using System.Net.Http;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace GameSync.Business.BoardGamesGeek;
 // https://boardgamegeek.com/wiki/page/BGG_XML_API2
-public class BoardGameGeekClient : IGameSearcher
+public class BoardGameGeekClient 
 {
 
     public const string BoardGameType = "boardgame";
@@ -73,6 +70,21 @@ public class BoardGameGeekClient : IGameSearcher
         var results = Deserialize<ThingRoot>(things);
         return results.Items;
 
+    }
+
+    public async Task<IEnumerable<BoardGameGeekGame>> GetBoardGamesDetailAsync(IEnumerable<int> ids)
+    {
+        var detail = await GetDetailedThingsAsync(ids.Select(x => x.ToString()));
+        return detail.Select(thing => new BoardGameGeekGame
+        {
+            Id = thing.Id,
+            Description = thing.Description,
+            MaxPlayer = thing.MaxPlayers.ValueAsInt,
+            MinPlayer = thing.MinPlayers.ValueAsInt,
+            DurationMinute = thing.PlayingTime.ValueAsInt,
+            MinAge = thing.MinAge.ValueAsInt,
+            Name = thing.Names.FirstOrDefault(x => x.Type == "primary")?.Value ?? thing.Names.FirstOrDefault()?.Value
+        });
     }
 
 }

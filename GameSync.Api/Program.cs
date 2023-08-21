@@ -9,7 +9,6 @@ using GameSync.Api.Persistence.Entities;
 using GameSync.Business.Auth;
 using GameSync.Business.BoardGamesGeek;
 using GameSync.Business.Mailing;
-using GameSync.Business.Search;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -60,7 +59,7 @@ builder.Services.AddJWTBearerAuth(
 
 builder.Services.AddAuthorization();
 builder.Services.AddCors();
-builder.Services.AddSingleton<IGameSearcher, BoardGameGeekClient>();
+builder.Services.AddSingleton<BoardGameGeekClient>();
 
 if (builder.Environment.IsDevelopment())
 {

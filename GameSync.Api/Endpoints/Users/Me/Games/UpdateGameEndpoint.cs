@@ -1,6 +1,5 @@
 ﻿using FastEndpoints.Security;
 using FluentValidation;
-using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Api.Resources;
@@ -11,7 +10,7 @@ using System.Net;
 
 namespace GameSync.Api.Endpoints.Users.Me.Games;
 
-public class UpdateGameRequest : IGame
+public class UpdateGameRequest : GameRequest
 {
     public required int GameId { get; init; }
 

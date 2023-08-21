@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -9,7 +8,7 @@ using System.Text.Json.Serialization;
 namespace GameSync.Api.Endpoints.Users.Me.Games;
 
 
-public class CreateGameRequest : IGame
+public class CreateGameRequest : GameRequest
 {
     public required string Name { get; init; }
     public required int MinPlayer { get; init; }
@@ -19,13 +18,13 @@ public class CreateGameRequest : IGame
     public int? DurationMinute { get; init; }
 
     [JsonIgnore]
-    int? IGame.MinPlayer => MinPlayer;
+    int? GameRequest.MinPlayer => MinPlayer;
 
     [JsonIgnore]
-    int? IGame.MaxPlayer => MaxPlayer;
+    int? GameRequest.MaxPlayer => MaxPlayer;
 
     [JsonIgnore]
-    int? IGame.MinAge => MinAge;
+    int? GameRequest.MinAge => MinAge;
 }
 
 

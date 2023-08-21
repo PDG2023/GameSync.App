@@ -1,8 +1,8 @@
-﻿using GameSync.Business.BoardGamesGeek;
-using GameSync.Business.Search;
+﻿using GameSync.Business.BoardGameGeek.Model;
+using GameSync.Business.BoardGamesGeek;
 using Xunit;
 
-namespace GameSync.Api.Tests;
+namespace GameSync.Api.Tests.BoardGameGeek;
 
 public class BoardGameGeekClientTests
 {
@@ -25,4 +25,27 @@ public class BoardGameGeekClientTests
         };
         Assert.Equivalent(expected, Assert.Single(result));
     }
+
+    [Fact]
+    public async Task Retrieving_detail_of_vimeo_cluedo_should_work()
+    {
+        var result = await _client.GetBoardGamesDetailAsync(new[] { 72917 });
+
+        var game = Assert.Single(result);
+        Assert.Equal("Vimto Cluedo", game.Name);
+        Assert.Equal(3, game.MinPlayer);
+        Assert.Equal(6, game.MaxPlayer);
+        Assert.Equal(8, game.MinAge);
+        Assert.Equal(0, game.DurationMinute);
+
+    }
+
+    [Fact]
+    public async Task Retrieving_non_existing_game_should_return_empty_collection()
+    {
+        var result = await _client.GetBoardGamesDetailAsync(new[] { 498445616 });
+        Assert.Empty(result);
+
+    }
+
 }

@@ -54,7 +54,7 @@ public class CreateGameTests : TestsWithLoggedUser
         var (response, result) = await Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, Game>(newGameRequest);
 
         // assert
-        await response.EnsureSuccessAndDumpBodyIfNot(_output);
+        await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
 
         Assert.NotNull(result);
         Assert.Equal("&lt;b&gt;test-game&lt;/b&gt;", result.Name);

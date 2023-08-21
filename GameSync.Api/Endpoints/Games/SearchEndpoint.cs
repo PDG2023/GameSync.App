@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using GameSync.Api.Endpoints.Games;
 using GameSync.Business.BoardGameGeek.Model;
 using GameSync.Business.BoardGamesGeek;
 using Microsoft.AspNetCore.Authorization;
@@ -29,17 +30,21 @@ public class PaginationValidator : Validator<SearchGameRequest>
 }
 
 
-[HttpGet(ENDPOINT_ROUTE)]
-[AllowAnonymous]
 public class SearchEndpoint : Endpoint<SearchGameRequest, PaginatedResult<BoardGameSearchResult>>
 {
-    public const string ENDPOINT_ROUTE = "games/search";
+    public const string Route = "search";
 
     private readonly BoardGameGeekClient _client;
 
     public SearchEndpoint(BoardGameGeekClient client)
     {
         _client = client;
+    }
+
+    public override void Configure()
+    {
+        Get(Route);
+        Group<GamesGroup>();
     }
 
     public override async Task<PaginatedResult<BoardGameSearchResult>> ExecuteAsync(SearchGameRequest req, CancellationToken ct)
@@ -50,6 +55,6 @@ public class SearchEndpoint : Endpoint<SearchGameRequest, PaginatedResult<BoardG
             collection,
             req.PageSize, 
             req.Page, 
-            $"{request.Scheme}://{request.Host}/api/{ENDPOINT_ROUTE}?{nameof(req.Query)}={HttpUtility.UrlEncode(req.Query)}");
+            $"{request.Scheme}://{request.Host}/api/{GamesGroup.Prefix}/{Route}?{nameof(req.Query)}={HttpUtility.UrlEncode(req.Query)}");
     }
 }

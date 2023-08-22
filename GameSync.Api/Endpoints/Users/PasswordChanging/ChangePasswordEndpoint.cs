@@ -57,6 +57,13 @@ public class ChangePasswordEndpoint : Endpoint<ChangePasswordRequest, Results<Ok
             return TypedResults.NotFound();
         }
 
-        return await  base.ExecuteAsync(req, ct);
+        var changePasswordResult = await _manager.ResetPasswordAsync(user, req.Token, req.Password);
+
+        if (!changePasswordResult.Succeeded)
+        {
+            return new BadRequestWhateverError(changePasswordResult.Errors);
+        }
+
+        return TypedResults.Ok();
     }
 }

@@ -2,9 +2,9 @@
 
 namespace GameSync.Api.Common;
 
-public class SingleGameRequestValidator : Validator<SingleGameRequest>
+public class RequestToIdentifiableObjectValidator : Validator<RequestToIdentifiableObject>
 {
-    public SingleGameRequestValidator()
+    public RequestToIdentifiableObjectValidator()
     {
         RuleFor(x => x.Id).GreaterThan(0);
     }

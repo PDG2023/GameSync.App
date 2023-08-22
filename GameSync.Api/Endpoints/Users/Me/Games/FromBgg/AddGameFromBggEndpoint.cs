@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace GameSync.Api.Endpoints.Users.Me.Games.FromBgg;
 
 
-public class AddGameFromBggEndpoint : Endpoint<SingleGameRequest, Results<NotFound, Ok, BadRequestWhateverError>>
+public class AddGameFromBggEndpoint : Endpoint<RequestToIdentifiableObject, Results<NotFound, Ok, BadRequestWhateverError>>
 {
     private readonly BoardGameGeekClient _client;
     private readonly GameSyncContext _context;
@@ -26,7 +26,7 @@ public class AddGameFromBggEndpoint : Endpoint<SingleGameRequest, Results<NotFou
         Group<CollectionGroup>();
     }
 
-    public override async Task<Results<NotFound, Ok, BadRequestWhateverError>> ExecuteAsync(SingleGameRequest req, CancellationToken ct)
+    public override async Task<Results<NotFound, Ok, BadRequestWhateverError>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
     {
         if (ValidationFailed)
         {

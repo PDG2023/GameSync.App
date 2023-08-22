@@ -11,7 +11,7 @@ using System.Net;
 
 namespace GameSync.Api.Endpoints.Users.Me.Games;
 
-public class UpdateGameRequest : SingleGameRequest, IGameRequest
+public class UpdateGameRequest : RequestToIdentifiableObject, IGameRequest
 {
     public string? Name { get; init; }
     public int? MinPlayer { get; init; }
@@ -26,7 +26,7 @@ public class UpdateGameValidator : Validator<UpdateGameRequest>
     public UpdateGameValidator()
     {
         Include(new GameValidator());
-        Include(new SingleGameRequestValidator());
+        Include(new RequestToIdentifiableObjectValidator());
     }
 }
 

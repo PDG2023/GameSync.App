@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace GameSync.Api.Endpoints.Users.Me.Games;
 
 
-public class DeleteGameEndpoint : Endpoint<SingleGameRequest, Results<BadRequestWhateverError, NotFound, Ok>>
+public class DeleteGameEndpoint : Endpoint<RequestToIdentifiableObject, Results<BadRequestWhateverError, NotFound, Ok>>
 {
     private readonly GameSyncContext _context;
 
@@ -23,7 +23,7 @@ public class DeleteGameEndpoint : Endpoint<SingleGameRequest, Results<BadRequest
         Group<CollectionGroup>();
     }
 
-    public override async Task<Results<BadRequestWhateverError, NotFound, Ok>> ExecuteAsync(SingleGameRequest req, CancellationToken ct)
+    public override async Task<Results<BadRequestWhateverError, NotFound, Ok>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
     {
 
         if (ValidationFailed)

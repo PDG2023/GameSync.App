@@ -29,10 +29,10 @@ public class DeletesGameTests : TestsWithLoggedUser
             Factory.CreateTestGame(UserId, 802)
         );
 
-        var request = new SingleGameRequest { Id = 8080 };
+        var request = new RequestToIdentifiableObject { Id = 8080 };
 
         // act
-        var (response, result) = await Client.DELETEAsync<DeleteGameEndpoint, SingleGameRequest, NotFound>(request);
+        var (response, result) = await Client.DELETEAsync<DeleteGameEndpoint, RequestToIdentifiableObject, NotFound>(request);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -56,10 +56,10 @@ public class DeletesGameTests : TestsWithLoggedUser
             Factory.CreateTestGame(UserId, 1002)
         );
 
-        var request = new SingleGameRequest { Id = 1000 };
+        var request = new RequestToIdentifiableObject { Id = 1000 };
 
         // act
-        var (response, result) = await Client.DELETEAsync<DeleteGameEndpoint, SingleGameRequest, Ok>(request);
+        var (response, result) = await Client.DELETEAsync<DeleteGameEndpoint, RequestToIdentifiableObject, Ok>(request);
 
         // assert
         response.EnsureSuccessStatusCode();

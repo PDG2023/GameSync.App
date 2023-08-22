@@ -6,7 +6,7 @@ using BoardGameGeekGame = GameSync.Business.BoardGameGeek.Model.BoardGameGeekGam
 
 namespace GameSync.Api.Endpoints.Games;
 
-public class GetGameEndpoint : Endpoint<SingleGameRequest, Results<Ok<BoardGameGeekGame>, NotFound, BadRequestWhateverError>>
+public class GetGameEndpoint : Endpoint<RequestToIdentifiableObject, Results<Ok<BoardGameGeekGame>, NotFound, BadRequestWhateverError>>
 {
     private readonly BoardGameGeekClient _client;
 
@@ -21,7 +21,7 @@ public class GetGameEndpoint : Endpoint<SingleGameRequest, Results<Ok<BoardGameG
         Group<GamesGroup>();
     }
 
-    public override async Task<Results<Ok<BoardGameGeekGame>, NotFound, BadRequestWhateverError>> ExecuteAsync(SingleGameRequest req, CancellationToken ct)
+    public override async Task<Results<Ok<BoardGameGeekGame>, NotFound, BadRequestWhateverError>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
     {
         if (ValidationFailed)
         {

@@ -24,9 +24,9 @@ public class GetGameTests
     [Fact]
     public async Task Retrieving_details_of_non_existing_game_produces_not_found()
     {
-        var detailGameRequest = new SingleGameRequest { Id = 5644415 };
+        var detailGameRequest = new RequestToIdentifiableObject { Id = 5644415 };
 
-        var (response, result) = await _client.GETAsync<GetGameEndpoint, SingleGameRequest, NotFound>(detailGameRequest);
+        var (response, result) = await _client.GETAsync<GetGameEndpoint, RequestToIdentifiableObject, NotFound>(detailGameRequest);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -34,9 +34,9 @@ public class GetGameTests
     [Fact]
     public async Task Retrieving_details_of_existing_game_should_return_it()
     {
-        var detailGameRequest = new SingleGameRequest { Id = 1087 };
+        var detailGameRequest = new RequestToIdentifiableObject { Id = 1087 };
 
-        var (response, result) = await _client.GETAsync<GetGameEndpoint, SingleGameRequest, BoardGameGeekGame>(detailGameRequest);
+        var (response, result) = await _client.GETAsync<GetGameEndpoint, RequestToIdentifiableObject, BoardGameGeekGame>(detailGameRequest);
 
         response.EnsureSuccessStatusCode();
 

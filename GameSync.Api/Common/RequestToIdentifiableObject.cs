@@ -1,6 +1,6 @@
 ﻿namespace GameSync.Api.Common;
 
-public class SingleGameRequest
+public class RequestToIdentifiableObject
 {
     public required int Id { get; set; }
 }

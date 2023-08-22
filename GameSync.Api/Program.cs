@@ -21,7 +21,7 @@ using GameSync.Api;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddFastEndpoints( o => o.IncludeAbstractValidators = true);
+builder.Services.AddFastEndpoints();
 builder.Services.SwaggerDocument(x => x.ShortSchemaNames = true);
 builder.Services.AddMemoryCache();
 

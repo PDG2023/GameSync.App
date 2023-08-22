@@ -21,7 +21,6 @@ public class ForgotPasswordEndpoint : Endpoint<SingleMailRequest, Results<Ok, St
 
     public override void Configure()
     {
-        DontThrowIfValidationFails();
         AllowAnonymous();
         Post("forgot-password");
         Group<UsersGroup>();

@@ -1,7 +1,7 @@
 ﻿using GameSync.Business.Auth;
 using static Duende.IdentityServer.Models.IdentityResources;
 
-namespace GameSync.Api.Tests.Identity;
+namespace GameSync.Api.Tests;
 
 public class MockMailService : IConfirmationEmailSender, IPasswordResetMailSenderAsync
 {

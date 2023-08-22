@@ -1,4 +1,5 @@
 ﻿using GameSync.Business.Auth;
+using static Duende.IdentityServer.Models.IdentityResources;
 
 namespace GameSync.Api.Tests.Identity;
 
@@ -13,18 +14,23 @@ public class MockMailService : IConfirmationEmailSender, IForgotPasswordEmailSen
 
     public Dictionary<string, string> Mails { get; private set; } = new Dictionary<string, string>();
 
-    public Task<bool> SendEmailConfirmationAsync(string toEmail, string mailConfirmationToken)
+    private Task<bool> Register(string email, string content)
     {
         if (!_shouldFail)
         {
-            Mails[toEmail] = mailConfirmationToken;
+            Mails[email] = content;
         }
-        
+
         return Task.FromResult(!_shouldFail);
+    }
+
+    public Task<bool> SendEmailConfirmationAsync(string toEmail, string mailConfirmationToken)
+    {
+        return Register(toEmail, mailConfirmationToken);
     }
 
     public Task<bool> SendForgotPasswordEmailAsync(string recipient, string passwordChangeToken)
     {
-        throw new NotImplementedException();
+        return Register(recipient, passwordChangeToken);
     }
 }

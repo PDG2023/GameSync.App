@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using GameSync.Api.Common;
+﻿using GameSync.Api.Common;
 using GameSync.Business.BoardGamesGeek;
 using Microsoft.AspNetCore.Http.HttpResults;
 using BoardGameGeekGame = GameSync.Business.BoardGameGeek.Model.BoardGameGeekGame;
@@ -23,11 +22,6 @@ public class GetGameEndpoint : Endpoint<SingleGameRequest, Results<Ok<BoardGameG
 
     public override async Task<Results<Ok<BoardGameGeekGame>, NotFound, BadRequestWhateverError>> ExecuteAsync(SingleGameRequest req, CancellationToken ct)
     {
-        if (ValidationFailed)
-        {
-            return new BadRequestWhateverError(ValidationFailures);
-        }
-
         var fetchedGames = await _client.GetBoardGamesDetailAsync(new[] {req.Id});
         var game = fetchedGames.FirstOrDefault();
         if (game is null)
@@ -37,5 +31,4 @@ public class GetGameEndpoint : Endpoint<SingleGameRequest, Results<Ok<BoardGameG
 
         return TypedResults.Ok(game);
     }
-
 }

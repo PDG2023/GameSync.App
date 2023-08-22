@@ -85,6 +85,7 @@ public class SignInEndpoint : Endpoint<SignInRequest, Results<Ok<SuccessfulSignI
 
     private void AddNotFoundCredentialsErrors()
     {
+        // TODO : Translate
         AddError(r => r.Email, "Nothing has been found for the given credentials", "NotFound");
     }
 }

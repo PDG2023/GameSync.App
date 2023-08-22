@@ -94,7 +94,16 @@ if (app.Environment.IsDevelopment())
     app.UseCors(configuration => configuration.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 }
 
-app.UseFastEndpoints(c => c.Endpoints.RoutePrefix = "api");
+app.UseFastEndpoints(c =>
+{
+    c.Endpoints.RoutePrefix = "api";
+    c.Errors.ResponseBuilder = (failures, context, statusCode) =>
+    {
+
+        return new BadRequestWhateverError(failures);
+
+    };
+});
 app.UseFileServer();
 app.UseAuthentication();
 app.UseAuthorization();

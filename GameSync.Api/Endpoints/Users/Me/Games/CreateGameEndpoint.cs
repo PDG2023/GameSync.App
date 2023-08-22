@@ -53,10 +53,6 @@ public class CreateGameEndpoint : Endpoint<CreateGameRequest, Results<Ok<Game>, 
 
     public override async Task<Results<Ok<Game>, BadRequestWhateverError>> ExecuteAsync(CreateGameRequest req, CancellationToken ct)
     {
-        if (ValidationFailed)
-        {
-            return new BadRequestWhateverError(ValidationFailures);
-        }
         var trackingGame = await _context.Games.AddAsync(RequestToGame(req), ct);
         await _context.SaveChangesAsync(ct);
         return TypedResults.Ok(trackingGame.Entity);

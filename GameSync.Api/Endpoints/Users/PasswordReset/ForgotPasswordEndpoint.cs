@@ -1,10 +1,11 @@
-﻿using GameSync.Api.Persistence.Entities;
+﻿using GameSync.Api.Endpoints.Users.IndividualUser;
+using GameSync.Api.Persistence.Entities;
 using GameSync.Business.Auth;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using System.Net;
 
-namespace GameSync.Api.Endpoints.Users.IndividualUser;
+namespace GameSync.Api.Endpoints.Users.PasswordReset;
 
 public class ForgotPasswordEndpoint : Endpoint<SingleMailRequest, Results<Ok, StatusCodeHttpResult, BadRequestWhateverError>>
 {
@@ -12,7 +13,7 @@ public class ForgotPasswordEndpoint : Endpoint<SingleMailRequest, Results<Ok, St
     private readonly IPasswordResetMailSenderAsync _sender;
 
     public ForgotPasswordEndpoint(
-        UserManager<User> manager, 
+        UserManager<User> manager,
         IPasswordResetMailSenderAsync sender)
     {
         _manager = manager;
@@ -21,9 +22,8 @@ public class ForgotPasswordEndpoint : Endpoint<SingleMailRequest, Results<Ok, St
 
     public override void Configure()
     {
-        AllowAnonymous();
         Post("forgot-password");
-        Group<UsersGroup>();
+        Group<PasswordResetGroup>();
     }
 
     public override async Task<Results<Ok, StatusCodeHttpResult, BadRequestWhateverError>> ExecuteAsync(SingleMailRequest req, CancellationToken ct)
@@ -35,7 +35,7 @@ public class ForgotPasswordEndpoint : Endpoint<SingleMailRequest, Results<Ok, St
 
         var user = await _manager.FindByEmailAsync(req.Email);
 
-        if (user is null) 
+        if (user is null)
         {
             return TypedResults.Ok();
         }

@@ -4,11 +4,11 @@ using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 
-namespace GameSync.Api.Endpoints.Users.IndividualUser;
+namespace GameSync.Api.Endpoints.Users.PasswordReset;
 
 public class ChangePasswordRequest
 {
-  
+
     public required string Email { get; init; }
     public required string Password { get; init; }
     public required string PasswordRepetition { get; init; }
@@ -31,16 +31,15 @@ public class ChangePasswordEndpoint : Endpoint<ChangePasswordRequest, Results<Ok
 {
     private readonly UserManager<User> _manager;
 
-    public ChangePasswordEndpoint(UserManager<User> manager) 
+    public ChangePasswordEndpoint(UserManager<User> manager)
     {
         _manager = manager;
     }
 
     public override void Configure()
     {
-        AllowAnonymous();
         Post("change-password");
-        Group<UsersGroup>();
+        Group<PasswordResetGroup>();
     }
 
     public override async Task<Results<Ok, NotFound, BadRequestWhateverError>> ExecuteAsync(ChangePasswordRequest req, CancellationToken ct)

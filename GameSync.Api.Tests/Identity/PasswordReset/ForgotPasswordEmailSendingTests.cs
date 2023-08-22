@@ -1,5 +1,6 @@
 ﻿using FastEndpoints;
 using GameSync.Api.Endpoints.Users.IndividualUser;
+using GameSync.Api.Endpoints.Users.PasswordReset;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -7,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using Xunit;
 
-namespace GameSync.Api.Tests.Identity.ForgotPassword;
+namespace GameSync.Api.Tests.Identity.PasswordReset;
 
 [Collection("FullApp")]
 public class ForgotPasswordEmailSendingTests
@@ -47,7 +48,7 @@ public class ForgotPasswordEmailSendingTests
         // arrange
         var mail = new Bogus.DataSets.Internet().Email();
         await _factory.CreateConfirmedUser(mail, mail, "Q9d&h@T6jtQBWwaivWq4@JM");
-        
+
         var request = new SingleMailRequest(mail);
 
         var mockMailService = new MockMailService(false);
@@ -56,7 +57,7 @@ public class ForgotPasswordEmailSendingTests
         var userManager = scope.Resolve<UserManager<User>>();
 
         // act
-        var result = await  new ForgotPasswordEndpoint(userManager, mockMailService).ExecuteAsync(request, CancellationToken.None);
+        var result = await new ForgotPasswordEndpoint(userManager, mockMailService).ExecuteAsync(request, CancellationToken.None);
         var okResult = result.Result as Ok;
 
         // assert

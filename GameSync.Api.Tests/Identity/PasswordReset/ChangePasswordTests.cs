@@ -1,7 +1,7 @@
 ﻿using Bogus.DataSets;
 using FakeItEasy;
 using FastEndpoints;
-using GameSync.Api.Endpoints.Users.IndividualUser;
+using GameSync.Api.Endpoints.Users.PasswordReset;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using Xunit;
 
-namespace GameSync.Api.Tests.Identity.ForgotPassword;
+namespace GameSync.Api.Tests.Identity.PasswordReset;
 
 [Collection("FullApp")]
 public class ChangePasswordTests
@@ -31,10 +31,11 @@ public class ChangePasswordTests
         var mail = new Internet().Email();
         const string password = "!b&Yv3yy&ki!*nKhZF2yor8";
         const string token = "...";
-        var request = new ChangePasswordRequest 
-        { 
-            Email = mail, 
-            Password = password, PasswordRepetition = password,
+        var request = new ChangePasswordRequest
+        {
+            Email = mail,
+            Password = password,
+            PasswordRepetition = password,
             Token = token
         };
         // act
@@ -76,13 +77,13 @@ public class ChangePasswordTests
         await _factory.CreateConfirmedUser(mail, mail, password);
 
         string token;
-    
+
         using (var scope = _factory.Services.CreateScope())
         {
             var manager = scope.Resolve<UserManager<User>>();
             var tempUser = await manager.FindByEmailAsync(mail);
             token = await manager.GeneratePasswordResetTokenAsync(tempUser!);
-       
+
         }
 
         var request = new ChangePasswordRequest
@@ -100,7 +101,7 @@ public class ChangePasswordTests
         response.EnsureSuccessStatusCode();
 
         // try to login with the new credentials
-        
+
         using var deletionScope = _factory.Services.CreateScope();
         var signInManager = deletionScope.Resolve<SignInManager<User>>();
         var user = await signInManager.UserManager.FindByEmailAsync(mail);

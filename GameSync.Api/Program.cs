@@ -19,7 +19,6 @@ using System.Text.Json;
 using GameSync.Api;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 builder.Services.AddFastEndpoints( o => o.IncludeAbstractValidators = true);
 builder.Services.SwaggerDocument(x => x.ShortSchemaNames = true);
@@ -45,6 +44,7 @@ builder.Services.AddIdentityCore<User>(x =>
 
 builder.Services.Replace(ServiceDescriptor.Scoped<IUserValidator<User>, AllowDuplicateUserNameUserValidator<User>>());
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Services.AddJWTBearerAuth(
     builder.Configuration["Jwt:SignKey"], 

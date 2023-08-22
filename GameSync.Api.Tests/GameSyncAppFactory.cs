@@ -87,6 +87,14 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
     }
 
+    public async Task<int> CreateParty(Party party)
+    {
+        using var scope = Services.CreateScope();
+        var manager = scope.Resolve<GameSyncContext>();
+        await manager.Parties.AddAsync(party);
+        await manager.SaveChangesAsync();
+        return party.Id;
+    }
 
     public async Task InitializeAsync() => await _postgreSqlContainer.StartAsync();
 

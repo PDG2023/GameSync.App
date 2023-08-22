@@ -24,7 +24,7 @@ public class UpdateGameTests : TestsWithLoggedUser
     public async Task Trying_to_update_non_existing_game_produces_404()
     {
         // arrange
-        var updateRequest = new UpdateGameRequest { GameId = 10 };
+        var updateRequest = new UpdateGameRequest { Id = 10 };
 
         // act
         var (response, result) = await Client.PATCHAsync<UpdateGameEndpoint, UpdateGameRequest, NotFound>(updateRequest);
@@ -62,7 +62,7 @@ public class UpdateGameTests : TestsWithLoggedUser
         await Factory.CreateTestGame(UserId, id);
         var request = new UpdateGameRequest
         {
-            GameId = id,
+            Id = id,
             Name = "<b>input</b>",
             Description = "<a>input</a>",
             DurationMinute = 10,
@@ -92,34 +92,34 @@ public class UpdateGameTests : TestsWithLoggedUser
         return new List<(UpdateGameRequest req, string expectedErrorCode)>
         {
             (
-                new UpdateGameRequest { GameId = originalGame.Id, MinPlayer = originalGame.MaxPlayer + 1 },
+                new UpdateGameRequest { Id = originalGame.Id, MinPlayer = originalGame.MaxPlayer + 1 },
                 nameof(Game.MinPlayer)
             ),
 
             (
-                new UpdateGameRequest { GameId = originalGame.Id, MaxPlayer = originalGame.MinPlayer - 1 },
+                new UpdateGameRequest { Id = originalGame.Id, MaxPlayer = originalGame.MinPlayer - 1 },
                 nameof(Game.MaxPlayer)
             ),
 
 
             (
-                new UpdateGameRequest { GameId = originalGame.Id, Description = string.Concat(Enumerable.Repeat('a', 1000)) },
+                new UpdateGameRequest { Id = originalGame.Id, Description = string.Concat(Enumerable.Repeat('a', 1000)) },
                 nameof(Game.Description)
             ),
 
             (
-                new UpdateGameRequest { GameId = originalGame.Id, DurationMinute = -10 },
+                new UpdateGameRequest { Id = originalGame.Id, DurationMinute = -10 },
                 nameof(Game.DurationMinute)
             ),
 
             
             (
-                new UpdateGameRequest { GameId = originalGame.Id, MinAge = -10 },
+                new UpdateGameRequest { Id = originalGame.Id, MinAge = -10 },
                 nameof(Game.MinAge)
             ),
 
             (
-                new UpdateGameRequest { GameId = originalGame.Id, Name = " " },
+                new UpdateGameRequest { Id = originalGame.Id, Name = " " },
                 nameof(Game.Name)
             )
         };

@@ -3,7 +3,7 @@ using GameSync.Api.Resources;
 
 namespace GameSync.Api.Endpoints.Users.Me.Games;
 
-public class GameValidator : AbstractValidator<GameRequest>
+public class GameValidator : AbstractValidator<IGameRequest>
 {
 
     public GameValidator() 

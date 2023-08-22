@@ -1,10 +1,18 @@
 ﻿using FluentValidation;
+using System.Text.Json.Serialization;
 
-namespace GameSync.Api.Endpoints.Users.User;
+namespace GameSync.Api.Endpoints.Users.IndividualUser;
 
 public class SingleMailRequest
 {
-    public required string Email { get; set; }
+
+    [JsonConstructor]
+    public SingleMailRequest(string email)
+    {
+        Email = email;
+    }
+
+    public string Email { get; init; }
 }
 
 public class SingleMailRequestValidator : Validator<SingleMailRequest>

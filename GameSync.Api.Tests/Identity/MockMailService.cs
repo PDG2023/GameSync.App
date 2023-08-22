@@ -1,13 +1,8 @@
 ﻿using GameSync.Business.Auth;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameSync.Api.Tests.Identity;
 
-public class MockMailService : IConfirmationEmailSender
+public class MockMailService : IConfirmationEmailSender, IForgotPasswordEmailSender
 {
     private readonly bool _shouldFail;
 
@@ -20,12 +15,16 @@ public class MockMailService : IConfirmationEmailSender
 
     public Task<bool> SendEmailConfirmationAsync(string toEmail, string mailConfirmationToken)
     {
-
         if (!_shouldFail)
         {
             Mails[toEmail] = mailConfirmationToken;
         }
         
         return Task.FromResult(!_shouldFail);
+    }
+
+    public Task<bool> SendForgotPasswordEmailAsync(string recipient, string passwordChangeToken)
+    {
+        throw new NotImplementedException();
     }
 }

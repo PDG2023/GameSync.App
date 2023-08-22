@@ -1,0 +1,66 @@
+﻿using FastEndpoints;
+using GameSync.Api.Endpoints.Users.IndividualUser;
+using GameSync.Api.Persistence.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Xunit;
+
+namespace GameSync.Api.Tests.Identity.ForgotPassword;
+
+[Collection("FullApp")]
+public class ForgotPasswordEmailSendingTests
+{
+    private readonly GameSyncAppFactory _factory;
+    public ForgotPasswordEmailSendingTests(GameSyncAppFactory factory)
+    {
+        _factory = factory;
+    }
+
+    [Fact]
+    public async Task Mail_is_sent_when_user_exists()
+    {
+        // arrange
+        var mail = new Bogus.DataSets.Internet().Email();
+        await _factory.CreateConfirmedUser(mail, mail, "Q9d&h@T6jtQBWwaivWq4@JM");
+        
+        var request = new SingleMailRequest(mail);
+
+        var mockMailService = new MockMailService(false);
+
+        using var scope = _factory.Services.CreateScope();
+        var userManager = scope.Resolve<UserManager<User>>();
+
+        // act
+        var result = await  new ForgotPasswordEndpoint(userManager, mockMailService).ExecuteAsync(request, CancellationToken.None);
+        var okResult = result.Result as Ok;
+
+        // assert
+        Assert.NotNull(okResult);
+
+        // checks that the mail has been correctly sent
+        Assert.True(mockMailService.Mails.ContainsKey(mail));
+
+    }
+
+    [Fact]
+    public async Task Mail_is_not_sent_when_user_does_not_exist()
+    {
+        // arrange 
+        var mail = new Bogus.DataSets.Internet().Email();
+        var request = new SingleMailRequest(mail);
+        var mockMailService = new MockMailService(false);
+        using var scope = _factory.Services.CreateScope();
+        var userManager = scope.Resolve<UserManager<User>>();
+
+        // act
+        var result = await new ForgotPasswordEndpoint(userManager, mockMailService).ExecuteAsync(request, CancellationToken.None);
+        var okResult = result.Result as Ok;
+
+        // assert
+        Assert.NotNull(okResult);
+        Assert.False(mockMailService.Mails.ContainsKey(mail));
+
+    }
+
+}

@@ -129,4 +129,7 @@
   <data name="MaxPlayerLowerThanMinPlayer" xml:space="preserve">
     <value>Le nombre de joueur maximum ne peut pas être supérieur au nombre de joueur minimum.</value>
   </data>
+  <data name="PasswordDontMatch" xml:space="preserve">
+    <value>Les mots de passe ne correspondent pas</value>
+  </data>
 </root>

@@ -76,6 +76,7 @@ else
 }
 
 builder.Services.AddSingleton<IConfirmationEmailSender, AuthMailService>();
+builder.Services.AddSingleton<IPasswordResetMailSenderAsync, AuthMailService>();
 
 
 builder.Services.AddSingleton<ConfirmationMailLinkProvider>();

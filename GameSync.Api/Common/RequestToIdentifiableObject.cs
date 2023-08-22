@@ -2,5 +2,5 @@
 
 public class RequestToIdentifiableObject
 {
-    public required int Id { get; set; }
+    public required int Id { get; init; }
 }

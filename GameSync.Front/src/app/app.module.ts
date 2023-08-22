@@ -28,6 +28,11 @@ import { SecurityLayoutComponent } from './common/security-layout/security-layou
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {AuthInterceptor} from "./helpers/auth-interceptor.interceptor";
 import {LocationStrategy, PathLocationStrategy} from "@angular/common";
+import {PartyItemComponent} from "./components/party-item/party-item.component";
+import { PartyDetailComponent } from './features/party-detail/party-detail.component';
+import { PartyGameItemComponent } from './components/party-game-item/party-game-item.component';
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import { PartyGameVoteIdentifyComponent } from './features/party-game-vote-identify/party-game-vote-identify.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +45,11 @@ import {LocationStrategy, PathLocationStrategy} from "@angular/common";
     LoginComponent,
     RegisterComponent,
     SecurityLayoutComponent,
+    PartiesComponent,
+    PartyItemComponent,
+    PartyDetailComponent,
+    PartyGameItemComponent,
+    PartyGameVoteIdentifyComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +67,8 @@ import {LocationStrategy, PathLocationStrategy} from "@angular/common";
     MatCardModule,
     HttpClientModule,
     MatSnackBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatProgressBarModule
   ],
   providers: [
     {

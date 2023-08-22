@@ -28,16 +28,16 @@ public class CreateGameRequest : IGameRequest
 }
 
 
-public class CreateGameValidator : Validator<CreateGameRequest>
+public class CreateGameRequestValidator : Validator<CreateGameRequest>
 {
-    public CreateGameValidator()
+    public CreateGameRequestValidator()
     {
         RuleFor(r => r.Name).NotEmpty();
         Include(new GameValidator());
     }
 }
 
-public class CreateGameEndpoint : Endpoint<CreateGameRequest, Results<Ok<Game>, BadRequestWhateverError>>
+public class CreateGameEndpoint : Endpoint<CreateGameRequest, Game>
 {
     private readonly GameSyncContext _context;
     public CreateGameEndpoint(GameSyncContext context)
@@ -51,11 +51,11 @@ public class CreateGameEndpoint : Endpoint<CreateGameRequest, Results<Ok<Game>, 
         Group<CollectionGroup>();
     }
 
-    public override async Task<Results<Ok<Game>, BadRequestWhateverError>> ExecuteAsync(CreateGameRequest req, CancellationToken ct)
+    public override async Task<Game> ExecuteAsync(CreateGameRequest req, CancellationToken ct)
     {
         var trackingGame = await _context.Games.AddAsync(RequestToGame(req), ct);
         await _context.SaveChangesAsync(ct);
-        return TypedResults.Ok(trackingGame.Entity);
+        return trackingGame.Entity;
     }
 
     private  Game RequestToGame(CreateGameRequest r)

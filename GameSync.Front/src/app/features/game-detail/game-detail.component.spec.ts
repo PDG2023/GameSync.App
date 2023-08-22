@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GameDetailComponent } from './game-detail.component';
+import {MatIconModule} from "@angular/material/icon";
 
 describe('GameDetailComponent', () => {
   let component: GameDetailComponent;
@@ -8,7 +9,8 @@ describe('GameDetailComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [GameDetailComponent]
+      declarations: [GameDetailComponent],
+      imports: [MatIconModule]
     });
     fixture = TestBed.createComponent(GameDetailComponent);
     component = fixture.componentInstance;

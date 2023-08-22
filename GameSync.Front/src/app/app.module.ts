@@ -18,7 +18,16 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
 import {SearchComponent} from './common/search/search.component';
-import {LocationStrategy, HashLocationStrategy} from "@angular/common";
+import {LoginComponent} from './features/login/login.component';
+import {MatCardModule} from "@angular/material/card";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {RegisterComponent} from './features/register/register.component';
+import {HttpErrorInterceptor} from "./helpers/http-error.interceptor";
+import { SecurityLayoutComponent } from './common/security-layout/security-layout.component';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {AuthInterceptor} from "./helpers/auth-interceptor.interceptor";
+import {LocationStrategy, PathLocationStrategy} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -28,6 +37,9 @@ import {LocationStrategy, HashLocationStrategy} from "@angular/common";
     CollectionComponent,
     PartiesComponent,
     SearchComponent,
+    LoginComponent,
+    RegisterComponent,
+    SecurityLayoutComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,14 +53,23 @@ import {LocationStrategy, HashLocationStrategy} from "@angular/common";
     MatFormFieldModule,
     MatAutocompleteModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatCardModule,
+    HttpClientModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     {
       provide: LocationStrategy,
-      useClass: HashLocationStrategy
-    }
+      useClass: PathLocationStrategy
+    },
+    {provide: HTTP_INTERCEPTORS, multi: true, useClass: HttpErrorInterceptor},
+    {provide: HTTP_INTERCEPTORS, multi: true, useClass: AuthInterceptor}
   ],
+
+
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

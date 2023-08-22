@@ -1,4 +1,5 @@
 ﻿
+using Duende.IdentityServer.Models;
 using FluentValidation;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -23,7 +24,10 @@ public class ChangePasswordRequestValidator : Validator<ChangePasswordRequest>
         RuleFor(x => x.Password).NotEmpty();
         RuleFor(x => x.Token).NotEmpty();
         RuleFor(x => x.Email).EmailAddress();
-        RuleFor(x => x.PasswordRepetition).NotEmpty().Must((req, x) => req.Password == x);
+        RuleFor(x => x.PasswordRepetition)
+            .NotEmpty()
+            .Must((req, x) => req.Password == x)
+            .WithMessage(Resources.Resource.PasswordDontMatch);
     }
 }
 

@@ -83,7 +83,7 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         var user = await manager.FindByEmailAsync(mail);
         var confirmationToken = await manager.GenerateEmailConfirmationTokenAsync(user!);
         await manager.ConfirmEmailAsync(user!, confirmationToken);
-        return user.Id;
+        return user!.Id;
 
     }
 

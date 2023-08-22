@@ -1,4 +1,5 @@
-﻿using FakeItEasy;
+﻿using Bogus.DataSets;
+using FakeItEasy;
 using FastEndpoints;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
@@ -95,6 +96,20 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         await manager.SaveChangesAsync();
         return party.Id;
     }
+
+    public async Task<int> CreatePartyOfAnotherUser()
+    {
+        var userId = await CreateConfirmedUser(new Internet().Email(), "username", "MuCkT*sgb2TB4!4P^r7cwRx");
+        return await CreateDefaultParty(userId);
+    }
+
+    public async Task<int> CreateDefaultParty(string userId) => await CreateParty(new Party
+    {
+        DateTime = DateTime.Now.AddDays(1),
+        Location = "...",
+        Name = "...",
+        UserId = userId
+    });
 
     public async Task InitializeAsync() => await _postgreSqlContainer.StartAsync();
 

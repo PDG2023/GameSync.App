@@ -20,7 +20,7 @@ public class GetAllPartiesTests : TestsWithLoggedUser
         var parties = await Task.WhenAll(
             Factory.CreateParty(new Party
             {
-                DateTimeOfParty = date,
+                DateTime = date,
                 Name = "First Party",
                 UserId = UserId,
                 Games = null,
@@ -29,7 +29,7 @@ public class GetAllPartiesTests : TestsWithLoggedUser
 
             Factory.CreateParty(new Party 
             {
-                DateTimeOfParty = date,
+                DateTime = date,
                 Name = "Second Party",
                 UserId = UserId,
                 Location = "Second Party Location",

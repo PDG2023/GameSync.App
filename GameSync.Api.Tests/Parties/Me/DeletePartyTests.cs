@@ -4,7 +4,6 @@ using FastEndpoints;
 using GameSync.Api.Common;
 using GameSync.Api.Endpoints.Users.Me.Parties;
 using GameSync.Api.Persistence;
-using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
@@ -32,14 +31,7 @@ public class DeletePartyTests : TestsWithLoggedUser
     public async Task Deletion_of_party_of_another_user_produces_not_found()
     {
         // arrange : create another user and retrieve its id
-        var otherUserId = await Factory.CreateConfirmedUser(new Internet().Email(), "username", "N#t$d6sM$F%#mgx9KanAtK!");
-        var otherUserPartyId = await Factory.CreateParty(new Party
-        {
-            DateTimeOfParty = DateTime.Now,
-            Location = "...",
-            Name = "...",
-            UserId = otherUserId
-        });
+        var otherUserPartyId = await Factory.CreatePartyOfAnotherUser();
 
         var request = new RequestToIdentifiableObject { Id = otherUserPartyId };
 
@@ -55,14 +47,7 @@ public class DeletePartyTests : TestsWithLoggedUser
     public async Task Deletion_of_existing_party_deletes_it_from_storage()
     {
         // arrange
-        var partyId = await Factory.CreateParty(new Party
-        {
-            DateTimeOfParty = DateTime.Now,
-            Location = "Somewhere",
-            Name = "A name",
-            UserId = UserId
-        });
-
+        var partyId = await Factory.CreateDefaultParty(UserId);
         var request = new RequestToIdentifiableObject { Id = partyId };
 
         //act

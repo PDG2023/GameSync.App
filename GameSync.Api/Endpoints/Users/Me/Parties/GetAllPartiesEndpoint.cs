@@ -39,7 +39,7 @@ public class GetAllPartiesEndpoint : EndpointWithoutRequest<IEnumerable<PartyPre
                 Id = party.Id,
                 Name = party.Name,
                 NumberOfGames = party.Games == null ? 0 : party.Games.Count(),
-                DateTime = party.DateTimeOfParty,
+                DateTime = party.DateTime,
                 Location = party.Location
             })
             .ToListAsync();

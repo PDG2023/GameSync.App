@@ -110,8 +110,8 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         services.RemoveService<IConfirmationEmailSender>();
         services.AddSingleton<IConfirmationEmailSender>(new MockMailService(false));
 
-        services.RemoveService<IForgotPasswordEmailSender>();
-        services.AddSingleton<IForgotPasswordEmailSender>(new MockMailService(false));
+        services.RemoveService<IPasswordResetMailSenderAsync>();
+        services.AddSingleton<IPasswordResetMailSenderAsync>(new MockMailService(false));
     }
 
     private static void SetupFakeConfiguration(IServiceCollection services)

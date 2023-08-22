@@ -3,7 +3,7 @@ using static Duende.IdentityServer.Models.IdentityResources;
 
 namespace GameSync.Api.Tests.Identity;
 
-public class MockMailService : IConfirmationEmailSender, IForgotPasswordEmailSender
+public class MockMailService : IConfirmationEmailSender, IPasswordResetMailSenderAsync
 {
     private readonly bool _shouldFail;
 
@@ -29,7 +29,7 @@ public class MockMailService : IConfirmationEmailSender, IForgotPasswordEmailSen
         return Register(toEmail, mailConfirmationToken);
     }
 
-    public Task<bool> SendForgotPasswordEmailAsync(string recipient, string passwordChangeToken)
+    public Task<bool> SendEmailPasswordResetAsync(string recipient, string passwordChangeToken)
     {
         return Register(recipient, passwordChangeToken);
     }

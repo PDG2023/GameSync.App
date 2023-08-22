@@ -4,6 +4,7 @@ using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net;
 using Xunit;
 
 namespace GameSync.Api.Tests.Identity.ForgotPassword;
@@ -15,6 +16,29 @@ public class ForgotPasswordEmailSendingTests
     public ForgotPasswordEmailSendingTests(GameSyncAppFactory factory)
     {
         _factory = factory;
+    }
+
+    [Fact]
+    public async Task Service_unavailable_is_sent_when_there_is_an_error()
+    {
+        // arrange
+        var mail = new Bogus.DataSets.Internet().Email();
+        await _factory.CreateConfirmedUser(mail, mail, "Q9d&h@T6jtQBWwaivWq4@JM");
+
+        var request = new SingleMailRequest(mail);
+
+        var mockMailService = new MockMailService(true);
+
+        using var scope = _factory.Services.CreateScope();
+        var userManager = scope.Resolve<UserManager<User>>();
+
+        // act
+        var result = await new ForgotPasswordEndpoint(userManager, mockMailService).ExecuteAsync(request, CancellationToken.None);
+        var serviceUnavailableResult = result.Result as StatusCodeHttpResult;
+
+        // assert
+        Assert.NotNull(serviceUnavailableResult);
+        Assert.Equal((int)HttpStatusCode.ServiceUnavailable, serviceUnavailableResult.StatusCode);
     }
 
     [Fact]

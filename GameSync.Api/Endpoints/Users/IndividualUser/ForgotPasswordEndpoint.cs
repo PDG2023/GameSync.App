@@ -9,11 +9,11 @@ namespace GameSync.Api.Endpoints.Users.IndividualUser;
 public class ForgotPasswordEndpoint : Endpoint<SingleMailRequest, Results<Ok, StatusCodeHttpResult, BadRequestWhateverError>>
 {
     private readonly UserManager<User> _manager;
-    private readonly IForgotPasswordEmailSender _sender;
+    private readonly IPasswordResetMailSenderAsync _sender;
 
     public ForgotPasswordEndpoint(
         UserManager<User> manager, 
-        IForgotPasswordEmailSender sender)
+        IPasswordResetMailSenderAsync sender)
     {
         _manager = manager;
         _sender = sender;
@@ -21,12 +21,19 @@ public class ForgotPasswordEndpoint : Endpoint<SingleMailRequest, Results<Ok, St
 
     public override void Configure()
     {
-        Post("{Email}/forgot-password");
+        DontThrowIfValidationFails();
+        AllowAnonymous();
+        Post("forgot-password");
         Group<UsersGroup>();
     }
 
     public override async Task<Results<Ok, StatusCodeHttpResult, BadRequestWhateverError>> ExecuteAsync(SingleMailRequest req, CancellationToken ct)
     {
+        if (ValidationFailed)
+        {
+            return new BadRequestWhateverError(ValidationFailures);
+        }
+
         var user = await _manager.FindByEmailAsync(req.Email);
 
         if (user is null) 
@@ -36,7 +43,7 @@ public class ForgotPasswordEndpoint : Endpoint<SingleMailRequest, Results<Ok, St
 
         var token = await _manager.GeneratePasswordResetTokenAsync(user);
 
-        if (!await _sender.SendForgotPasswordEmailAsync(req.Email, token))
+        if (!await _sender.SendEmailPasswordResetAsync(req.Email, token))
         {
             return TypedResults.StatusCode((int)HttpStatusCode.ServiceUnavailable);
         }

@@ -11,19 +11,19 @@ public class UpdateValidatorTests
     private readonly UpdateGameValidator _updateValidator = new();
     public static IEnumerable<object[]> MalformedUpdateRequest => new List<object[]>
     {
-        new[] { new UpdateGameRequest { GameId = 1, MinAge = -10 } },
-        new[] { new UpdateGameRequest { GameId = 1, Name = " " } },
-        new[] { new UpdateGameRequest { GameId = 1, MaxPlayer = -10 } },
-        new[] { new UpdateGameRequest { GameId = 1, MinPlayer = -10 } },
-        new[] { new UpdateGameRequest { GameId = 1, MaxPlayer = 10, MinPlayer = 11 } },
-        new[] { new UpdateGameRequest { GameId = 1, DurationMinute = -10 } }
+        new[] { new UpdateGameRequest { Id = 1, MinAge = -10 } },
+        new[] { new UpdateGameRequest { Id = 1, Name = " " } },
+        new[] { new UpdateGameRequest { Id = 1, MaxPlayer = -10 } },
+        new[] { new UpdateGameRequest { Id = 1, MinPlayer = -10 } },
+        new[] { new UpdateGameRequest { Id = 1, MaxPlayer = 10, MinPlayer = 11 } },
+        new[] { new UpdateGameRequest { Id = 1, DurationMinute = -10 } }
 
     };
 
     [Fact]
     public void Ignorable_properties_should_not_produce_errors()
     {
-        var updateGameRequest = new UpdateGameRequest { GameId = 10 };
+        var updateGameRequest = new UpdateGameRequest { Id = 10 };
 
         var result = _updateValidator.Validate(updateGameRequest);
         Assert.Empty(result.Errors);

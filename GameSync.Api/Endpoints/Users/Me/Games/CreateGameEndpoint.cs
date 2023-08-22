@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 namespace GameSync.Api.Endpoints.Users.Me.Games;
 
 
-public class CreateGameRequest : GameRequest
+public class CreateGameRequest : IGameRequest
 {
     public required string Name { get; init; }
     public required int MinPlayer { get; init; }
@@ -18,13 +18,13 @@ public class CreateGameRequest : GameRequest
     public int? DurationMinute { get; init; }
 
     [JsonIgnore]
-    int? GameRequest.MinPlayer => MinPlayer;
+    int? IGameRequest.MinPlayer => MinPlayer;
 
     [JsonIgnore]
-    int? GameRequest.MaxPlayer => MaxPlayer;
+    int? IGameRequest.MaxPlayer => MaxPlayer;
 
     [JsonIgnore]
-    int? GameRequest.MinAge => MinAge;
+    int? IGameRequest.MinAge => MinAge;
 }
 
 

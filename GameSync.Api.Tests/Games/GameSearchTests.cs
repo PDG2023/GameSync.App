@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GameSync.Api.Tests;
+namespace GameSync.Api.Tests.Games;
 
 
 [Collection("FullApp")]
@@ -42,6 +42,6 @@ public class GameSearchTests
             ThumbnailUrl = "https://cf.geekdo-images.com/5QN9cOgpqbt0YrTPgU90eA__thumb/img/h4eG5WjhcTG2gF47Ckq_U6GkTU0=/fit-in/200x150/filters:strip_icc()/pic760405.jpg"
         };
         Assert.Equivalent(expected, actual);
-      
+
     }
 }

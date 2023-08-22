@@ -3,6 +3,7 @@
 global using FastEndpoints;
 global using FastEndpoints.Security;
 
+
 using FastEndpoints.Swagger;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
@@ -13,8 +14,9 @@ using GameSync.Business.Mailing;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Text.Json;
-
+using GameSync.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,8 +43,8 @@ builder.Services.AddIdentityCore<User>(x =>
     .AddEntityFrameworkStores<GameSyncContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.Replace(ServiceDescriptor.Scoped<IUserValidator<User>, AllowDuplicateUserNameUserValidator<User>>());
 
-// TODO : Change the key to a secured one
 
 builder.Services.AddJWTBearerAuth(
     builder.Configuration["Jwt:SignKey"], 

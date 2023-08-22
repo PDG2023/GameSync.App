@@ -1,4 +1,5 @@
 ﻿using FastEndpoints;
+using GameSync.Api.Common;
 using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
@@ -28,14 +29,13 @@ public class DeletesGameTests : TestsWithLoggedUser
             Factory.CreateTestGame(UserId, 802)
         );
 
-        var request = new DeleteGamesRequest { GamesId = new[] { 801, 803 } };
+        var request = new SingleGameRequest { Id = 8080 };
 
         // act
-        var (response, result) = await Client.DELETEAsync<DeleteGamesEndpoint, DeleteGamesRequest, NotFound<List<int>>>(request);
+        var (response, result) = await Client.DELETEAsync<DeleteGameEndpoint, SingleGameRequest, NotFound>(request);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        Assert.Equal("[803]", await response.Content.ReadAsStringAsync());
 
         // checks whether the first two games are still there
         using var scope = Factory.Services.CreateScope();
@@ -46,7 +46,7 @@ public class DeletesGameTests : TestsWithLoggedUser
 
 
     [Fact]
-    public async Task Deleting_subset_of_games_deletes_them_in_the_storage()
+    public async Task Deleting_a_game_deletes_them_in_the_storage()
     {
         // arrange
 
@@ -56,18 +56,18 @@ public class DeletesGameTests : TestsWithLoggedUser
             Factory.CreateTestGame(UserId, 1002)
         );
 
-        var request = new DeleteGamesRequest { GamesId = new[] { 1000, 1001 } };
+        var request = new SingleGameRequest { Id = 1000 };
 
         // act
-        var (response, result) = await Client.DELETEAsync<DeleteGamesEndpoint, DeleteGamesRequest, Ok>(request);
+        var (response, result) = await Client.DELETEAsync<DeleteGameEndpoint, SingleGameRequest, Ok>(request);
 
         // assert
         response.EnsureSuccessStatusCode();
 
-        // checks whether the first two games are still there
+        // Checks whether the deleted game is in fact correctly deleted
         using var scope = Factory.Services.CreateScope();
         var ctx = scope.Resolve<GameSyncContext>();
-        var gamesShouldBeDeleted = await ctx.Games.Where(x => x.Id == 1000 || x.Id == 1001).ToListAsync();
+        var gamesShouldBeDeleted = await ctx.Games.Where(x => x.Id == 1000).ToListAsync();
         Assert.Empty(gamesShouldBeDeleted);
     }
 

@@ -4,17 +4,19 @@
       <button mat-icon-button (click)="snav.toggle()">
         <mat-icon>casino</mat-icon>
       </button>
-      <h1 class="app-name">GameSync</h1>
+      <a *ngIf="!mobileQuery.matches" class="app-name toolbar-link" routerLink="/" mat-list-item>GameSync</a>
     </div>
     <div class="search-container">
       <app-search></app-search>
     </div>
-    <div class="login-container">
-      <div class="spacer"></div>
+    <div class="login-button-container">
+      <div *ngIf="!mobileQuery.matches" class="spacer"></div>
       <div>
-        <a routerLink="/" mat-list-item>
+        <a class="toolbar-link" routerLink="/login" mat-list-item>
           <mat-icon matListItemIcon>account_circle</mat-icon>
-          S'identifier
+          <ng-container *ngIf="!mobileQuery.matches">
+            S'identifier
+          </ng-container>
         </a>
       </div>
     </div>
@@ -41,7 +43,9 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <ng-content></ng-content>
+      <div class="content-wrapper">
+        <ng-content></ng-content>
+      </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

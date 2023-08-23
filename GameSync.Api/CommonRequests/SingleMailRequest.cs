@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace GameSync.Api.Endpoints.Users.IndividualUser;
+namespace GameSync.Api.CommonRequests;
 
 public class SingleMailRequest
 {

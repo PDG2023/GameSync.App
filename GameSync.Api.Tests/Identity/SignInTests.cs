@@ -5,6 +5,7 @@ using GameSync.Api.Endpoints.Users.Me;
 using GameSync.Api.Persistence.Entities;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,11 +41,11 @@ public class SignInTests
     }
 
     [Theory]
-    [InlineData("non-existing-mail@gmail.com", "33fPTNmupi@MHEuQi#7jSJg")]
-    public async Task LogIn_with_non_existing_credentials_is_not_successful(string mail, string password)
+    [InlineData("non-existing-mail@gmail.com", "")]
+    public async Task LogIn_with_false_credentials_is_not_successful(string mail, string password)
     {
         // arrange
-        var request = new SignInRequest { Email = mail, Password = password };
+        var request = new SignIn.Request { Email = mail, Password = password };
 
         // act
         var response = await _client.PostAsJsonAsync("api/users/sign-in", request);
@@ -67,7 +68,7 @@ public class SignInTests
         var mail = new Internet().Email();
         await _factory.CreateUnconfirmedUser(mail, mail, pwd);
 
-        var req = new SignInRequest { Email = mail, Password = pwd };
+        var req = new SignIn.Request { Email = mail, Password = pwd };
 
         // act
         var response  = await _client.PostAsJsonAsync("api/users/sign-in", req);
@@ -89,14 +90,14 @@ public class SignInTests
         const string password = "$UX#%A!qaphEL2";
         var mail = new Internet().Email();
         await _factory.CreateConfirmedUser(mail, mail, password);
-        var signInRequest = new SignInRequest
+        var signInRequest = new SignIn.Request
         {
             Email = mail,
             Password = password
         };
 
         // act
-        var (response, result) = await _client.POSTAsync<SignInEndpoint, SignInRequest, SuccessfulSignInResponse>(signInRequest);
+        var (response, result) = await _client.POSTAsync<SignIn.Endpoint, SignIn.Request, SignIn.Response>(signInRequest);
 
         // assert
         await response.EnsureSuccessAndDumpBodyIfNotAsync(output);
@@ -111,7 +112,7 @@ public class SignInTests
         _client.SetToken(JwtBearerDefaults.AuthenticationScheme, token);
 
         // Try accessing an authorized endpoint
-        var (meResponse, meResult) = await _client.GETAsync<MeEndpoint, MeResult>();
+        var (meResponse, meResult) = await _client.GETAsync<Me.Endpoint, NoContent>();
 
         meResponse.EnsureSuccessStatusCode();
 

@@ -20,10 +20,10 @@ public class UpdatePartyTests : TestsWithLoggedUser
     public async Task Updating_non_existing_party_produces_not_found()
     {
         // arrange
-        var request = new UpdatePartyRequest { Id = 918582 };
+        var request = new UpdateParty.Request { Id = 918582 };
 
         // act
-        var (response, result) = await Client.PATCHAsync<UpdatePartyEndpoint, UpdatePartyRequest, NotFound>(request);
+        var (response, result) = await Client.PATCHAsync<UpdateParty.Endpoint, UpdateParty.Request, NotFound>(request);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -34,7 +34,7 @@ public class UpdatePartyTests : TestsWithLoggedUser
     {
         // arrange
         var partyId = await Factory.CreatePartyOfAnotherUser();
-        var request = new UpdatePartyRequest 
+        var request = new UpdateParty.Request 
         { 
             Id = partyId,
             DateTime = DateTime.Now.AddDays(1),
@@ -43,7 +43,7 @@ public class UpdatePartyTests : TestsWithLoggedUser
         };
 
         // act
-        var (response, result) = await Client.PATCHAsync<UpdatePartyEndpoint, UpdatePartyRequest, NotFound>(request);
+        var (response, result) = await Client.PATCHAsync<UpdateParty.Endpoint, UpdateParty.Request, NotFound>(request);
         
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -56,7 +56,7 @@ public class UpdatePartyTests : TestsWithLoggedUser
         // arrange
         var partyId = await Factory.CreateDefaultParty(UserId);
         var expectedDate = new DateTime(2025, 02, 04, 18, 0, 0);
-        var request = new UpdatePartyRequest
+        var request = new UpdateParty.Request
         {
             Id = partyId,
             DateTime = expectedDate,
@@ -65,7 +65,7 @@ public class UpdatePartyTests : TestsWithLoggedUser
         };
 
         // act
-        var (response, result) = await Client.PATCHAsync<UpdatePartyEndpoint, UpdatePartyRequest, Party>(request);
+        var (response, result) = await Client.PATCHAsync<UpdateParty.Endpoint, UpdateParty.Request, Party>(request);
 
         // assert
         response.EnsureSuccessStatusCode();

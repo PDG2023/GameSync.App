@@ -3,7 +3,7 @@ using FluentValidation.Results;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace GameSync.Api.Common;
+namespace GameSync.Api.CommonRequests;
 
 public class CredentialsValidator : Validator<IRequestWithCredentials>
 {

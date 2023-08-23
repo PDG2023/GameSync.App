@@ -26,7 +26,7 @@ public class GetGameTests
     {
         var detailGameRequest = new RequestToIdentifiableObject { Id = 5644415 };
 
-        var (response, result) = await _client.GETAsync<GetGameEndpoint, RequestToIdentifiableObject, NotFound>(detailGameRequest);
+        var (response, result) = await _client.GETAsync<GetBggGameDetail.Endpoint, RequestToIdentifiableObject, NotFound>(detailGameRequest);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -36,7 +36,7 @@ public class GetGameTests
     {
         var detailGameRequest = new RequestToIdentifiableObject { Id = 1087 };
 
-        var (response, result) = await _client.GETAsync<GetGameEndpoint, RequestToIdentifiableObject, BoardGameGeekGame>(detailGameRequest);
+        var (response, result) = await _client.GETAsync<GetBggGameDetail.Endpoint, RequestToIdentifiableObject, BoardGameGeekGame>(detailGameRequest);
 
         response.EnsureSuccessStatusCode();
 

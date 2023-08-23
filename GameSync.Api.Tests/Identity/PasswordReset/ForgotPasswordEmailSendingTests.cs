@@ -1,5 +1,5 @@
 ﻿using FastEndpoints;
-using GameSync.Api.Endpoints.Users.IndividualUser;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users.PasswordReset;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -34,7 +34,7 @@ public class ForgotPasswordEmailSendingTests
         var userManager = scope.Resolve<UserManager<User>>();
 
         // act
-        var result = await new ForgotPasswordEndpoint(userManager, mockMailService).ExecuteAsync(request, CancellationToken.None);
+        var result = await new ForgotPassword.Endpoint(userManager, mockMailService).ExecuteAsync(request, CancellationToken.None);
         var serviceUnavailableResult = result.Result as StatusCodeHttpResult;
 
         // assert
@@ -57,7 +57,7 @@ public class ForgotPasswordEmailSendingTests
         var userManager = scope.Resolve<UserManager<User>>();
 
         // act
-        var result = await new ForgotPasswordEndpoint(userManager, mockMailService).ExecuteAsync(request, CancellationToken.None);
+        var result = await new ForgotPassword.Endpoint(userManager, mockMailService).ExecuteAsync(request, CancellationToken.None);
         var okResult = result.Result as Ok;
 
         // assert
@@ -79,7 +79,7 @@ public class ForgotPasswordEmailSendingTests
         var userManager = scope.Resolve<UserManager<User>>();
 
         // act
-        var result = await new ForgotPasswordEndpoint(userManager, mockMailService).ExecuteAsync(request, CancellationToken.None);
+        var result = await new ForgotPassword.Endpoint(userManager, mockMailService).ExecuteAsync(request, CancellationToken.None);
         var okResult = result.Result as Ok;
 
         // assert

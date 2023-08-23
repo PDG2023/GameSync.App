@@ -42,7 +42,7 @@ public class GetAllPartiesTests : TestsWithLoggedUser
 
 
         // act
-        var (response, result) = await Client.GETAsync<GetAllPartiesEndpoint, IEnumerable<PartyPreview>>();
+        var (response, result) = await Client.GETAsync<GetAllParties.Endpoint, IEnumerable<PartyPreview>>();
         
         // assert
         response.EnsureSuccessStatusCode();

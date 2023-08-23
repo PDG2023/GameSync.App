@@ -17,7 +17,7 @@ public class CreatePartyTests : TestsWithLoggedUser
     {
         // arrange
         var date = new DateTime(2025, 08, 08, 17, 0, 0);
-        var request = new CreatePartyRequest 
+        var request = new CreateParty.Request
         { 
             DateTime = date, 
             Name = "<script>hackerman</script>", 
@@ -26,7 +26,7 @@ public class CreatePartyTests : TestsWithLoggedUser
 
 
         // act
-        var (response, result) = await Client.POSTAsync<CreatePartyEndpoint, CreatePartyRequest, PartyPreview>(request);
+        var (response, result) = await Client.POSTAsync<CreateParty.Endpoint, CreateParty.Request, PartyPreview>(request);
 
         // assert
         response.EnsureSuccessStatusCode();
@@ -45,14 +45,14 @@ public class CreatePartyTests : TestsWithLoggedUser
     public async Task Creating_a_party_with_invalid_properties_produces_not_found()
     {
         // arrange
-        var request = new CreatePartyRequest
+        var request = new CreateParty.Request
         {
             DateTime = DateTime.Now.Subtract(TimeSpan.FromDays(1)),
             Name = string.Empty
         };
 
         // act
-        var (response, result) = await Client.POSTAsync<CreatePartyEndpoint, CreatePartyRequest, BadRequestWhateverError>(request);
+        var (response, result) = await Client.POSTAsync<CreateParty.Endpoint, CreateParty.Request, BadRequestWhateverError>(request);
 
         // assert
         Assert.NotNull(result);

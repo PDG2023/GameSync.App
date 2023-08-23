@@ -34,7 +34,7 @@ public class AddGameFromBggTests : TestsWithLoggedUser
         };
 
         // act
-        var (response, result) = await Client.POSTAsync<AddGameFromBggEndpoint, RequestToIdentifiableObject, NotFound>(addExistingGameRequest);
+        var (response, result) = await Client.POSTAsync<AddBggGame.Endpoint, RequestToIdentifiableObject, NotFound>(addExistingGameRequest);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -50,8 +50,8 @@ public class AddGameFromBggTests : TestsWithLoggedUser
         };
 
 
-        var (response, result) = await Client.POSTAsync<AddGameFromBggEndpoint, RequestToIdentifiableObject, Ok>(addExistingGameRequest);
-        var (secondResponse, secondResult) = await Client.POSTAsync<AddGameFromBggEndpoint, RequestToIdentifiableObject, BadRequestWhateverError>(addExistingGameRequest);
+        var (response, result) = await Client.POSTAsync<AddBggGame.Endpoint, RequestToIdentifiableObject, Ok>(addExistingGameRequest);
+        var (secondResponse, secondResult) = await Client.POSTAsync<AddBggGame.Endpoint, RequestToIdentifiableObject, BadRequestWhateverError>(addExistingGameRequest);
 
         response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
         Assert.Equal(HttpStatusCode.BadRequest, secondResponse.StatusCode);
@@ -68,8 +68,8 @@ public class AddGameFromBggTests : TestsWithLoggedUser
         };
 
         // act
-        var (response, result) = await Client.POSTAsync<AddGameFromBggEndpoint, RequestToIdentifiableObject, Ok>(addExistingGameRequest);
-        var (getResponse, listOfGames) = await Client.GETAsync<GetGamesEndpoint, IEnumerable<Game>>();
+        var (response, result) = await Client.POSTAsync<AddBggGame.Endpoint, RequestToIdentifiableObject, Ok>(addExistingGameRequest);
+        var (getResponse, listOfGames) = await Client.GETAsync<GetAllGames.Endpoint, IEnumerable<Game>>();
 
         // assert
         await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);

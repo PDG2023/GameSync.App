@@ -2,7 +2,6 @@
 using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Persistence;
-using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +31,7 @@ public class DeletesGameTests : TestsWithLoggedUser
         var request = new RequestToIdentifiableObject { Id = 8080 };
 
         // act
-        var (response, result) = await Client.DELETEAsync<DeleteGameEndpoint, RequestToIdentifiableObject, NotFound>(request);
+        var (response, result) = await Client.DELETEAsync<DeleteGame.Endpoint, RequestToIdentifiableObject, NotFound>(request);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -59,7 +58,7 @@ public class DeletesGameTests : TestsWithLoggedUser
         var request = new RequestToIdentifiableObject { Id = needleId };
 
         // act
-        var (response, result) = await Client.DELETEAsync<DeleteGameEndpoint, RequestToIdentifiableObject, Ok>(request);
+        var (response, result) = await Client.DELETEAsync<DeleteGame.Endpoint, RequestToIdentifiableObject, Ok>(request);
 
         // assert
         response.EnsureSuccessStatusCode();

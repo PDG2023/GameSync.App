@@ -22,7 +22,12 @@ public class UpdatePartyRequestValidator : Validator<UpdatePartyRequest>
     public UpdatePartyRequestValidator()
     {
         RuleFor(x => x.Name).Must(x => x is null || !string.IsNullOrWhiteSpace(x));
-        RuleFor(x => x.DateTime).GreaterThan(DateTime.Now).When(x => x is not null);
+        RuleFor(x => x.DateTime)
+            .GreaterThan(DateTime.Now)
+            .When(x => x is not null)
+            .WithMessage(Resources.Resource.DateTimeMustBeAfterNow)
+            .WithErrorCode(nameof(Resources.Resource.DateTimeMustBeAfterNow));
+
         Include(new RequestToIdentifiableObjectValidator());
     }
 }

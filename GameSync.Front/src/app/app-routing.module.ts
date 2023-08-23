@@ -10,6 +10,7 @@ import {authGuardChild} from "./guards/auth.guard";
 import {anonymousGuardChild} from "./guards/anonymous.guard";
 import {PartyDetailComponent} from "./features/party-detail/party-detail.component";
 import {PartyGameVoteIdentifyComponent} from "./features/party-game-vote-identify/party-game-vote-identify.component";
+import {GameDetailComponent} from "./features/game-detail/game-detail.component";
 
 const anonymousOnlyRoutes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -21,6 +22,7 @@ const authOnlyRoutes: Routes = [
     {path: 'collection', component: CollectionComponent},
     {path: 'parties/:id', component: PartyDetailComponent},
     {path: 'parties/:id/vote-guest', component: PartyGameVoteIdentifyComponent},
+    {path: 'games/:id', component: GameDetailComponent}
 ]
 
 const routes: Routes = [

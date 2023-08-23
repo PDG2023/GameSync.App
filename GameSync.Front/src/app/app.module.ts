@@ -33,6 +33,11 @@ import { PartyDetailComponent } from './features/party-detail/party-detail.compo
 import { PartyGameItemComponent } from './components/party-game-item/party-game-item.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import { PartyGameVoteIdentifyComponent } from './features/party-game-vote-identify/party-game-vote-identify.component';
+import {MatMenuModule} from "@angular/material/menu";
+import { CollectionItemComponent } from './components/collection-item/collection-item.component';
+import { DialogYesNoComponent } from './common/dialog-yes-no/dialog-yes-no.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import { GameDetailComponent } from './features/game-detail/game-detail.component';
 
 @NgModule({
   declarations: [
@@ -45,11 +50,13 @@ import { PartyGameVoteIdentifyComponent } from './features/party-game-vote-ident
     LoginComponent,
     RegisterComponent,
     SecurityLayoutComponent,
-    PartiesComponent,
     PartyItemComponent,
     PartyDetailComponent,
     PartyGameItemComponent,
-    PartyGameVoteIdentifyComponent
+    PartyGameVoteIdentifyComponent,
+    CollectionItemComponent,
+    DialogYesNoComponent,
+    GameDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +75,9 @@ import { PartyGameVoteIdentifyComponent } from './features/party-game-vote-ident
     HttpClientModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatMenuModule,
+    MatDialogModule
   ],
   providers: [
     {

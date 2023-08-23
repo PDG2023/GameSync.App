@@ -28,10 +28,6 @@ public class AddGameFromBggEndpoint : Endpoint<RequestToIdentifiableObject, Resu
 
     public override async Task<Results<NotFound, Ok, BadRequestWhateverError>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
     {
-        if (ValidationFailed)
-        {
-            return new BadRequestWhateverError(ValidationFailures);
-        }
         var ids = new List<int> { req.Id };
         var games = await _client.GetBoardGamesDetailAsync(ids);
         var game = games.FirstOrDefault();

@@ -6,7 +6,7 @@ namespace GameSync.Api.Tests.UserGames.Validators;
 public class CreateValidatorTests
 {
 
-    private readonly CreateGameValidator _validator = new();
+    private readonly CreateGameRequestValidator _validator = new();
 
     [Fact]
     public void If_all_properties_are_correctly_set_no_errors_should_be_thrown()

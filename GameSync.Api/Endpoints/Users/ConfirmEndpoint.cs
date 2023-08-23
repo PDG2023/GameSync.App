@@ -1,4 +1,5 @@
-﻿using GameSync.Api.Persistence.Entities;
+﻿using FluentValidation;
+using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
@@ -14,6 +15,15 @@ public class ConfirmRequest
 
     [QueryParam]
     public required string Email { get; init; }
+}
+
+public class ConfirmRequestValidator : Validator<ConfirmRequest>
+{
+    public ConfirmRequestValidator()
+    {
+        RuleFor(x => x.ConfirmationToken).NotEmpty();
+        RuleFor(x => x.Email).EmailAddress();
+    }
 }
 
 

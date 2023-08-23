@@ -47,13 +47,6 @@ public class UpdateGameEndpoint : Endpoint<UpdateGameRequest, Results<NotFound, 
 
     public override async Task<Results<NotFound, Ok<Game>, BadRequestWhateverError>> ExecuteAsync(UpdateGameRequest req, CancellationToken ct)
     {
-
-        if (ValidationFailed)
-        {
-            return new BadRequestWhateverError(ValidationFailures);
-        }
-
-
         var userId = User.ClaimValue(ClaimsTypes.UserId);
 
         var game = await _context.Games.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == req.Id);
@@ -63,11 +56,7 @@ public class UpdateGameEndpoint : Endpoint<UpdateGameRequest, Results<NotFound, 
         }
 
         UpdateProperties(game, req);
-
-        if (ValidationFailed)
-        {
-            return new BadRequestWhateverError(ValidationFailures);
-        }
+        ThrowIfAnyErrors();
 
         _context.Games.Update(game);
         await _context.SaveChangesAsync();

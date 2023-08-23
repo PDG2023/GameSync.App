@@ -20,7 +20,7 @@ using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
-builder.Services.AddFastEndpoints( o => o.IncludeAbstractValidators = true);
+builder.Services.AddFastEndpoints();
 builder.Services.SwaggerDocument(x => x.ShortSchemaNames = true);
 builder.Services.AddMemoryCache();
 
@@ -96,7 +96,16 @@ if (app.Environment.IsDevelopment())
     app.UseCors(configuration => configuration.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 }
 
-app.UseFastEndpoints(c => c.Endpoints.RoutePrefix = "api");
+app.UseFastEndpoints(c =>
+{
+    c.Endpoints.RoutePrefix = "api";
+    c.Errors.ResponseBuilder = (failures, context, statusCode) =>
+    {
+
+        return new BadRequestWhateverError(failures);
+
+    };
+});
 app.UseFileServer();
 app.UseAuthentication();
 app.UseAuthorization();

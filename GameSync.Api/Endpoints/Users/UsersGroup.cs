@@ -4,6 +4,6 @@ public class UsersGroup : Group
 {
     public UsersGroup() 
     { 
-        Configure("users", _ => {}); 
+        Configure("users", _ => { }); 
     }
 }

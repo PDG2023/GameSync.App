@@ -32,6 +32,8 @@ public class CreateGameTests : TestsWithLoggedUser
         };
 
         var (response, result) = await Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, BadRequestWhateverError>(newGameRequest);
+
+        Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
         Assert.NotNull(result);
         Assert.Equal(7, result.Errors.Count());
     }

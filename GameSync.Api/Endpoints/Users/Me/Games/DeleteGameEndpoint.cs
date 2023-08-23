@@ -1,12 +1,10 @@
 ﻿using FluentValidation;
 using GameSync.Api.Common;
 using GameSync.Api.Persistence;
-using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameSync.Api.Endpoints.Users.Me.Games;
-
 
 public class DeleteGameEndpoint : Endpoint<RequestToIdentifiableObject, Results<BadRequestWhateverError, NotFound, Ok>>
 {
@@ -26,12 +24,6 @@ public class DeleteGameEndpoint : Endpoint<RequestToIdentifiableObject, Results<
     public override async Task<Results<BadRequestWhateverError, NotFound, Ok>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
     {
 
-        if (ValidationFailed)
-        {
-            await Task.CompletedTask;
-            return new BadRequestWhateverError(ValidationFailures);
-        }
-
         var userId = User.ClaimValue(ClaimsTypes.UserId);
         var gameExists = await _context.Games.AnyAsync(game => game.Id == req.Id && userId == game.UserId);
         
@@ -43,9 +35,5 @@ public class DeleteGameEndpoint : Endpoint<RequestToIdentifiableObject, Results<
         await _context.Games.Where(game => game.Id == req.Id).ExecuteDeleteAsync();
 
         return TypedResults.Ok();
-
     }
-
-
-
 }

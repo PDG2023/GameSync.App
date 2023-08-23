@@ -21,7 +21,6 @@ public class GameValidator : AbstractValidator<IGameRequest>
 
         RuleFor(x => x.MaxPlayer)
             .Must((req, maxPlayer) => maxPlayer >= req.MinPlayer)
-            .WithErrorCode(nameof(Resource.MaxPlayerLowerThanMinPlayer))
             .WithMessage(Resource.MaxPlayerLowerThanMinPlayer)
             .When(x => x.MaxPlayer is not null && x.MinPlayer is not null);
 

@@ -1,13 +1,14 @@
-﻿using GameSync.Api.Persistence.Entities;
+﻿using FluentValidation;
+using GameSync.Api.Common;
+using GameSync.Api.Persistence.Entities;
 using GameSync.Business.Auth;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
-using NJsonSchema.Validation;
 using System.Net;
 
 namespace GameSync.Api.Endpoints.Users;
 
-public class SignUpRequest
+public class SignUpRequest : IRequestWithCredentials
 {
     public required string UserName { get; set; }
     public required string Email { get; set; }
@@ -20,15 +21,24 @@ public class SuccessfulSignUpResponse
     public required string UserName { get; set; }
 }
 
+public class SignUpRequestValidator : Validator<SignUpRequest>
+{
+    public SignUpRequestValidator()
+    {
+        RuleFor(x => x.UserName).NotEmpty();
+        Include(new CredentialsValidator());
+    }
+}
+
 public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequestWhateverError, StatusCodeHttpResult, Ok<SuccessfulSignUpResponse>>>
 {
-    private readonly UserManager<User> userManager;
-    private readonly IConfirmationEmailSender authMailService;
+    private readonly UserManager<User> _userManager;
+    private readonly IConfirmationEmailSender _authMailService;
 
     public SignUpEndpoint(UserManager<User> userManager, IConfirmationEmailSender authMailService)
     {
-        this.userManager = userManager;
-        this.authMailService = authMailService;
+        _userManager = userManager;
+        _authMailService = authMailService;
     }
 
     public override void Configure()
@@ -46,19 +56,19 @@ public class SignUpEndpoint : Endpoint<SignUpRequest, Results<BadRequestWhatever
             UserName = req.UserName,
         };
 
-        var tryCreateUser = await userManager.CreateAsync(newUser, req.Password);
+        var tryCreateUser = await _userManager.CreateAsync(newUser, req.Password);
 
         if (!tryCreateUser.Succeeded)
         {
             return new BadRequestWhateverError(tryCreateUser.Errors);
         }
 
-        var mailToken = await userManager.GenerateEmailConfirmationTokenAsync(newUser);
-        if (!await authMailService.SendEmailConfirmationAsync(newUser.Email, mailToken))
+        var mailToken = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+        if (!await _authMailService.SendEmailConfirmationAsync(newUser.Email, mailToken))
         {
             
             // delete the newly created user
-            await userManager.DeleteAsync(newUser);
+            await _userManager.DeleteAsync(newUser);
 
             // Send an error
             return TypedResults.StatusCode((int)HttpStatusCode.ServiceUnavailable);

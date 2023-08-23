@@ -41,11 +41,10 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
 
 
-    public async Task<Game> CreateTestGame(string userId, int id)
+    public async Task<Game> CreateTestGame(string userId)
     {
         var game = new Game
         {
-            Id = id,
             MaxPlayer = 10,
             MinPlayer = 5,
             DurationMinute = 5,

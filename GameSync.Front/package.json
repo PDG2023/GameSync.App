@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve --host=127.0.0.1",
     "build": "ng build --output-path ./dist",
+    "docker": "ng build --output-path ./dist --configuration docker",
     "watch": "ng build --watch --configuration development",
     "test": "jest"
   },

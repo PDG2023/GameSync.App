@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://gamesync.azurewebsites.net',
+  apiUrl: 'http://localhost',
   securityStorage: 'jwt'
 };

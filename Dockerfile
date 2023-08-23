@@ -34,7 +34,8 @@ RUN npm install
 
 FROM front-install AS front-build
 COPY ./GameSync.Front/ .
-RUN npm run build
+ARG CMD=build
+RUN npm run $CMD
 
 FROM base AS final
 WORKDIR /app

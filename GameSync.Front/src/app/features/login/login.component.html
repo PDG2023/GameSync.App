@@ -1,0 +1,35 @@
+
+<mat-card>
+
+  <img id="card-img" matCardImage src="./assets/img/casino.svg" alt="GameSync Logo">
+
+  <h2>S'identifier</h2>
+
+  <mat-card-content>
+    <form [formGroup]="loginForm">
+      <mat-error *ngIf="false">
+        L'email ou le mot de passe est incorrect
+      </mat-error>
+      <mat-form-field>
+        <input formControlName="email" matInput type="text" placeholder="Email" required>
+        <mat-error>
+          L'adresse mail n'est pas valide
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input formControlName="password" matInput type="password" placeholder="Mot de passe" required>
+        <mat-error>
+          Ce champ est obligatoire
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="submit()">Se connecter</button>
+    </form>
+  </mat-card-content>
+
+  <div class="link-wrapper">
+    <a routerLink="/register">Pas encore inscrit ?</a>
+    <a routerLink="/login">Mot de passe oublié</a>
+  </div>
+
+</mat-card>

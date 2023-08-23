@@ -17,6 +17,7 @@ public class SuccessfulSignInResponse
 {
     public required string Email { get; init; }
     public required string Token { get; init; }
+    public required string UserName { get; init; }
 }
 
 public class SignInRequestValidator : Validator<SignInRequest>
@@ -84,8 +85,13 @@ public class SignInEndpoint : Endpoint<SignInRequest, Results<Ok<SuccessfulSignI
                 u.Claims.Add((ClaimsTypes.UserId,  user.Id));
             });
 
-
-        return TypedResults.Ok(new SuccessfulSignInResponse { Email = req.Email, Token = token });
+        var response = new SuccessfulSignInResponse 
+        { 
+            Email = user.Email, 
+            Token = token,
+            UserName = user.UserName
+        };
+        return TypedResults.Ok(response);
     }
 
     private void AddNotFoundCredentialsErrors()

@@ -18,7 +18,26 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
 import {SearchComponent} from './common/search/search.component';
-import {LocationStrategy, HashLocationStrategy} from "@angular/common";
+import {LoginComponent} from './features/login/login.component';
+import {MatCardModule} from "@angular/material/card";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {RegisterComponent} from './features/register/register.component';
+import {HttpErrorInterceptor} from "./helpers/http-error.interceptor";
+import { SecurityLayoutComponent } from './common/security-layout/security-layout.component';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {AuthInterceptor} from "./helpers/auth-interceptor.interceptor";
+import {LocationStrategy, PathLocationStrategy} from "@angular/common";
+import {PartyItemComponent} from "./components/party-item/party-item.component";
+import { PartyDetailComponent } from './features/party-detail/party-detail.component';
+import { PartyGameItemComponent } from './components/party-game-item/party-game-item.component';
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import { PartyGameVoteIdentifyComponent } from './features/party-game-vote-identify/party-game-vote-identify.component';
+import {MatMenuModule} from "@angular/material/menu";
+import { CollectionItemComponent } from './components/collection-item/collection-item.component';
+import { DialogYesNoComponent } from './common/dialog-yes-no/dialog-yes-no.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import { GameDetailComponent } from './features/game-detail/game-detail.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +47,16 @@ import {LocationStrategy, HashLocationStrategy} from "@angular/common";
     CollectionComponent,
     PartiesComponent,
     SearchComponent,
+    LoginComponent,
+    RegisterComponent,
+    SecurityLayoutComponent,
+    PartyItemComponent,
+    PartyDetailComponent,
+    PartyGameItemComponent,
+    PartyGameVoteIdentifyComponent,
+    CollectionItemComponent,
+    DialogYesNoComponent,
+    GameDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -41,14 +70,26 @@ import {LocationStrategy, HashLocationStrategy} from "@angular/common";
     MatFormFieldModule,
     MatAutocompleteModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatCardModule,
+    HttpClientModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
+    MatMenuModule,
+    MatDialogModule
   ],
   providers: [
     {
       provide: LocationStrategy,
-      useClass: HashLocationStrategy
-    }
+      useClass: PathLocationStrategy
+    },
+    {provide: HTTP_INTERCEPTORS, multi: true, useClass: HttpErrorInterceptor},
+    {provide: HTTP_INTERCEPTORS, multi: true, useClass: AuthInterceptor}
   ],
+
+
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

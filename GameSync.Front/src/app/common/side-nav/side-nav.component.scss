@@ -12,6 +12,10 @@
   justify-content: space-between;
 }
 
+.toolbar-link:hover {
+  cursor: pointer;
+}
+
 .button-logo-container {
   display: flex;
   align-items: center;
@@ -22,7 +26,7 @@
   flex-grow: 2;
 }
 
-.login-container {
+.login-button-container {
   flex-grow: 1;
   display: flex;
   justify-content: space-between;
@@ -32,6 +36,7 @@
   position: fixed;
   /* Make sure the toolbar will stay on top of the content as it scrolls past. */
   z-index: 2;
+  display: flex;
 }
 
 h1.app-name {
@@ -48,4 +53,11 @@ h1.app-name {
   /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
      `<body>` to be our scrolling element for mobile layouts. */
   flex: 1 0 auto;
+  justify-content: space-between;
+}
+
+
+.content-wrapper {
+  padding: 50px;
+  height: 100%;
 }

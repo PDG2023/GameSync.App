@@ -86,5 +86,14 @@ namespace GameSync.Api.Resources {
                 return ResourceManager.GetString("MaxPlayerLowerThanMinPlayer", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Les mots de passe ne correspondent pas.
+        /// </summary>
+        public static string PasswordDontMatch {
+            get {
+                return ResourceManager.GetString("PasswordDontMatch", resourceCulture);
+            }
+        }
     }
 }

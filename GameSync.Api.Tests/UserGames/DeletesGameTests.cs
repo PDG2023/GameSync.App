@@ -24,9 +24,9 @@ public class DeletesGameTests : TestsWithLoggedUser
         // arrange
 
         var games = await Task.WhenAll(
-            Factory.CreateTestGame(UserId, 800),
-            Factory.CreateTestGame(UserId, 801),
-            Factory.CreateTestGame(UserId, 802)
+            Factory.CreateTestGame(UserId),
+            Factory.CreateTestGame(UserId),
+            Factory.CreateTestGame(UserId)
         );
 
         var request = new RequestToIdentifiableObject { Id = 8080 };
@@ -51,12 +51,12 @@ public class DeletesGameTests : TestsWithLoggedUser
         // arrange
 
         var games = await Task.WhenAll(
-            Factory.CreateTestGame(UserId, 1000),
-            Factory.CreateTestGame(UserId, 1001),
-            Factory.CreateTestGame(UserId, 1002)
+            Factory.CreateTestGame(UserId),
+            Factory.CreateTestGame(UserId),
+            Factory.CreateTestGame(UserId)
         );
-
-        var request = new RequestToIdentifiableObject { Id = 1000 };
+        var needleId = games[0].Id;
+        var request = new RequestToIdentifiableObject { Id = needleId };
 
         // act
         var (response, result) = await Client.DELETEAsync<DeleteGameEndpoint, RequestToIdentifiableObject, Ok>(request);
@@ -67,7 +67,7 @@ public class DeletesGameTests : TestsWithLoggedUser
         // Checks whether the deleted game is in fact correctly deleted
         using var scope = Factory.Services.CreateScope();
         var ctx = scope.Resolve<GameSyncContext>();
-        var gamesShouldBeDeleted = await ctx.Games.Where(x => x.Id == 1000).ToListAsync();
+        var gamesShouldBeDeleted = await ctx.Games.Where(x => x.Id == needleId).ToListAsync();
         Assert.Empty(gamesShouldBeDeleted);
     }
 

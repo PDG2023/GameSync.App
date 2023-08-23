@@ -1,10 +1,8 @@
 ﻿using FastEndpoints;
+using GameSync.Api.Common;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users.Me.Games;
-using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using System.Security.Cryptography.X509Certificates;
 using Xunit;
 
 namespace GameSync.Api.Tests.UserGames;
@@ -22,7 +20,7 @@ public class GetGameTests
         }
 
         [Fact]
-        public async void User_without_games_should_return_an_empty_array()
+        public async Task User_without_games_should_return_an_empty_array()
         {
             var (response, result) = await Client.GETAsync<GetGamesEndpoint, IEnumerable<Game>>();
 
@@ -43,12 +41,32 @@ public class GetGameTests
         }
 
         [Fact]
-        public async void Getting_games_of_user_with_two_games_should_return_them_all()
+        public async Task Getting_detail_of_game_should_work()
+        {
+            // arrange
+            var games = await Task.WhenAll(
+                Factory.CreateTestGame(UserId),
+                Factory.CreateTestGame(UserId)
+
+            );
+            var req = new RequestToIdentifiableObject { Id = games[0].Id };
+
+            // act
+            var (response, result) = await Client.GETAsync<GetGameEndpoint, RequestToIdentifiableObject, Game>(req);
+
+            // assert
+            response.EnsureSuccessStatusCode();
+            Assert.NotNull(result);
+            Assert.Equal(games[0].Id, result.Id);
+        }
+
+        [Fact]
+        public async Task Getting_games_of_user_with_two_games_should_return_them_all()
         {
             // arrange : add said games
             var games = await Task.WhenAll(
-                Factory.CreateTestGame(UserId, 50),
-                Factory.CreateTestGame(UserId, 51)
+                Factory.CreateTestGame(UserId),
+                Factory.CreateTestGame(UserId)
             );
 
             // act 
@@ -58,8 +76,8 @@ public class GetGameTests
             Assert.NotNull(result);
             response.EnsureSuccessStatusCode();
             Assert.Collection(result,
-                first => Assert.Equal(50, first.Id),
-                second => Assert.Equal(51, second.Id));
+                first => Assert.Equal(games[0].Id, first.Id),
+                second => Assert.Equal(games[1].Id, second.Id));
         }
     }
 

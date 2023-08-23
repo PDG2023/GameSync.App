@@ -4,8 +4,6 @@ public class UsersGroup : Group
 {
     public UsersGroup() 
     { 
-        Configure("users", x => {
-            x.DontThrowIfValidationFails();
-        }); 
+        Configure("users", _ => { }); 
     }
 }

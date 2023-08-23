@@ -28,11 +28,6 @@ public class ForgotPasswordEndpoint : Endpoint<SingleMailRequest, Results<Ok, St
 
     public override async Task<Results<Ok, StatusCodeHttpResult, BadRequestWhateverError>> ExecuteAsync(SingleMailRequest req, CancellationToken ct)
     {
-        if (ValidationFailed)
-        {
-            return new BadRequestWhateverError(ValidationFailures);
-        }
-
         var user = await _manager.FindByEmailAsync(req.Email);
 
         if (user is null)

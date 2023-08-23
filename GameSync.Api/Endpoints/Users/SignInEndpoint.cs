@@ -1,18 +1,13 @@
-﻿using FluentValidation.Results;
+﻿using FluentValidation;
+using GameSync.Api.Common;
 using GameSync.Api.Persistence.Entities;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
 
 namespace GameSync.Api.Endpoints.Users;
 
-public class SignInRequest
+public class SignInRequest : IRequestWithCredentials
 {
-    [EmailAddress]
     public required string Email { get; init; }
 
     public required string Password { get; init; }
@@ -24,6 +19,15 @@ public class SuccessfulSignInResponse
     public required string Token { get; init; }
     public required string UserName { get; init; }
 }
+
+public class SignInRequestValidator : Validator<SignInRequest>
+{
+    public SignInRequestValidator() 
+    {
+        Include(new CredentialsValidator());
+    }
+}
+
 
 public class SignInEndpoint : Endpoint<SignInRequest, Results<Ok<SuccessfulSignInResponse>,  BadRequestWhateverError>>
 {
@@ -60,6 +64,7 @@ public class SignInEndpoint : Endpoint<SignInRequest, Results<Ok<SuccessfulSignI
         {
             if (signInResult.IsNotAllowed)
             {
+                // TODO : Translate
                 AddError(r => r.Email, "The email needs to be confirmed", "ConfirmationNeeded");
             }
             else
@@ -91,6 +96,7 @@ public class SignInEndpoint : Endpoint<SignInRequest, Results<Ok<SuccessfulSignI
 
     private void AddNotFoundCredentialsErrors()
     {
+        // TODO : Translate
         AddError(r => r.Email, "Nothing has been found for the given credentials", "NotFound");
     }
 }

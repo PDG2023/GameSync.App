@@ -1,0 +1,40 @@
+<ng-container *ngIf="game$ | async as game">
+  <div class="row mb-4">
+    <div class="col-sm-4">
+      <img src="https://placehold.co/400">
+    </div>
+    <div class="col-sm-8">
+      <h1>{{ game.name }}</h1>
+      <table class="game-attributes">
+        <tr>
+          <td class="attribute-title">Nombre minimum de joueurs:</td>
+          <td>{{ game.minPlayer }} joueur(s)</td>
+        </tr>
+        <tr>
+          <td class="attribute-title">Nombre maximum de joueurs:</td>
+          <td>{{ game.maxPlayer }} joueur(s)</td>
+        </tr>
+        <tr>
+          <td class="attribute-title">Age:</td>
+          <td>dès {{ game.minAge }} an(s)</td>
+        </tr>
+        <tr>
+          <td class="attribute-title">Durée:</td>
+          <td>environ {{ game.durationMinute }} mn</td>
+        </tr>
+      </table>
+      <button color="primary" mat-flat-button>
+        <mat-icon>favorite_outline</mat-icon>
+        <!--<mat-icon>favorite</mat-icon> // Lorsque dans la collection  -->
+        Ajouter à la collection
+        <!-- Retirer de la collection -->
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>Description</h1>
+      {{ game.description }}
+    </div>
+  </div>
+</ng-container>

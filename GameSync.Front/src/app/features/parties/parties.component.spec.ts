@@ -1,6 +1,10 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {PartiesComponent} from './parties.component';
+import {PartyItemComponent} from "../../components/party-item/party-item.component";
+import {MatCardModule} from "@angular/material/card";
+import {MatIconModule} from "@angular/material/icon";
+import {RouterTestingModule} from "@angular/router/testing";
 
 describe('PartiesComponent', () => {
   let component: PartiesComponent;
@@ -8,7 +12,12 @@ describe('PartiesComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PartiesComponent]
+      declarations: [PartiesComponent, PartyItemComponent],
+      imports: [
+        MatCardModule,
+        MatIconModule,
+        RouterTestingModule
+      ]
     });
     fixture = TestBed.createComponent(PartiesComponent);
     component = fixture.componentInstance;

@@ -1,0 +1,52 @@
+/* You can add global styles to this file, and also import other style files */
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.error-snackbar {
+  --mdc-snackbar-container-color: #c94343;
+  --mdc-snackbar-supporting-text-color: white !important;
+  --mat-mdc-snack-bar-button-color: white !important;
+  white-space: pre-line
+}
+
+.success-snackbar {
+  --mdc-snackbar-container-color: #64e05f;
+  --mdc-snackbar-supporting-text-color: black !important;
+  --mat-mdc-snack-bar-button-color: white !important;
+  white-space: pre-line
+}
+
+#card-img {
+  height: 200px;
+}
+
+.login-container mat-card {
+  min-width: 375px;
+  min-height: 610px;
+  text-align: center;
+  display: flex;
+  justify-content: space-around;
+}
+
+.login-container mat-form-field {
+  display: block;
+}
+
+.login-container button {
+  margin-bottom: 15px;
+}
+
+.login-container .link-wrapper {
+  margin-bottom: 20px;
+}
+
+.login-container a {
+  color: white;
+  display: block;
+}
+
+.login-container #copyright {
+  font-size: large;
+}

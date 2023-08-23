@@ -23,9 +23,10 @@ public class ConfirmEndpoint : Endpoint<ConfirmRequest, Results<NotFound, NoCont
 
     public override void Configure()
     {
+
+        AllowAnonymous();
         Get("confirm");
         Group<UsersGroup>();
-        AllowAnonymous();
     }
 
     public ConfirmEndpoint(UserManager<User> userManager)

@@ -1,0 +1,37 @@
+
+
+<mat-card *ngIf="game">
+  <mat-card-header>
+    <mat-card-title>
+      {{ game.name }}
+    </mat-card-title>
+  </mat-card-header>
+  <img src="https://placehold.co/400">
+  <mat-card-content>
+
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button (click)="navigateToDetails()">
+      <mat-icon>visibility</mat-icon>
+      Détails
+    </button>
+    <button mat-icon-button color="warn" (click)="deleteMe()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>
+
+
+<div class="collection-item" *ngIf="game">
+  <div class="collection-image">
+
+  </div>
+  <div class="collection-title-wrapper">
+    <h1 class="collection-title">
+
+    </h1>
+    <div class="collection-delete">
+
+    </div>
+  </div>
+</div>

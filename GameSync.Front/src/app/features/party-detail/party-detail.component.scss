@@ -1,0 +1,27 @@
+app-party-game-item {
+  display: block;
+  margin-bottom: 30px;
+}
+
+.party-games-actions {
+  text-align: center;
+}
+
+.share-wrapper {
+  text-align: right;
+
+  button {
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+}
+
+p b {
+  text-transform: uppercase;
+  font-weight: normal;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+p {
+  margin-bottom: 0px;
+}

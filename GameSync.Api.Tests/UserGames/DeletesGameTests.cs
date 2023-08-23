@@ -1,5 +1,5 @@
 ﻿using FastEndpoints;
-using GameSync.Api.Common;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;

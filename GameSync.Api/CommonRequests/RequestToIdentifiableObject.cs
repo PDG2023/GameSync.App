@@ -1,4 +1,4 @@
-﻿namespace GameSync.Api.Common;
+﻿namespace GameSync.Api.CommonRequests;
 
 public class RequestToIdentifiableObject
 {

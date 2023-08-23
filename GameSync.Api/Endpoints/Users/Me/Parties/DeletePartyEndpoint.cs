@@ -1,4 +1,4 @@
-﻿using GameSync.Api.Common;
+﻿using GameSync.Api.CommonRequests;
 using GameSync.Api.Persistence;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;

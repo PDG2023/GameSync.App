@@ -1,6 +1,7 @@
 ﻿using FastEndpoints.Security;
 using FluentValidation;
 using GameSync.Api.Common;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Api.Resources;
@@ -47,6 +48,7 @@ public class UpdateGameEndpoint : Endpoint<UpdateGameRequest, Results<NotFound, 
 
     public override async Task<Results<NotFound, Ok<Game>, BadRequestWhateverError>> ExecuteAsync(UpdateGameRequest req, CancellationToken ct)
     {
+
         var userId = User.ClaimValue(ClaimsTypes.UserId);
 
         var game = await _context.Games.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == req.Id);

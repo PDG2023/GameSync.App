@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GameSync.Api.Common;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Business.BoardGamesGeek;

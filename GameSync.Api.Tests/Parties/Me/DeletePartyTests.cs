@@ -1,7 +1,7 @@
 ﻿using Bogus.DataSets;
 using Duende.IdentityServer.Validation;
 using FastEndpoints;
-using GameSync.Api.Common;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users.Me.Parties;
 using GameSync.Api.Persistence;
 using Microsoft.AspNetCore.Http.HttpResults;

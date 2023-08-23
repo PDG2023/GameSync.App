@@ -1,5 +1,5 @@
 ﻿using FastEndpoints;
-using GameSync.Api.Common;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Endpoints.Users.Me.Games.FromBgg;
 using GameSync.Api.Persistence.Entities;
@@ -53,7 +53,7 @@ public class AddGameFromBggTests : TestsWithLoggedUser
         var (response, result) = await Client.POSTAsync<AddGameFromBggEndpoint, RequestToIdentifiableObject, Ok>(addExistingGameRequest);
         var (secondResponse, secondResult) = await Client.POSTAsync<AddGameFromBggEndpoint, RequestToIdentifiableObject, BadRequestWhateverError>(addExistingGameRequest);
 
-        await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
+        response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
         Assert.Equal(HttpStatusCode.BadRequest, secondResponse.StatusCode);
     }
 

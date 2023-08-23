@@ -1,10 +1,12 @@
 ﻿using FluentValidation;
-using GameSync.Api.Common;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Persistence;
+using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameSync.Api.Endpoints.Users.Me.Games;
+
 
 public class DeleteGameEndpoint : Endpoint<RequestToIdentifiableObject, Results<BadRequestWhateverError, NotFound, Ok>>
 {
@@ -35,5 +37,9 @@ public class DeleteGameEndpoint : Endpoint<RequestToIdentifiableObject, Results<
         await _context.Games.Where(game => game.Id == req.Id).ExecuteDeleteAsync();
 
         return TypedResults.Ok();
+
     }
+
+
+
 }

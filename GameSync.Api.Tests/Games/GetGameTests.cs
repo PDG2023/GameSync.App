@@ -1,5 +1,5 @@
 ﻿using FastEndpoints;
-using GameSync.Api.Common;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Games;
 using GameSync.Business.BoardGameGeek.Model;
 using GameSync.Business.BoardGamesGeek;

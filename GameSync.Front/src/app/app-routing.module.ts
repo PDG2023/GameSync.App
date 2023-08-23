@@ -8,6 +8,7 @@ import {SecurityLayoutComponent} from "./common/security-layout/security-layout.
 import {RegisterComponent} from "./features/register/register.component";
 import {authGuardChild} from "./guards/auth.guard";
 import {anonymousGuardChild} from "./guards/anonymous.guard";
+import {GameDetailComponent} from "./features/game-detail/game-detail.component";
 
 const anonymousOnlyRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -16,7 +17,8 @@ const anonymousOnlyRoutes: Routes = [
 
 const authOnlyRoutes: Routes = [
   {path: 'parties', component: PartiesComponent},
-  {path: 'collection', component: CollectionComponent}
+  {path: 'collection', component: CollectionComponent},
+  {path: 'games/:id', component: GameDetailComponent},
 ]
 
 const routes: Routes = [

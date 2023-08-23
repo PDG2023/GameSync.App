@@ -28,6 +28,11 @@ import { SecurityLayoutComponent } from './common/security-layout/security-layou
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {AuthInterceptor} from "./helpers/auth-interceptor.interceptor";
 import {LocationStrategy, PathLocationStrategy} from "@angular/common";
+import {MatMenuModule} from "@angular/material/menu";
+import { CollectionItemComponent } from './components/collection-item/collection-item.component';
+import { DialogYesNoComponent } from './common/dialog-yes-no/dialog-yes-no.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import { GameDetailComponent } from './features/game-detail/game-detail.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +45,9 @@ import {LocationStrategy, PathLocationStrategy} from "@angular/common";
     LoginComponent,
     RegisterComponent,
     SecurityLayoutComponent,
+    CollectionItemComponent,
+    DialogYesNoComponent,
+    GameDetailComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,7 +65,9 @@ import {LocationStrategy, PathLocationStrategy} from "@angular/common";
     MatCardModule,
     HttpClientModule,
     MatSnackBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatMenuModule,
+    MatDialogModule
   ],
   providers: [
     {

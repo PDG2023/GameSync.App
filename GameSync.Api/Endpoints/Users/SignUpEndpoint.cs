@@ -2,7 +2,6 @@
 using GameSync.Business.Auth;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
-using NJsonSchema.Validation;
 using System.Net;
 
 namespace GameSync.Api.Endpoints.Users;

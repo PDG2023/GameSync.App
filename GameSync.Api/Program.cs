@@ -99,6 +99,7 @@ app.UseFileServer();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSwaggerGen();
+app.MapFallbackToFile("index.html");
 
 using (var scope = app.Services.CreateScope())
 {

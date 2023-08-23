@@ -1,0 +1,47 @@
+<div class="breadcrumb">
+  <button mat-flat-button>
+    <mat-icon>arrow_left</mat-icon>
+    Retour à la liste des soirées
+  </button>
+</div>
+<div class="row mb-5 align-items-center">
+  <div class="col-sm-3">
+    <mat-form-field>
+      <mat-label>Titre</mat-label>
+      <input matInput placeholder="Titre" value="Soirée 1">
+    </mat-form-field>
+  </div>
+  <div class="col-sm-3">
+    <mat-form-field>
+      <mat-label>Date</mat-label>
+      <input matInput placeholder="Date" value="26/06/2023">
+    </mat-form-field>
+  </div>
+  <div class="col-sm-3">
+    <mat-form-field>
+      <mat-label>Lieu</mat-label>
+      <input matInput placeholder="Lieu" value="Chez moi">
+    </mat-form-field>
+  </div>
+  <div class="col-sm-3 share-wrapper">
+    <button mat-flat-button color="primary">
+      <mat-icon>save</mat-icon>
+      Enregistrer
+    </button>
+    <button mat-flat-button color="accent">
+      <mat-icon>share</mat-icon>
+      Partager
+    </button>
+  </div>
+</div>
+<div class="party-games">
+  <app-party-game-item></app-party-game-item>
+  <app-party-game-item></app-party-game-item>
+  <app-party-game-item></app-party-game-item>
+</div>
+<div class="party-games-actions">
+  <button mat-flat-button color="primary">
+    <mat-icon>add</mat-icon>
+    Ajouter un jeu
+  </button>
+</div>

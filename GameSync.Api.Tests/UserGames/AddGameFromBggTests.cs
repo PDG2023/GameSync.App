@@ -53,7 +53,7 @@ public class AddGameFromBggTests : TestsWithLoggedUser
         var (response, result) = await Client.POSTAsync<AddGameFromBggEndpoint, SingleGameRequest, Ok>(addExistingGameRequest);
         var (secondResponse, secondResult) = await Client.POSTAsync<AddGameFromBggEndpoint, SingleGameRequest, BadRequestWhateverError>(addExistingGameRequest);
 
-        response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
+        await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
         Assert.Equal(HttpStatusCode.BadRequest, secondResponse.StatusCode);
     }
 

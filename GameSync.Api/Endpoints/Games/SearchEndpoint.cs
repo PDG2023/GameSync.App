@@ -24,6 +24,7 @@ public class PaginationValidator : Validator<SearchGameRequest>
 {
     public PaginationValidator()
     {
+        RuleFor(x => x.Query).NotEmpty();
         RuleFor(r => r.PageSize).ExclusiveBetween(0, 101);
         RuleFor(r => r.Page).GreaterThanOrEqualTo(0);
     }

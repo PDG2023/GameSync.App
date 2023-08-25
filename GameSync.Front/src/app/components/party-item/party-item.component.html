@@ -1,0 +1,23 @@
+<mat-card>
+  <mat-card-content>
+    <div class="row">
+      <div class="col-sm-4 party-content">
+        <p>Soirée 1</p>
+        <p>13 jeux</p>
+      </div>
+      <div class="col-sm-4 party-content">
+        <p>Chez moi</p>
+        <p>26/06/2023</p>
+      </div>
+      <div class="col-sm-4 actions">
+        <button mat-flat-button [routerLink]="['/parties', 0]">
+          <mat-icon>edit</mat-icon>
+          Modifier
+        </button>
+        <button mat-icon-button color="warn">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

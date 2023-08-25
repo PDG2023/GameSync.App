@@ -79,11 +79,29 @@ namespace GameSync.Api.Resources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Le format de l&apos;adresse mail est incorrect..
+        /// </summary>
+        public static string InvalidEmail {
+            get {
+                return ResourceManager.GetString("InvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Le nombre de joueur maximum ne peut pas être supérieur au nombre de joueur minimum..
         /// </summary>
         public static string MaxPlayerLowerThanMinPlayer {
             get {
                 return ResourceManager.GetString("MaxPlayerLowerThanMinPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Les mots de passe ne correspondent pas.
+        /// </summary>
+        public static string PasswordDontMatch {
+            get {
+                return ResourceManager.GetString("PasswordDontMatch", resourceCulture);
             }
         }
     }

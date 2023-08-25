@@ -123,7 +123,13 @@
   <data name="GamesNotFound" xml:space="preserve">
     <value>Le(s) jeu(x) suivant(s) n'existe(nt) pas :</value>
   </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Le format de l'adresse mail est incorrect.</value>
+  </data>
   <data name="MaxPlayerLowerThanMinPlayer" xml:space="preserve">
     <value>Le nombre de joueur maximum ne peut pas être supérieur au nombre de joueur minimum.</value>
+  </data>
+  <data name="PasswordDontMatch" xml:space="preserve">
+    <value>Les mots de passe ne correspondent pas</value>
   </data>
 </root>

@@ -34,7 +34,7 @@ public class BoardGameGeekClient
         }
     }
 
-    private TOutput Deserialize<TOutput>(Stream stream)
+    private static TOutput Deserialize<TOutput>(Stream stream)
     {
         return (TOutput)new XmlSerializer(typeof(TOutput)).Deserialize(stream)!;
     }
@@ -85,7 +85,7 @@ public class BoardGameGeekClient
             DurationMinute = thing.PlayingTime?.ValueAsInt,
             MinAge = thing.MinAge?.ValueAsInt,
             ImageUrl = thing.Image,
-            Name = thing.Names?.FirstOrDefault(x => x.Type == "primary")?.Value ?? thing.Names.FirstOrDefault()?.Value
+            Name = thing.Names?.FirstOrDefault(x => x.Type == "primary")?.Value ?? thing.Names?.FirstOrDefault()?.Value
         });
     }
 

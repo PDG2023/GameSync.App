@@ -1,4 +1,5 @@
-﻿using GameSync.Api.Persistence.Entities;
+﻿using FluentValidation;
+using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
@@ -16,6 +17,15 @@ public class ConfirmRequest
     public required string Email { get; init; }
 }
 
+public class ConfirmRequestValidator : Validator<ConfirmRequest>
+{
+    public ConfirmRequestValidator()
+    {
+        RuleFor(x => x.ConfirmationToken).NotEmpty();
+        RuleFor(x => x.Email).EmailAddress();
+    }
+}
+
 
 public class ConfirmEndpoint : Endpoint<ConfirmRequest, Results<NotFound, NoContent, BadRequestWhateverError>>
 {
@@ -23,9 +33,10 @@ public class ConfirmEndpoint : Endpoint<ConfirmRequest, Results<NotFound, NoCont
 
     public override void Configure()
     {
+
+        AllowAnonymous();
         Get("confirm");
         Group<UsersGroup>();
-        AllowAnonymous();
     }
 
     public ConfirmEndpoint(UserManager<User> userManager)

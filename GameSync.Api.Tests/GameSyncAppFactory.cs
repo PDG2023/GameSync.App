@@ -41,11 +41,10 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
 
 
-    public async Task<Game> CreateTestGame(string userId, int id)
+    public async Task<Game> CreateTestGame(string userId)
     {
         var game = new Game
         {
-            Id = id,
             MaxPlayer = 10,
             MinPlayer = 5,
             DurationMinute = 5,
@@ -83,7 +82,7 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         var user = await manager.FindByEmailAsync(mail);
         var confirmationToken = await manager.GenerateEmailConfirmationTokenAsync(user!);
         await manager.ConfirmEmailAsync(user!, confirmationToken);
-        return user.Id;
+        return user!.Id;
 
     }
 
@@ -109,6 +108,9 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
         services.RemoveService<IConfirmationEmailSender>();
         services.AddSingleton<IConfirmationEmailSender>(new MockMailService(false));
+
+        services.RemoveService<IPasswordResetMailSenderAsync>();
+        services.AddSingleton<IPasswordResetMailSenderAsync>(new MockMailService(false));
     }
 
     private static void SetupFakeConfiguration(IServiceCollection services)

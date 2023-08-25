@@ -5,6 +5,7 @@ global using FastEndpoints.Security;
 
 
 using FastEndpoints.Swagger;
+using GameSync.Api;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Business.Auth;
@@ -16,12 +17,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Text.Json;
-using GameSync.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddFastEndpoints( o => o.IncludeAbstractValidators = true);
+builder.Services.AddFastEndpoints();
 builder.Services.SwaggerDocument(x => x.ShortSchemaNames = true);
 builder.Services.AddMemoryCache();
 
@@ -38,6 +38,7 @@ builder.Services.AddIdentityCore<User>(x =>
         x.SignIn.RequireConfirmedEmail = true;
         x.Password.RequiredLength = 8;
     })
+    .AddErrorDescriber<FrenchIdentityErrorDescriber>()
     .AddUserManager<UserManager<User>>()
     .AddSignInManager()
     .AddEntityFrameworkStores<GameSyncContext>()
@@ -76,6 +77,7 @@ else
 }
 
 builder.Services.AddSingleton<IConfirmationEmailSender, AuthMailService>();
+builder.Services.AddSingleton<IPasswordResetMailSenderAsync, AuthMailService>();
 
 
 builder.Services.AddSingleton<ConfirmationMailLinkProvider>();
@@ -94,11 +96,21 @@ if (app.Environment.IsDevelopment())
     app.UseCors(configuration => configuration.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 }
 
-app.UseFastEndpoints(c => c.Endpoints.RoutePrefix = "api");
+app.UseFastEndpoints(c =>
+{
+    c.Endpoints.RoutePrefix = "api";
+    c.Errors.ResponseBuilder = (failures, context, statusCode) =>
+    {
+
+        return new BadRequestWhateverError(failures);
+
+    };
+});
 app.UseFileServer();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSwaggerGen();
+app.MapFallbackToFile("index.html");
 
 using (var scope = app.Services.CreateScope())
 {

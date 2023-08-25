@@ -4,6 +4,7 @@ using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.DependencyInjection;
+using NuGet.Frameworks;
 using System.Net;
 using Xunit;
 
@@ -27,7 +28,7 @@ public class UpdateGameTests : TestsWithLoggedUser
         var updateRequest = new UpdateGameRequest { Id = 10 };
 
         // act
-        var (response, result) = await Client.PATCHAsync<UpdateGameEndpoint, UpdateGameRequest, NotFound>(updateRequest);
+        var (response, _) = await Client.PATCHAsync<UpdateGameEndpoint, UpdateGameRequest, NotFound>(updateRequest);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -37,8 +38,7 @@ public class UpdateGameTests : TestsWithLoggedUser
     public async Task Malformed_properties_should_produce_errors()
     {
         // arrange
-        var id = new Random().Next();
-        var game = await Factory.CreateTestGame(UserId, id);
+        var game = await Factory.CreateTestGame(UserId);
 
         var requestsToTests = GetMalformedRequests(game);
 
@@ -58,11 +58,10 @@ public class UpdateGameTests : TestsWithLoggedUser
     public async Task Html_is_escaped_and_all_inputs_are_taken()
     {
         // arrange
-        var id = new Random().Next();
-        await Factory.CreateTestGame(UserId, id);
+        var game = await Factory.CreateTestGame(UserId);
         var request = new UpdateGameRequest
         {
-            Id = id,
+            Id = game.Id,
             Name = "<b>input</b>",
             Description = "<a>input</a>",
             DurationMinute = 10,
@@ -76,6 +75,7 @@ public class UpdateGameTests : TestsWithLoggedUser
 
         // assert
         response.EnsureSuccessStatusCode();
+        Assert.NotNull(result);
         Assert.Equal("&lt;b&gt;input&lt;/b&gt;", result.Name);
         Assert.Equal("&lt;a&gt;input&lt;/a&gt;", result.Description);
         Assert.Equal(request.DurationMinute, result.DurationMinute);

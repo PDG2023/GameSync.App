@@ -40,8 +40,8 @@ public class SignInTests
     }
 
     [Theory]
-    [InlineData("non-existing-mail@gmail.com", "")]
-    public async Task LogIn_with_false_credentials_is_not_successful(string mail, string password)
+    [InlineData("non-existing-mail@gmail.com", "33fPTNmupi@MHEuQi#7jSJg")]
+    public async Task LogIn_with_non_existing_credentials_is_not_successful(string mail, string password)
     {
         // arrange
         var request = new SignInRequest { Email = mail, Password = password };

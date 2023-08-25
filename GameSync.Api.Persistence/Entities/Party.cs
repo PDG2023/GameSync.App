@@ -11,6 +11,5 @@ public class Party
     public required DateTime DateTime { get; set; }
     public required string UserId { get; set; }
 
-    [Column(TypeName = "jsonb")]
     public IEnumerable<PartyGame>? Games { get; set; }
 }

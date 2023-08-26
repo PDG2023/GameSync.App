@@ -31,7 +31,7 @@ public class ChangePasswordTests
         var mail = new Internet().Email();
         const string password = "!b&Yv3yy&ki!*nKhZF2yor8";
         const string token = "...";
-        var request = new ChangePasswordRequest
+        var request = new ChangePassword.Request
         {
             Email = mail,
             Password = password,
@@ -39,7 +39,7 @@ public class ChangePasswordTests
             Token = token
         };
         // act
-        var (response, result) = await _client.POSTAsync<ChangePasswordEndpoint, ChangePasswordRequest, NotFound>(request);
+        var (response, result) = await _client.POSTAsync<ChangePassword.Endpoint, ChangePassword.Request, NotFound>(request);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -53,7 +53,7 @@ public class ChangePasswordTests
         const string password = "sQ$94ju%HGxS@YhueL8cy!W";
         await _factory.CreateConfirmedUser(mail, mail, "sQ$94ju%HGxS@YhueL8cy!W");
 
-        var request = new ChangePasswordRequest
+        var request = new ChangePassword.Request
         {
             Email = mail,
             Password = password,
@@ -62,7 +62,7 @@ public class ChangePasswordTests
         };
 
         // act
-        var (response, result) = await _client.POSTAsync<ChangePasswordEndpoint, ChangePasswordRequest, BadRequestWhateverError>(request);
+        var (response, result) = await _client.POSTAsync<ChangePassword.Endpoint, ChangePassword.Request, BadRequestWhateverError>(request);
 
         // assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -86,7 +86,7 @@ public class ChangePasswordTests
 
         }
 
-        var request = new ChangePasswordRequest
+        var request = new ChangePassword.Request
         {
             Email = mail,
             Password = password,
@@ -95,7 +95,7 @@ public class ChangePasswordTests
         };
 
         // act
-        var (response, result) = await _client.POSTAsync<ChangePasswordEndpoint, ChangePasswordRequest, Ok>(request);
+        var (response, result) = await _client.POSTAsync<ChangePassword.Endpoint, ChangePassword.Request, Ok>(request);
 
         // assert
         response.EnsureSuccessStatusCode();

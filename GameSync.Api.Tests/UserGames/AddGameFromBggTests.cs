@@ -1,5 +1,5 @@
 ﻿using FastEndpoints;
-using GameSync.Api.Common;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Endpoints.Users.Me.Games.FromBgg;
 using GameSync.Api.Persistence.Entities;
@@ -28,13 +28,13 @@ public class AddGameFromBggTests : TestsWithLoggedUser
 
         // arrange
         const int nonExistingId = 848965651;
-        var addExistingGameRequest = new SingleGameRequest
+        var addExistingGameRequest = new RequestToIdentifiableObject
         {
             Id = nonExistingId
         };
 
         // act
-        var (response, result) = await Client.POSTAsync<AddGameFromBggEndpoint, SingleGameRequest, NotFound>(addExistingGameRequest);
+        var (response, result) = await Client.POSTAsync<AddBggGame.Endpoint, RequestToIdentifiableObject, NotFound>(addExistingGameRequest);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -44,16 +44,16 @@ public class AddGameFromBggTests : TestsWithLoggedUser
     [Fact]
     public async Task Adding_twice_same_game_should_produce_bad_request()
     {
-        var addExistingGameRequest = new SingleGameRequest
+        var addExistingGameRequest = new RequestToIdentifiableObject
         {
             Id = 1421
         };
 
 
-        var (response, result) = await Client.POSTAsync<AddGameFromBggEndpoint, SingleGameRequest, Ok>(addExistingGameRequest);
-        var (secondResponse, secondResult) = await Client.POSTAsync<AddGameFromBggEndpoint, SingleGameRequest, BadRequestWhateverError>(addExistingGameRequest);
+        var (response, result) = await Client.POSTAsync<AddBggGame.Endpoint, RequestToIdentifiableObject, Ok>(addExistingGameRequest);
+        var (secondResponse, secondResult) = await Client.POSTAsync<AddBggGame.Endpoint, RequestToIdentifiableObject, BadRequestWhateverError>(addExistingGameRequest);
 
-        await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
+        response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
         Assert.Equal(HttpStatusCode.BadRequest, secondResponse.StatusCode);
     }
 
@@ -62,14 +62,14 @@ public class AddGameFromBggTests : TestsWithLoggedUser
     {
 
         // arrange
-        var addExistingGameRequest = new SingleGameRequest
+        var addExistingGameRequest = new RequestToIdentifiableObject
         {
             Id = 321016
         };
 
         // act
-        var (response, result) = await Client.POSTAsync<AddGameFromBggEndpoint, SingleGameRequest, Ok>(addExistingGameRequest);
-        var (getResponse, listOfGames) = await Client.GETAsync<GetGamesEndpoint, IEnumerable<Game>>();
+        var (response, result) = await Client.POSTAsync<AddBggGame.Endpoint, RequestToIdentifiableObject, Ok>(addExistingGameRequest);
+        var (getResponse, listOfGames) = await Client.GETAsync<GetAllGames.Endpoint, IEnumerable<Game>>();
 
         // assert
         await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);

@@ -34,7 +34,7 @@ public class SignUpTests
         var testRequest = GetNewAccountRequest("$UX#%A!qaphEL2");
 
         // act
-        var (response, result) = await _client.POSTAsync<SignUpEndpoint, SignUpRequest, SuccessfulSignUpResponse>(testRequest);
+        var (response, result) = await _client.POSTAsync<SignUp.Endpoint, SignUp.Request, SignUp.Response>(testRequest);
 
         // assert
         response.EnsureSuccessStatusCode();
@@ -49,7 +49,7 @@ public class SignUpTests
         var newAccountRequest = GetNewAccountRequest("Ws%uf^n7iB9nK#e&b");
 
         // act
-        var (response, result) = await _client.POSTAsync<SignUpEndpoint, SignUpRequest, BadRequestWhateverError>(newAccountRequest);
+        var (response, result) = await _client.POSTAsync<SignUp.Endpoint, SignUp.Request, BadRequestWhateverError>(newAccountRequest);
 
         // assert
         response.EnsureSuccessStatusCode();
@@ -71,7 +71,7 @@ public class SignUpTests
         var testRequest = GetNewAccountRequest(password);
 
         // act
-        var testResult = await _client.POSTAsync<SignUpEndpoint, SignUpRequest, BadRequestWhateverError>(testRequest);
+        var testResult = await _client.POSTAsync<SignUp.Endpoint, SignUp.Request, BadRequestWhateverError>(testRequest);
 
         // assert
         AssertProduceError(expectedError, testResult);
@@ -82,9 +82,9 @@ public class SignUpTests
     [Fact]
     public async Task Badly_formed_mail_produces_an_error()
     {
-        var badlyFormMail = new SignUpRequest { Email = "ab", Password = "$UX#%A!qaphEL2a23", UserName = "cd" };
+        var badlyFormMail = new SignUp.Request { Email = "ab", Password = "$UX#%A!qaphEL2a23", UserName = "cd" };
 
-        var testResult = await _client.POSTAsync<SignUpEndpoint, SignUpRequest, BadRequestWhateverError>(badlyFormMail);
+        var testResult = await _client.POSTAsync<SignUp.Endpoint, SignUp.Request, BadRequestWhateverError>(badlyFormMail);
 
         AssertProduceError("InvalidEmail", testResult);
     }
@@ -94,7 +94,7 @@ public class SignUpTests
     public async Task Multiple_user_with_same_username_can_exist()
     {
         var firstUser = GetNewAccountRequest("wE%LASrT4Nx25FeY^z#b^*@");
-        var secondUser = new SignUpRequest
+        var secondUser = new SignUp.Request
         {
             Password = firstUser.Password,
             UserName = firstUser.UserName,
@@ -102,8 +102,8 @@ public class SignUpTests
         };
 
 
-        var (firstResponse, firstResult) = await _client.POSTAsync<SignUpEndpoint, SignUpRequest, SuccessfulSignUpResponse>(firstUser);
-        var (secondResponse, secondResult) = await _client.POSTAsync<SignUpEndpoint, SignUpRequest, SuccessfulSignUpResponse>(secondUser);
+        var (firstResponse, firstResult) = await _client.POSTAsync<SignUp.Endpoint, SignUp.Request, SignUp.Response>(firstUser);
+        var (secondResponse, secondResult) = await _client.POSTAsync<SignUp.Endpoint, SignUp.Request, SignUp.Response>(secondUser);
 
         firstResponse.EnsureSuccessStatusCode();
         await secondResponse.EnsureSuccessAndDumpBodyIfNotAsync(_output);
@@ -116,7 +116,7 @@ public class SignUpTests
         Assert.Equal(firstUser.UserName, secondResult.UserName);
     }
 
-    private static SignUpRequest GetNewAccountRequest(string password) => new()
+    private static SignUp.Request GetNewAccountRequest(string password) => new()
     {
         Email = new Internet().Email(),
         Password = password,

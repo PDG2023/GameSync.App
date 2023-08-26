@@ -61,6 +61,15 @@ namespace GameSync.Api.Resources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à La date et l&apos;heure doivent être dans le futur.
+        /// </summary>
+        public static string DateTimeMustBeAfterNow {
+            get {
+                return ResourceManager.GetString("DateTimeMustBeAfterNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Le jeu a déjà été ajouté.
         /// </summary>
         public static string GameAlreadyAdded {

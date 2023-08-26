@@ -1,10 +1,7 @@
 ﻿using FastEndpoints;
 using GameSync.Api.Endpoints.Users.Me.Games;
-using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.Extensions.DependencyInjection;
-using NuGet.Frameworks;
 using System.Net;
 using Xunit;
 
@@ -25,10 +22,10 @@ public class UpdateGameTests : TestsWithLoggedUser
     public async Task Trying_to_update_non_existing_game_produces_404()
     {
         // arrange
-        var updateRequest = new UpdateGameRequest { Id = 10 };
+        var updateRequest = new UpdateGame.Request { Id = 10 };
 
         // act
-        var (response, _) = await Client.PATCHAsync<UpdateGameEndpoint, UpdateGameRequest, NotFound>(updateRequest);
+        var (response, _) = await Client.PATCHAsync<UpdateGame.Endpoint, UpdateGame.Request, NotFound>(updateRequest);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -45,7 +42,7 @@ public class UpdateGameTests : TestsWithLoggedUser
         foreach (var (request, property) in requestsToTests)
         {
             // act
-            var (response, result) = await Client.PATCHAsync<UpdateGameEndpoint, UpdateGameRequest, BadRequestWhateverError>(request);
+            var (response, result) = await Client.PATCHAsync<UpdateGame.Endpoint, UpdateGame.Request, BadRequestWhateverError>(request);
 
             // assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -59,7 +56,7 @@ public class UpdateGameTests : TestsWithLoggedUser
     {
         // arrange
         var game = await Factory.CreateTestGame(UserId);
-        var request = new UpdateGameRequest
+        var request = new UpdateGame.Request
         {
             Id = game.Id,
             Name = "<b>input</b>",
@@ -71,7 +68,7 @@ public class UpdateGameTests : TestsWithLoggedUser
         };
 
         // act
-        var (response, result) = await Client.PATCHAsync<UpdateGameEndpoint, UpdateGameRequest, Game>(request);
+        var (response, result) = await Client.PATCHAsync<UpdateGame.Endpoint, UpdateGame.Request, Game>(request);
 
         // assert
         response.EnsureSuccessStatusCode();
@@ -86,40 +83,40 @@ public class UpdateGameTests : TestsWithLoggedUser
     }
 
 
-    private static IEnumerable<(UpdateGameRequest req, string expectedErrorCode)> GetMalformedRequests(Game originalGame)
+    private static IEnumerable<(UpdateGame.Request req, string expectedErrorCode)> GetMalformedRequests(Game originalGame)
     {
 
-        return new List<(UpdateGameRequest req, string expectedErrorCode)>
+        return new List<(UpdateGame.Request req, string expectedErrorCode)>
         {
             (
-                new UpdateGameRequest { Id = originalGame.Id, MinPlayer = originalGame.MaxPlayer + 1 },
+                new UpdateGame.Request { Id = originalGame.Id, MinPlayer = originalGame.MaxPlayer + 1 },
                 nameof(Game.MinPlayer)
             ),
 
             (
-                new UpdateGameRequest { Id = originalGame.Id, MaxPlayer = originalGame.MinPlayer - 1 },
+                new UpdateGame.Request { Id = originalGame.Id, MaxPlayer = originalGame.MinPlayer - 1 },
                 nameof(Game.MaxPlayer)
             ),
 
 
             (
-                new UpdateGameRequest { Id = originalGame.Id, Description = string.Concat(Enumerable.Repeat('a', 1000)) },
+                new UpdateGame.Request { Id = originalGame.Id, Description = string.Concat(Enumerable.Repeat('a', 1000)) },
                 nameof(Game.Description)
             ),
 
             (
-                new UpdateGameRequest { Id = originalGame.Id, DurationMinute = -10 },
+                new UpdateGame.Request { Id = originalGame.Id, DurationMinute = -10 },
                 nameof(Game.DurationMinute)
             ),
 
             
             (
-                new UpdateGameRequest { Id = originalGame.Id, MinAge = -10 },
+                new UpdateGame.Request { Id = originalGame.Id, MinAge = -10 },
                 nameof(Game.MinAge)
             ),
 
             (
-                new UpdateGameRequest { Id = originalGame.Id, Name = " " },
+                new UpdateGame.Request { Id = originalGame.Id, Name = " " },
                 nameof(Game.Name)
             )
         };

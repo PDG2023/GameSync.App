@@ -19,7 +19,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 builder.Services.AddFastEndpoints();
 builder.Services.SwaggerDocument(x => x.ShortSchemaNames = true);
@@ -46,6 +45,7 @@ builder.Services.AddIdentityCore<User>(x =>
 
 builder.Services.Replace(ServiceDescriptor.Scoped<IUserValidator<User>, AllowDuplicateUserNameUserValidator<User>>());
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Services.AddJWTBearerAuth(
     builder.Configuration["Jwt:SignKey"], 
@@ -67,7 +67,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddCors();
 builder.Services.AddSingleton<BoardGameGeekClient, CachedBoardGameGeekClient>();
 
-if (builder.Environment.IsDevelopment())
+if (!builder.Environment.IsProduction())
 {
     builder.Services.AddSingleton<IMailSender, SmtpMailSender>();
 }
@@ -78,7 +78,6 @@ else
 
 builder.Services.AddSingleton<IConfirmationEmailSender, AuthMailService>();
 builder.Services.AddSingleton<IPasswordResetMailSenderAsync, AuthMailService>();
-
 
 builder.Services.AddSingleton<ConfirmationMailLinkProvider>();
 builder.Services.AddHttpContextAccessor();

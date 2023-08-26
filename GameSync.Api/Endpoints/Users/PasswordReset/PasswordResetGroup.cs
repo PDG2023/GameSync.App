@@ -1,5 +1,6 @@
 ﻿namespace GameSync.Api.Endpoints.Users.PasswordReset;
 
+
 public class PasswordResetGroup : SubGroup<UsersGroup>
 {
     public PasswordResetGroup()

@@ -1,5 +1,5 @@
 ﻿using FastEndpoints;
-using GameSync.Api.Endpoints.Users.IndividualUser;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users.PasswordReset;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -26,7 +26,7 @@ public class ForgotPasswordEmailSendingTests
         var mail = new Bogus.DataSets.Internet().Email();
         await _factory.CreateConfirmedUser(mail, mail, "Q9d&h@T6jtQBWwaivWq4@JM");
 
-        var request = new SingleMailRequest(mail);
+        var request = new RequestToUser { Email = mail };
 
         var mockMailService = new MockMailService(true);
 
@@ -34,7 +34,7 @@ public class ForgotPasswordEmailSendingTests
         var userManager = scope.Resolve<UserManager<User>>();
 
         // act
-        var result = await new ForgotPasswordEndpoint(userManager, mockMailService).ExecuteAsync(request, CancellationToken.None);
+        var result = await new ForgotPassword.Endpoint(userManager, mockMailService).ExecuteAsync(request, CancellationToken.None);
         var serviceUnavailableResult = result.Result as StatusCodeHttpResult;
 
         // assert
@@ -49,7 +49,7 @@ public class ForgotPasswordEmailSendingTests
         var mail = new Bogus.DataSets.Internet().Email();
         await _factory.CreateConfirmedUser(mail, mail, "Q9d&h@T6jtQBWwaivWq4@JM");
 
-        var request = new SingleMailRequest(mail);
+        var request = new RequestToUser{ Email = mail };
 
         var mockMailService = new MockMailService(false);
 
@@ -57,7 +57,7 @@ public class ForgotPasswordEmailSendingTests
         var userManager = scope.Resolve<UserManager<User>>();
 
         // act
-        var result = await new ForgotPasswordEndpoint(userManager, mockMailService).ExecuteAsync(request, CancellationToken.None);
+        var result = await new ForgotPassword.Endpoint(userManager, mockMailService).ExecuteAsync(request, CancellationToken.None);
         var okResult = result.Result as Ok;
 
         // assert
@@ -73,13 +73,13 @@ public class ForgotPasswordEmailSendingTests
     {
         // arrange 
         var mail = new Bogus.DataSets.Internet().Email();
-        var request = new SingleMailRequest(mail);
+        var request = new RequestToUser { Email = mail };
         var mockMailService = new MockMailService(false);
         using var scope = _factory.Services.CreateScope();
         var userManager = scope.Resolve<UserManager<User>>();
 
         // act
-        var result = await new ForgotPasswordEndpoint(userManager, mockMailService).ExecuteAsync(request, CancellationToken.None);
+        var result = await new ForgotPassword.Endpoint(userManager, mockMailService).ExecuteAsync(request, CancellationToken.None);
         var okResult = result.Result as Ok;
 
         // assert

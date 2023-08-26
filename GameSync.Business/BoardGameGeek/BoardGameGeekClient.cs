@@ -73,10 +73,10 @@ public class BoardGameGeekClient
 
     }
 
-    public async Task<IEnumerable<BoardGameGeekGame>> GetBoardGamesDetailAsync(IEnumerable<int> ids)
+    public async Task<IEnumerable<BoardGameGeekGameDetail>> GetBoardGamesDetailAsync(IEnumerable<int> ids)
     {
         var detail = await GetDetailedThingsAsync(ids.Select(x => x.ToString()));
-        return detail.Where(x => x is not null).Select(thing => new BoardGameGeekGame
+        return detail.Where(x => x is not null).Select(thing => new BoardGameGeekGameDetail
         {
             Id = thing.Id,
             Description = thing.Description,

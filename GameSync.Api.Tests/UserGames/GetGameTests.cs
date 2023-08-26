@@ -19,7 +19,7 @@ public class GetGameTests
         [Fact]
         public async Task User_without_games_should_return_an_empty_array()
         {
-            var (response, result) = await Client.GETAsync<GetGame.Endpoint, IEnumerable<Game>>();
+            var (response, result) = await Client.GETAsync<GetAllGames.Endpoint, IEnumerable<Game>>();
 
             Assert.NotNull(result);
             response.EnsureSuccessStatusCode();
@@ -67,7 +67,7 @@ public class GetGameTests
             );
 
             // act 
-           var (response, result) = await Client.GETAsync<GetGame.Endpoint, IEnumerable<Game>>();
+           var (response, result) = await Client.GETAsync<GetAllGames.Endpoint, IEnumerable<Game>>();
 
             // assert
             Assert.NotNull(result);

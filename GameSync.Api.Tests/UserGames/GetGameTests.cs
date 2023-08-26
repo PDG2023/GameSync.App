@@ -1,13 +1,10 @@
 ﻿using FastEndpoints;
-using GameSync.Api.Common;
 using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Persistence.Entities;
 using Xunit;
 
 namespace GameSync.Api.Tests.UserGames;
-
-
 
 public class GetGameTests
 {
@@ -22,7 +19,7 @@ public class GetGameTests
         [Fact]
         public async Task User_without_games_should_return_an_empty_array()
         {
-            var (response, result) = await Client.GETAsync<GetGamesEndpoint, IEnumerable<Game>>();
+            var (response, result) = await Client.GETAsync<GetAllGames.Endpoint, IEnumerable<Game>>();
 
             Assert.NotNull(result);
             response.EnsureSuccessStatusCode();
@@ -52,7 +49,7 @@ public class GetGameTests
             var req = new RequestToIdentifiableObject { Id = games[0].Id };
 
             // act
-            var (response, result) = await Client.GETAsync<GetGameEndpoint, RequestToIdentifiableObject, Game>(req);
+            var (response, result) = await Client.GETAsync<GetGame.Endpoint, RequestToIdentifiableObject, Game>(req);
 
             // assert
             response.EnsureSuccessStatusCode();
@@ -70,7 +67,7 @@ public class GetGameTests
             );
 
             // act 
-           var (response, result) = await Client.GETAsync<GetGamesEndpoint, IEnumerable<Game>>();
+           var (response, result) = await Client.GETAsync<GetAllGames.Endpoint, IEnumerable<Game>>();
 
             // assert
             Assert.NotNull(result);

@@ -21,7 +21,7 @@ public class CreateGameTests : TestsWithLoggedUser
     public async Task Invalid_properties_should_produce_errors()
     {
 
-        var newGameRequest = new CreateGameRequest
+        var newGameRequest = new CreateGame.Request
         {
             MaxPlayer = -10,
             MinPlayer = -3,
@@ -31,7 +31,7 @@ public class CreateGameTests : TestsWithLoggedUser
             DurationMinute = -5
         };
 
-        var (response, result) = await Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, BadRequestWhateverError>(newGameRequest);
+        var (response, result) = await Client.POSTAsync<CreateGame.Endpoint, CreateGame.Request, BadRequestWhateverError>(newGameRequest);
 
         Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
         Assert.NotNull(result);
@@ -42,7 +42,7 @@ public class CreateGameTests : TestsWithLoggedUser
     public async Task Creating_a_personal_game_should_return_the_same_game_with_escaped_html()
     {
         // arrange
-        var newGameRequest = new CreateGameRequest
+        var newGameRequest = new CreateGame.Request
         {
             MaxPlayer = 10,
             MinPlayer = 1,
@@ -53,7 +53,7 @@ public class CreateGameTests : TestsWithLoggedUser
         };
 
         // act
-        var (response, result) = await Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, Game>(newGameRequest);
+        var (response, result) = await Client.POSTAsync<CreateGame.Endpoint, CreateGame.Request, Game>(newGameRequest);
 
         // assert
         await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);

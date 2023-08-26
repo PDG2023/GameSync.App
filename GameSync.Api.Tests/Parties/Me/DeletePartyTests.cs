@@ -23,7 +23,7 @@ public class DeletePartyTests : TestsWithLoggedUser
     {
         var request = new RequestToIdentifiableObject { Id = 295203 };
 
-        var (response, result) = await Client.DELETEAsync<DeletePartyEndpoint, RequestToIdentifiableObject, NotFound>(request);
+        var (response, result) = await Client.DELETEAsync<DeleteParty.Endpoint, RequestToIdentifiableObject, NotFound>(request);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -36,7 +36,7 @@ public class DeletePartyTests : TestsWithLoggedUser
         var request = new RequestToIdentifiableObject { Id = otherUserPartyId };
 
         // act
-        var (response, result) = await Client.DELETEAsync<DeletePartyEndpoint, RequestToIdentifiableObject, NotFound>(request);
+        var (response, result) = await Client.DELETEAsync<DeleteParty.Endpoint, RequestToIdentifiableObject, NotFound>(request);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -51,7 +51,7 @@ public class DeletePartyTests : TestsWithLoggedUser
         var request = new RequestToIdentifiableObject { Id = partyId };
 
         //act
-        var (response, result) = await Client.DELETEAsync<DeletePartyEndpoint, RequestToIdentifiableObject, Ok>(request);
+        var (response, result) = await Client.DELETEAsync<DeleteParty.Endpoint, RequestToIdentifiableObject, Ok>(request);
 
         // assert
         response.EnsureSuccessStatusCode();

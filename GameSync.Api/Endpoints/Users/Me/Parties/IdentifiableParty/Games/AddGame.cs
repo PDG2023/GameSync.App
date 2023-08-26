@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
 
-public class AddGame
+public static class AddGame
 {
 
-    public class Endpoint : Endpoint<PartyGameRequest, Results<NotFound, Ok>>
+    public class Endpoint : Endpoint<PartyGameRequest, Results<NotFound, Ok, BadRequestWhateverError>>
     {
         private readonly GameSyncContext _context;
 
@@ -19,11 +19,11 @@ public class AddGame
 
         public override void Configure()
         {
-            Put("{PartyId}/games/{GameId}");
-            Group<PartiesGroup>();
+            Put(string.Empty);
+            Group<PartyGameGroup>();
         }
 
-        public override async Task<Results<NotFound, Ok>> ExecuteAsync(PartyGameRequest req, CancellationToken ct)
+        public override async Task<Results<NotFound, Ok, BadRequestWhateverError>> ExecuteAsync(PartyGameRequest req, CancellationToken ct)
         {
             var userId = User.ClaimValue(ClaimsTypes.UserId);
 

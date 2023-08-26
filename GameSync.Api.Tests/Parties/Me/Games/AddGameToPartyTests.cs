@@ -1,10 +1,12 @@
 ﻿using FastEndpoints;
 using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
 using GameSync.Api.Persistence;
+using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
+using System.Runtime.CompilerServices;
 using Xunit;
 
 namespace GameSync.Api.Tests.Parties.Me.Games;
@@ -30,6 +32,10 @@ public class AddGameToPartyTests : TestsWithLoggedUser
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+        // Check that the game has not been added
+        Assert.Null(await Fetch(request.PartyId, request.GameId));
+
     }
 
     [Fact]
@@ -50,15 +56,39 @@ public class AddGameToPartyTests : TestsWithLoggedUser
 
         // assert
         response.EnsureSuccessStatusCode();
+        
+        Assert.NotNull(await Fetch(request.PartyId, request.GameId));
+    }
 
-        using var scope = Factory.Services.CreateScope();
-        var ctx = scope.Resolve<GameSyncContext>();
-        var partyGame = await ctx.PartiesGames
-            .FirstOrDefaultAsync(x => x.PartyId == request.PartyId && x.GameId == request.GameId);
+    [Fact]
+    public async Task Adding_twice_same_game_in_party_produces_bad_request()
+    {
+        // arrange
+        var party = await Factory.CreateDefaultParty(UserId);
+        var game = await Factory.CreateTestGame(UserId);
+        var request = new PartyGameRequest
+        {
+            GameId = game.Id,
+            PartyId = party.Id
+        };
 
-        Assert.NotNull(partyGame);
+        // act
+        await Client.PUTAsync<AddGame.Endpoint, PartyGameRequest, Ok>(request);
+        var (result, _) = await Client.PUTAsync<AddGame.Endpoint, PartyGameRequest, BadRequestWhateverError>(request);
 
+        // assert
+        Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+
+        // Check that the pair has not been deleted 
+        Assert.NotNull(await Fetch(request.PartyId, request.GameId));
 
     }
 
+    private async Task<PartyGame?> Fetch(int partyId, int gameId)
+    {
+        using var scope = Factory.Services.CreateScope();
+        var ctx = scope.Resolve<GameSyncContext>();
+        return await ctx.PartiesGames
+            .FirstOrDefaultAsync(x => x.PartyId == partyId && x.GameId == gameId);
+    }
 }

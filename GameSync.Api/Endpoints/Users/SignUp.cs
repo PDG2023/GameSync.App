@@ -1,21 +1,19 @@
 ﻿using FluentValidation;
-using GameSync.Api.CommonRequests;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Business.Auth;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using System.Net;
+using GameSync.Api.CommonRequests;
 
 namespace GameSync.Api.Endpoints.Users;
 
 public static class SignUp
 {
 
-    public class Request : IRequestWithCredentials
+    public class Request : RequestWithCredentials
     {
         public required string UserName { get; set; }
-        public required string Email { get; set; }
-        public required string Password { get; set; }
     }
 
     public class Response
@@ -29,7 +27,7 @@ public static class SignUp
         public Validator()
         {
             RuleFor(x => x.UserName).NotEmpty();
-            Include(new CredentialsValidator());
+            Include(new RequestWithCredentialsValidator());
         }
     }
 

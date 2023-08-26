@@ -5,16 +5,12 @@ using Microsoft.AspNetCore.Identity;
 
 namespace GameSync.Api.CommonRequests;
 
-public class CredentialsValidator : Validator<IRequestWithCredentials>
+public class RequestWithCredentialsValidator : Validator<RequestWithCredentials>
 {
-    public CredentialsValidator()
+    public RequestWithCredentialsValidator()
     {
 
-        RuleFor(x => x.Email)
-            .NotEmpty()
-            .EmailAddress()
-            .WithErrorCode(nameof(Resources.Resource.InvalidEmail))
-            .WithMessage(Resources.Resource.InvalidEmail);
+        Include(new RequestToUserValidator());
 
         RuleFor(x => x.Password).CustomAsync(async (password, validatorContext, ct) =>
         {

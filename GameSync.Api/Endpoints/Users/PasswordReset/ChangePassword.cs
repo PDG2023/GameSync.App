@@ -1,28 +1,24 @@
 ﻿using FluentValidation;
-using GameSync.Api.CommonRequests;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using GameSync.Api.CommonRequests;
 
 namespace GameSync.Api.Endpoints.Users.PasswordReset;
 
 public static class ChangePassword
 {
-    public class Request : IRequestWithCredentials
+    public class Request : RequestWithCredentials
     {
-
-        public required string Email { get; init; }
-        public required string Password { get; init; }
         public required string PasswordRepetition { get; init; }
         public required string Token { get; init; }
-
     }
 
     public class Validator : Validator<Request>
     {
         public Validator()
         {
-            Include(new CredentialsValidator());
+            Include(new RequestWithCredentialsValidator());
             RuleFor(x => x.Token).NotEmpty();
             RuleFor(x => x.PasswordRepetition)
                 .NotEmpty()

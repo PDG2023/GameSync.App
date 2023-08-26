@@ -1,19 +1,12 @@
-﻿using GameSync.Api.CommonRequests;
-using GameSync.Api.Persistence.Entities;
+﻿using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using GameSync.Api.CommonRequests;
 
 namespace GameSync.Api.Endpoints.Users;
 
 public static class SignIn
 {
-
-    public class Request : IRequestWithCredentials
-    {
-        public required string Email { get; init; }
-
-        public required string Password { get; init; }
-    }
 
     public class Response
     {
@@ -22,16 +15,8 @@ public static class SignIn
         public required string UserName { get; init; }
     }
 
-    public class Validator : Validator<Request>
-    {
-        public Validator()
-        {
-            Include(new CredentialsValidator());
-        }
-    }
 
-
-    public class Endpoint : Endpoint<Request, Results<Ok<Response>, BadRequestWhateverError>>
+    public class Endpoint : Endpoint<RequestWithCredentials, Results<Ok<Response>, BadRequestWhateverError>>
     {
         private readonly SignInManager<User> signInManager;
         private readonly IConfiguration config;
@@ -50,7 +35,7 @@ public static class SignIn
 
         }
 
-        public override async Task<Results<Ok<Response>, BadRequestWhateverError>> ExecuteAsync(Request req, CancellationToken ct)
+        public override async Task<Results<Ok<Response>, BadRequestWhateverError>> ExecuteAsync(RequestWithCredentials req, CancellationToken ct)
         {
 
             var user = await signInManager.UserManager.FindByEmailAsync(req.Email);

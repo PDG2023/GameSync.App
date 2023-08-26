@@ -1,5 +1,6 @@
 ﻿using Bogus.DataSets;
 using FastEndpoints;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users;
 using GameSync.Api.Endpoints.Users.Me;
 using GameSync.Api.Persistence.Entities;
@@ -45,7 +46,7 @@ public class SignInTests
     public async Task LogIn_with_false_credentials_is_not_successful(string mail, string password)
     {
         // arrange
-        var request = new SignIn.Request { Email = mail, Password = password };
+        var request = new RequestWithCredentials { Email = mail, Password = password };
 
         // act
         var response = await _client.PostAsJsonAsync("api/users/sign-in", request);
@@ -67,7 +68,7 @@ public class SignInTests
         var mail = new Internet().Email();
         await _factory.CreateUnconfirmedUser(mail, mail, pwd);
 
-        var req = new SignIn.Request { Email = mail, Password = pwd };
+        var req = new RequestWithCredentials { Email = mail, Password = pwd };
 
         // act
         var response  = await _client.PostAsJsonAsync("api/users/sign-in", req);
@@ -89,14 +90,14 @@ public class SignInTests
         const string password = "$UX#%A!qaphEL2";
         var mail = new Internet().Email();
         await _factory.CreateConfirmedUser(mail, mail, password);
-        var signInRequest = new SignIn.Request
+        var signInRequest = new RequestWithCredentials
         {
             Email = mail,
             Password = password
         };
 
         // act
-        var (response, result) = await _client.POSTAsync<SignIn.Endpoint, SignIn.Request, SignIn.Response>(signInRequest);
+        var (response, result) = await _client.POSTAsync<SignIn.Endpoint, RequestWithCredentials, SignIn.Response>(signInRequest);
 
         // assert
         await response.EnsureSuccessAndDumpBodyIfNotAsync(output);

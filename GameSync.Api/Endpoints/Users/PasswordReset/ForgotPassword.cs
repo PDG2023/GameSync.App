@@ -9,7 +9,7 @@ namespace GameSync.Api.Endpoints.Users.PasswordReset;
 
 public static class ForgotPassword
 {
-    public class Endpoint : Endpoint<SingleMailRequest, Results<Ok, StatusCodeHttpResult, BadRequestWhateverError>>
+    public class Endpoint : Endpoint<RequestToUser, Results<Ok, StatusCodeHttpResult, BadRequestWhateverError>>
     {
         private readonly UserManager<User> _manager;
         private readonly IPasswordResetMailSenderAsync _sender;
@@ -28,7 +28,7 @@ public static class ForgotPassword
             Group<PasswordResetGroup>();
         }
 
-        public override async Task<Results<Ok, StatusCodeHttpResult, BadRequestWhateverError>> ExecuteAsync(SingleMailRequest req, CancellationToken ct)
+        public override async Task<Results<Ok, StatusCodeHttpResult, BadRequestWhateverError>> ExecuteAsync(RequestToUser req, CancellationToken ct)
         {
             var user = await _manager.FindByEmailAsync(req.Email);
 

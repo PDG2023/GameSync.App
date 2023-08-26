@@ -1,12 +1,12 @@
-﻿using GameSync.Api.CommonRequests;
-using GameSync.Api.Persistence;
+﻿using GameSync.Api.Persistence;
+using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
 
 public class AddGame
 {
-
 
     public class Endpoint : Endpoint<PartyGameRequest, Results<NotFound, Ok>>
     {
@@ -23,14 +23,26 @@ public class AddGame
             Group<PartiesGroup>();
         }
 
-        public override Task<Results<NotFound, Ok>> ExecuteAsync(PartyGameRequest req, CancellationToken ct)
+        public override async Task<Results<NotFound, Ok>> ExecuteAsync(PartyGameRequest req, CancellationToken ct)
         {
             var userId = User.ClaimValue(ClaimsTypes.UserId);
 
+            var userGame = await _context.Games
+                .FirstOrDefaultAsync(g => g.Id == req.GameId && g.UserId == userId);
 
+            if (userGame is null)
+            {
+                return TypedResults.NotFound();
+            }
 
-            return base.ExecuteAsync(req, ct);
+            var partyGame = await _context.AddAsync(new PartyGame
+            {
+                GameId = req.GameId,
+                PartyId = req.PartyId
+            });
+            await _context.SaveChangesAsync();
+
+            return TypedResults.Ok();
         }
-
     }
 }

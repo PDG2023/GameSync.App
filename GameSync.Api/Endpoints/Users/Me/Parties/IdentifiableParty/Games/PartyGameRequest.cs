@@ -3,5 +3,5 @@
 public class PartyGameRequest
 {
     public required int GameId { get; init; }
-    public required int PartyGame { get; init; }
+    public required int PartyId { get; init; }
 }

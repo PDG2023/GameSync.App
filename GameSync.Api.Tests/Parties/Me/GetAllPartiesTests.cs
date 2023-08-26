@@ -26,28 +26,31 @@ public class GetAllPartiesTests : TestsWithLoggedUser
         var game = await Factory.CreateTestGame(UserId);
         var otherGame = await Factory.CreateTestGame(UserId);
 
-        var parties = await Task.WhenAll(
-            Factory.CreateParty(new Party
-            {
-                DateTime = date,
-                Name = "First Party",
-                UserId = UserId,
-                Games = null,
-                Location = "First Party Location"
-            }),
+        var expectedFirstParty = new Party
+        {
+            DateTime = date,
+            Name = "First Party",
+            UserId = UserId,
+            Games = null,
+            Location = "First Party Location"
+        };
 
-            Factory.CreateParty(new Party 
-            {
-                DateTime = date,
-                Name = "Second Party",
-                UserId = UserId,
-                Location = "Second Party Location",
-                Games = null
-            })
+        var expectedSecondParty = new Party
+        {
+            DateTime = date,
+            Name = "Second Party",
+            UserId = UserId,
+            Location = "Second Party Location",
+            Games = null
+        };
+
+        var parties = await Task.WhenAll(
+            Factory.CreateParty(expectedFirstParty),
+            Factory.CreateParty(expectedSecondParty)
         );
 
-        await Factory.CreatePartyGame(parties[1], game.Id);
-        await Factory.CreatePartyGame(parties[1], otherGame.Id);
+        await Factory.CreatePartyGame(parties[1].Id, game.Id);
+        await Factory.CreatePartyGame(parties[1].Id, otherGame.Id);
 
 
         // act
@@ -59,33 +62,22 @@ public class GetAllPartiesTests : TestsWithLoggedUser
 
         Assert.Collection(
             result, 
-
-            firstParty =>
-            {
-                var expected = new
-                {
-                    Id = parties[0],
-                    Name = "First Party",
-                    NumberOfGames = 0,
-                    Location = "First Party Location"
-                };
-                Assert.Equivalent(expected, firstParty);
-                CompareDates(date, firstParty.DateTime);
-            },
-
-            secondParty =>
-            {
-                var expected = new
-                {
-                    Id = parties[1],
-                    Name = "Second Party",
-                    NumberOfGames = 2,
-                    Location = "Second Party Location"
-                };
-                Assert.Equivalent(expected, secondParty);
-                CompareDates(date, secondParty.DateTime);
-            }
+            firstParty => AssertEquivalence(expectedFirstParty, firstParty, 0),
+            secondParty => AssertEquivalence(expectedSecondParty, secondParty, 2)
         );
+
+        void AssertEquivalence(Party expected, PartyPreview result, int numberOfGames)
+        {
+            var expectedProperties = new
+            {
+                expected.Name,
+                expected.Location,
+                expected.Id,
+                NumberOfGames = numberOfGames
+            };
+            Assert.Equivalent(expectedProperties, result);
+            CompareDates(expected.DateTime, result.DateTime);
+        }
 
         void CompareDates(DateTime expected, DateTime actual)
         {

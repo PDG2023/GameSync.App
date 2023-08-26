@@ -33,10 +33,10 @@ public class UpdatePartyTests : TestsWithLoggedUser
     public async Task Updating_party_of_another_user_produces_not_found()
     {
         // arrange
-        var partyId = await Factory.CreatePartyOfAnotherUser();
+        var party = await Factory.CreatePartyOfAnotherUser();
         var request = new UpdateParty.Request 
         { 
-            Id = partyId,
+            Id = party.Id,
             DateTime = DateTime.Now.AddDays(1),
             Location = "...",
             Name = "."
@@ -54,11 +54,11 @@ public class UpdatePartyTests : TestsWithLoggedUser
     public async Task Updating_party_of_user_changes_it()
     {
         // arrange
-        var partyId = await Factory.CreateDefaultParty(UserId);
+        var party = await Factory.CreateDefaultParty(UserId);
         var expectedDate = new DateTime(2025, 02, 04, 18, 0, 0);
         var request = new UpdateParty.Request
         {
-            Id = partyId,
+            Id = party.Id,
             DateTime = expectedDate,
             Location = string.Empty, // removes the location
             Name = "Name"
@@ -73,7 +73,7 @@ public class UpdatePartyTests : TestsWithLoggedUser
         Assert.NotNull(result);
         var expectedResults = new Party
         {
-            Id = partyId,
+            Id = party.Id,
             Name = request.Name,
             Location = request.Location,
             DateTime = expectedDate,

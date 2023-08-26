@@ -87,22 +87,22 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
     }
 
-    public async Task<int> CreateParty(Party party)
+    public async Task<Party> CreateParty(Party party)
     {
         using var scope = Services.CreateScope();
         var manager = scope.Resolve<GameSyncContext>();
         await manager.Parties.AddAsync(party);
         await manager.SaveChangesAsync();
-        return party.Id;
+        return party;
     }
 
-    public async Task<int> CreatePartyOfAnotherUser()
+    public async Task<Party> CreatePartyOfAnotherUser()
     {
         var userId = await CreateConfirmedUser(new Internet().Email(), "username", "MuCkT*sgb2TB4!4P^r7cwRx");
         return await CreateDefaultParty(userId);
     }
 
-    public async Task<int> CreateDefaultParty(string userId) => await CreateParty(new Party
+    public async Task<Party> CreateDefaultParty(string userId) => await CreateParty(new Party
     {
         DateTime = DateTime.Now.AddDays(1),
         Location = "...",

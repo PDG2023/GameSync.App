@@ -12,8 +12,6 @@ import {ActivatedRoute} from "@angular/router";
 export class GameDetailComponent implements OnInit {
   game$: Observable<GameDetail> = of();
   isLoading: boolean = true;
-  isError: boolean = false;
-
 
   constructor(
     private gamesService: GamesService,
@@ -24,11 +22,6 @@ export class GameDetailComponent implements OnInit {
   ngOnInit(): void {
     this.game$ = this.gamesService.getGameDetail(this.route.snapshot.params['id'])
       .pipe(
-        catchError(() => {
-          console.log("coucou erreur")
-          this.isError = true;
-          return of();
-        }),
         finalize(() => this.isLoading = false)
       );
   }

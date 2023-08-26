@@ -2,6 +2,7 @@
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
 
@@ -35,12 +36,26 @@ public static class AddGame
                 return TypedResults.NotFound();
             }
 
-            var partyGame = await _context.AddAsync(new PartyGame
+            try
             {
-                GameId = req.GameId,
-                PartyId = req.PartyId
-            });
-            await _context.SaveChangesAsync();
+
+                var partyGame = await _context.AddAsync(new PartyGame
+                {
+                    GameId = req.GameId,
+                    PartyId = req.PartyId
+                });
+                await _context.SaveChangesAsync();
+
+            } 
+            catch (DbUpdateException e)
+            {
+                if (e.InnerException is PostgresException npgException
+                    && npgException.SqlState == PostgresErrorCodes.UniqueViolation)
+                {
+                    AddError(nameof(Resources.Resource.GameAlreadyAdded), Resources.Resource.GameAlreadyAdded);
+                    return new BadRequestWhateverError(ValidationFailures);
+                }
+            }
 
             return TypedResults.Ok();
         }

@@ -74,10 +74,10 @@ public class AddGameToPartyTests : TestsWithLoggedUser
 
         // act
         await Client.PUTAsync<AddGame.Endpoint, PartyGameRequest, Ok>(request);
-        var (result, _) = await Client.PUTAsync<AddGame.Endpoint, PartyGameRequest, BadRequestWhateverError>(request);
+        var (response, _) = await Client.PUTAsync<AddGame.Endpoint, PartyGameRequest, BadRequestWhateverError>(request);
 
         // assert
-        Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
         // Check that the pair has not been deleted 
         Assert.NotNull(await Fetch(request.PartyId, request.GameId));

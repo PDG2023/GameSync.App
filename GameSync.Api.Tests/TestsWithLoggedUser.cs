@@ -28,7 +28,7 @@ public class TestsWithLoggedUser : IAsyncLifetime
     public virtual async Task InitializeAsync()
     {
         UserId = await Factory.CreateConfirmedUser(Mail, Mail, Password);
-        var (response, result) = await Client.POSTAsync<SignIn.Endpoint, RequestWithCredentials, SignIn.Response>(new RequestWithCredentials { Email = Mail, Password = Password});
+        var (_, result) = await Client.POSTAsync<SignIn.Endpoint, RequestWithCredentials, SignIn.Response>(new RequestWithCredentials { Email = Mail, Password = Password});
         Client.SetBearerToken(result!.Token);
     }
 }

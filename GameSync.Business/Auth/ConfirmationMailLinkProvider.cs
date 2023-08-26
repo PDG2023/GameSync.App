@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 
 namespace GameSync.Business.Auth;

@@ -3,14 +3,9 @@ using FastEndpoints;
 using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users;
 using GameSync.Api.Endpoints.Users.Me;
-using GameSync.Api.Persistence.Entities;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Org.BouncyCastle.Ocsp;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -24,16 +19,16 @@ namespace GameSync.Api.Tests.Identity;
 public class SignInTests
 {
     private readonly GameSyncAppFactory _factory;
-    private readonly ITestOutputHelper output;
+    private readonly ITestOutputHelper _output;
     private readonly HttpClient _client;
 
-    private JsonSerializerOptions _failedSignInOpt;
+    private readonly JsonSerializerOptions _failedSignInOpt;
     
 
     public SignInTests(GameSyncAppFactory integrationTestFactory, ITestOutputHelper output)
     {
         _factory = integrationTestFactory;
-        this.output = output;
+        this._output = output;
         _client = _factory.CreateClient();
         _failedSignInOpt = new JsonSerializerOptions
         {
@@ -100,7 +95,7 @@ public class SignInTests
         var (response, result) = await _client.POSTAsync<SignIn.Endpoint, RequestWithCredentials, SignIn.Response>(signInRequest);
 
         // assert
-        await response.EnsureSuccessAndDumpBodyIfNotAsync(output);
+        await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
 
         Assert.NotNull(result);
         Assert.Equal(result.Email, mail);
@@ -112,7 +107,7 @@ public class SignInTests
         _client.SetToken(JwtBearerDefaults.AuthenticationScheme, token);
 
         // Try accessing an authorized endpoint
-        var (meResponse, meResult) = await _client.GETAsync<Me.Endpoint, NoContent>();
+        var (meResponse, _) = await _client.GETAsync<Me.Endpoint, NoContent>();
 
         meResponse.EnsureSuccessStatusCode();
 

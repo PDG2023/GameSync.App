@@ -55,8 +55,8 @@ public static class CreateParty
                 Games = null
             };
 
-            var partyTracking = await _context.Parties.AddAsync(party);
-            await _context.SaveChangesAsync();
+            await _context.Parties.AddAsync(party, ct);
+            await _context.SaveChangesAsync(ct);
 
             return new PartyPreview
             {

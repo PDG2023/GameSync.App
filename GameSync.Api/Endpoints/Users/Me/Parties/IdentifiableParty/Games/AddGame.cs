@@ -14,7 +14,7 @@ public class AddGame
 
         public Endpoint(GameSyncContext context)
         {
-            this._context = context;
+            _context = context;
         }
 
         public override void Configure()

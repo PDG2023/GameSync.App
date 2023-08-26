@@ -23,7 +23,7 @@ public class UpdatePartyTests : TestsWithLoggedUser
         var request = new UpdateParty.Request { Id = 918582 };
 
         // act
-        var (response, result) = await Client.PATCHAsync<UpdateParty.Endpoint, UpdateParty.Request, NotFound>(request);
+        var (response, _) = await Client.PATCHAsync<UpdateParty.Endpoint, UpdateParty.Request, NotFound>(request);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -43,7 +43,7 @@ public class UpdatePartyTests : TestsWithLoggedUser
         };
 
         // act
-        var (response, result) = await Client.PATCHAsync<UpdateParty.Endpoint, UpdateParty.Request, NotFound>(request);
+        var (response, _) = await Client.PATCHAsync<UpdateParty.Endpoint, UpdateParty.Request, NotFound>(request);
         
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);

@@ -2,21 +2,30 @@
 using GameSync.Api.Endpoints.Users.Me.Parties;
 using GameSync.Api.Persistence.Entities;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace GameSync.Api.Tests.Parties.Me;
 
 [Collection("FullApp")]
 public class GetAllPartiesTests : TestsWithLoggedUser
 {
-    public GetAllPartiesTests(GameSyncAppFactory factory) : base(factory)
+    private readonly ITestOutputHelper _output;
+
+    public GetAllPartiesTests(GameSyncAppFactory factory, ITestOutputHelper output) : base(factory)
     {
+        _output = output;
     }
 
     [Fact]
     public async Task Retrieve_existing_parties_of_user_returns_them_with_the_count_of_games()
     {
         // arrange
+
         var date = DateTime.Now.AddDays(1);
+
+        var game = await Factory.CreateTestGame(UserId);
+        var otherGame = await Factory.CreateTestGame(UserId);
+
         var parties = await Task.WhenAll(
             Factory.CreateParty(new Party
             {
@@ -33,19 +42,19 @@ public class GetAllPartiesTests : TestsWithLoggedUser
                 Name = "Second Party",
                 UserId = UserId,
                 Location = "Second Party Location",
-                Games = new[] { 
-                    new PartyGame { GameId = 0 }, 
-                    new PartyGame { GameId = 1 } 
-                }
+                Games = null
             })
         );
+
+        await Factory.CreatePartyGame(parties[1], game.Id);
+        await Factory.CreatePartyGame(parties[1], otherGame.Id);
 
 
         // act
         var (response, result) = await Client.GETAsync<GetAllParties.Endpoint, IEnumerable<PartyPreview>>();
         
         // assert
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
         Assert.NotNull(result);
 
         Assert.Collection(

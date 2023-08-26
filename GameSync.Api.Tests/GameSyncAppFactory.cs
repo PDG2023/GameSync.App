@@ -110,6 +110,19 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         UserId = userId
     });
 
+    public async Task CreatePartyGame(int partyId, int gameId, List<Vote>? votes = null)
+    {
+        using var scope = Services.CreateScope();
+        var ctx = scope.Resolve<GameSyncContext>();
+        await ctx.PartiesGames.AddAsync(new PartyGame
+        {
+            GameId = gameId,
+            PartyId = partyId,
+            Votes = votes
+        });
+        await ctx.SaveChangesAsync();
+    }
+
     public async Task InitializeAsync() => await _postgreSqlContainer.StartAsync();
 
     public new async Task DisposeAsync() => await _postgreSqlContainer.DisposeAsync().AsTask();

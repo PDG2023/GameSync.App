@@ -5,9 +5,9 @@ namespace GameSync.Api.Persistence.Entities;
 [PrimaryKey(nameof(GameId), nameof(PartyId))]
 public class PartyGame
 {
-    public required int GameId { get; set; }
-    public required int PartyId { get; set; }
-    public List<Vote>? Votes { get; set; }
+    public int GameId { get; set; }
+    public int PartyId { get; set; }
+    public ICollection<Vote>? Votes { get; set; }
 }
 
 [Owned]

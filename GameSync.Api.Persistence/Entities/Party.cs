@@ -11,5 +11,5 @@ public class Party
     public required DateTime DateTime { get; set; }
     public required string UserId { get; set; }
 
-    public IEnumerable<PartyGame>? Games { get; set; }
+    public virtual ICollection<PartyGame>? Games { get; set; }
 }

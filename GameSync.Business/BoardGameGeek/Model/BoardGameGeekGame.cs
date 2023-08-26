@@ -1,6 +1,6 @@
 ﻿namespace GameSync.Business.BoardGameGeek.Model;
 
-public class BoardGameGeekGame
+public class BoardGameGeekGameDetail
 {
     public int Id { get; set; }
     public string? Name { get; set; }

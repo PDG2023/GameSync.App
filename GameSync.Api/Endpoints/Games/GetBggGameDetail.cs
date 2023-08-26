@@ -2,14 +2,14 @@
 using GameSync.Api.CommonRequests;
 using GameSync.Business.BoardGamesGeek;
 using Microsoft.AspNetCore.Http.HttpResults;
-using BoardGameGeekGame = GameSync.Business.BoardGameGeek.Model.BoardGameGeekGame;
+using BoardGameGeekGameDetail = GameSync.Business.BoardGameGeek.Model.BoardGameGeekGameDetail;
 
 namespace GameSync.Api.Endpoints.Games;
 
 public static class GetBggGameDetail
 {
 
-    public class Endpoint : Endpoint<RequestToIdentifiableObject, Results<Ok<BoardGameGeekGame>, NotFound, BadRequestWhateverError>>
+    public class Endpoint : Endpoint<RequestToIdentifiableObject, Results<Ok<BoardGameGeekGameDetail>, NotFound, BadRequestWhateverError>>
     {
         private readonly BoardGameGeekClient _client;
 
@@ -24,7 +24,7 @@ public static class GetBggGameDetail
             Group<GamesGroup>();
         }
 
-        public override async Task<Results<Ok<BoardGameGeekGame>, NotFound, BadRequestWhateverError>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
+        public override async Task<Results<Ok<BoardGameGeekGameDetail>, NotFound, BadRequestWhateverError>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
         {
 
             var fetchedGames = await _client.GetBoardGamesDetailAsync(new[] { req.Id });

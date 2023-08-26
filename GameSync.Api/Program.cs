@@ -67,7 +67,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddCors();
 builder.Services.AddSingleton<BoardGameGeekClient, CachedBoardGameGeekClient>();
 
-if (builder.Environment.IsDevelopment())
+if (!builder.Environment.IsProduction())
 {
     builder.Services.AddSingleton<IMailSender, SmtpMailSender>();
 }
@@ -78,7 +78,6 @@ else
 
 builder.Services.AddSingleton<IConfirmationEmailSender, AuthMailService>();
 builder.Services.AddSingleton<IPasswordResetMailSenderAsync, AuthMailService>();
-
 
 builder.Services.AddSingleton<ConfirmationMailLinkProvider>();
 builder.Services.AddHttpContextAccessor();

@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {Game, GameList, GameSearchRequest, GameSearchResult, GameSearchResultItem} from '../models/models';
+import {GameCollection, GameSearchRequest, GameSearchResult} from '../models/models';
 import {environment} from "../../environments/environment";
 
 @Injectable({
@@ -20,11 +20,12 @@ export class GamesService {
     );
   }
 
-  getMyGames(): Observable<GameList[]> {
+  getMyGames(): Observable<GameCollection[]> {
     return of([
       {
         id: 0,
         name: "string",
+        yearPublished: 2000,
         minPlayer: 0,
         maxPlayer: 0,
         minAge: 0,
@@ -35,6 +36,7 @@ export class GamesService {
       {
         id: 0,
         name: "string",
+        yearPublished: 2000,
         minPlayer: 0,
         maxPlayer: 0,
         minAge: 0,
@@ -45,6 +47,7 @@ export class GamesService {
       {
         id: 0,
         name: "string",
+        yearPublished: 2000,
         minPlayer: 0,
         maxPlayer: 0,
         minAge: 0,
@@ -55,6 +58,7 @@ export class GamesService {
       {
         id: 0,
         name: "string",
+        yearPublished: 2000,
         minPlayer: 0,
         maxPlayer: 0,
         minAge: 0,
@@ -65,6 +69,7 @@ export class GamesService {
       {
         id: 0,
         name: "string",
+        yearPublished: 2000,
         minPlayer: 0,
         maxPlayer: 0,
         minAge: 0,

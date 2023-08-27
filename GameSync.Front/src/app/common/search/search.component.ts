@@ -2,7 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {debounceTime, map, Observable, of, startWith, switchMap} from "rxjs";
 import {FormControl} from "@angular/forms";
 import {GamesService} from "../../services/games.service";
-import {GameList, GameSearchResult, GameSearchResultItem} from "../../models/models";
+import {Router} from "@angular/router";
+import {Game} from "../../models/models";
 
 @Component({
   selector: 'app-search',
@@ -11,12 +12,13 @@ import {GameList, GameSearchResult, GameSearchResultItem} from "../../models/mod
 })
 export class SearchComponent implements OnInit {
   private readonly PAGE_SIZE_PREVIEW = 10;
-  private readonly PAGE_NUMBER_PREVIEW = 0;
+  protected readonly PAGE_NUMBER_PREVIEW = 0;
   autoComplete = new FormControl('');
-  gamesSearchedPreview$: Observable<GameSearchResultItem[]> = of([]);
+  gamesSearchedPreview$: Observable<Game[]> = of([]);
 
   constructor(
-    private gamesService: GamesService
+    private gamesService: GamesService,
+    private router: Router
   ) {
   }
 
@@ -37,5 +39,18 @@ export class SearchComponent implements OnInit {
       ),
       map(result => result.items)
     );
+  }
+
+  goToSearchResult() {
+    this.router.navigate(
+      ['/games'],
+      {
+        queryParams: {
+          Query: this.autoComplete.value,
+          PageSize: this.PAGE_SIZE_PREVIEW,
+          Page: this.PAGE_NUMBER_PREVIEW
+        }
+      }
+    )
   }
 }

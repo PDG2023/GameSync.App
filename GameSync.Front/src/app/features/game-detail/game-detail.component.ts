@@ -11,6 +11,7 @@ export class GameDetailComponent {
   game$: Observable<GameDetail> = of({
     id: 0,
     name: 'Les Loups-Garous de Thiercelieux',
+    yearPublished: 2015,
     minPlayer: 8,
     maxPlayer: 10,
     minAge: 10,

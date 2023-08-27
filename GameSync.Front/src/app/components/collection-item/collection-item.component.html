@@ -1,5 +1,3 @@
-
-
 <mat-card *ngIf="game">
   <mat-card-header>
     <mat-card-title>
@@ -15,7 +13,7 @@
       <mat-icon>visibility</mat-icon>
       Détails
     </button>
-    <button mat-icon-button color="warn" (click)="deleteMe()">
+    <button *ngIf="canBeDeleted" mat-icon-button color="warn" (click)="deleteMe()">
       <mat-icon>delete</mat-icon>
     </button>
   </mat-card-actions>

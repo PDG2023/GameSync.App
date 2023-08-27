@@ -11,6 +11,7 @@ import {anonymousGuardChild} from "./guards/anonymous.guard";
 import {PartyDetailComponent} from "./features/party-detail/party-detail.component";
 import {PartyGameVoteIdentifyComponent} from "./features/party-game-vote-identify/party-game-vote-identify.component";
 import {GameDetailComponent} from "./features/game-detail/game-detail.component";
+import {SearchResultComponent} from "./features/search-result/search-result.component";
 
 const anonymousOnlyRoutes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -34,6 +35,7 @@ const routes: Routes = [
         component: SecurityLayoutComponent,
         children: anonymousOnlyRoutes
     },
+  {path: 'games', component: SearchResultComponent}
 ];
 
 @NgModule({

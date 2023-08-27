@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import {GameList} from "../../models/models";
+import {GameCollection} from "../../models/models";
 import {MessagesService} from "../../services/messages.service";
 import {ConfirmationDialogService} from "../../services/confirmation-dialog.service";
 
@@ -11,7 +11,8 @@ import {ConfirmationDialogService} from "../../services/confirmation-dialog.serv
 })
 export class CollectionItemComponent {
 
-  @Input() game?: GameList;
+  @Input() game?: GameCollection;
+  @Input() canBeDeleted: boolean = true;
 
   constructor(
     private confirmationDialogService: ConfirmationDialogService,
@@ -20,7 +21,6 @@ export class CollectionItemComponent {
   ) {
 
   }
-
 
   navigateToDetails() {
     this.router.navigate(['/games', this.game?.id]);

@@ -17,22 +17,21 @@ export interface GameSearchRequest {
 }
 
 export interface GameSearchResult {
-  items: GameSearchResultItem[],
+  items: Game[],
   nextPage: string;
   previousPage: string;
 }
 
-export interface GameSearchResultItem {
-  yearPublished: number;
-  name: string;
-  isExpansion: boolean;
+export interface Game {
   id: number;
-  thumbnailUrl: string;
-  imageUrl: string;
+  name: string;
+  yearPublished: number;
+  isExpansion?: boolean;
+  thumbnailUrl?: string;
+  imageUrl?: string;
 }
 
-export interface Game {
-  name: string;
+export interface GameDetail extends Game {
   minPlayer: number;
   maxPlayer: number;
   minAge: number;
@@ -40,10 +39,6 @@ export interface Game {
   durationMinute: number;
 }
 
-export interface GameDetail extends Game {
-  id: number;
-}
-
-export interface GameList extends GameDetail {
+export interface GameCollection extends GameDetail {
   userId: string;
 }

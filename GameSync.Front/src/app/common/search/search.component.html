@@ -3,10 +3,16 @@
          aria-label="Number"
          placeholder="Rechercher un jeu"
          matInput
+         (keyup.enter)="goToSearchResult()"
          [formControl]="autoComplete"
-         [matAutocomplete]="auto">
+         [matAutocomplete]="auto"
+  >
   <mat-autocomplete #auto="matAutocomplete">
-    <mat-option *ngFor="let game of gamesSearchedPreview$ | async" [value]="game.name">
+    <mat-option
+      *ngFor="let game of gamesSearchedPreview$ | async"
+      [value]="game.name"
+      [routerLink]="'/games/' + game.id"
+    >
       <img class="search-thumbnail" [src]="game.thumbnailUrl">
       {{ game.name }} {{ game.yearPublished ? '(' + game.yearPublished + ')' : ''}}
     </mat-option>

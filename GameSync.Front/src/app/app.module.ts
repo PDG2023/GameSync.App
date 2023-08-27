@@ -38,6 +38,7 @@ import { CollectionItemComponent } from './components/collection-item/collection
 import { DialogYesNoComponent } from './common/dialog-yes-no/dialog-yes-no.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import { GameDetailComponent } from './features/game-detail/game-detail.component';
+import { SearchResultComponent } from './features/search-result/search-result.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { GameDetailComponent } from './features/game-detail/game-detail.componen
     PartyGameVoteIdentifyComponent,
     CollectionItemComponent,
     DialogYesNoComponent,
-    GameDetailComponent
+    GameDetailComponent,
+    SearchResultComponent,
   ],
   imports: [
     BrowserModule,

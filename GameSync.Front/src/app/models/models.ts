@@ -14,9 +14,10 @@ export interface Game {
   name: string;
   minPlayer: number;
   maxPlayer: number;
-  minAge: number;
+  minAge?: number;
   description: string;
-  durationMinute: number;
+  durationMinute?: number;
+  imageUrl?: string;
 }
 
 export interface GameDetail extends Game {

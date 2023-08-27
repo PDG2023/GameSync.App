@@ -1,4 +1,5 @@
 ﻿using FastEndpoints;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users;
 using IdentityModel.Client;
 using Xunit;
@@ -27,7 +28,7 @@ public class TestsWithLoggedUser : IAsyncLifetime
     public virtual async Task InitializeAsync()
     {
         UserId = await Factory.CreateConfirmedUser(Mail, Mail, Password);
-        var (response, result) = await Client.POSTAsync<SignInEndpoint, SignInRequest, SuccessfulSignInResponse>(new SignInRequest { Email = Mail, Password = Password});
+        var (response, result) = await Client.POSTAsync<SignIn.Endpoint, RequestWithCredentials, SignIn.Response>(new RequestWithCredentials { Email = Mail, Password = Password});
         Client.SetBearerToken(result!.Token);
     }
 }

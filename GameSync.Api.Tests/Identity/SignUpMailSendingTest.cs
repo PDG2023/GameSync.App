@@ -30,7 +30,7 @@ public class SignUpMailSendingTest
 
         using var scope = _factory.Services.CreateScope();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-        var endpoint = new SignUpEndpoint(userManager, mockService);
+        var endpoint = new SignUp.Endpoint(userManager, mockService);
 
         // act
         var response = await endpoint.ExecuteAsync(req, CancellationToken.None);
@@ -54,11 +54,11 @@ public class SignUpMailSendingTest
 
         using var scope = _factory.Services.CreateScope();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-        var endpoint = new SignUpEndpoint(userManager, mockService);
+        var endpoint = new SignUp.Endpoint(userManager, mockService);
 
         // act
         var response = await endpoint.ExecuteAsync(req, CancellationToken.None);
-        var status = (Ok<SuccessfulSignUpResponse>)response.Result;
+        var status = (Ok<SignUp.Response>)response.Result;
         var result = status.Value;
 
         // assert
@@ -66,7 +66,7 @@ public class SignUpMailSendingTest
         Assert.Equal(req.Email, addedMail);
     }
 
-    private static SignUpRequest CreateTestUser() => new SignUpRequest
+    private static SignUp.Request CreateTestUser() => new SignUp.Request
     {
         Email = new Bogus.DataSets.Internet().Email(),
         Password = "%7#FMe*ArfFLWb4h2",

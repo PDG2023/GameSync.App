@@ -1,4 +1,4 @@
-﻿namespace GameSync.Api.Endpoints.Users.Me.Games;
+﻿namespace GameSync.Api.Endpoints.Users.Me.Games.Validator;
 
 public interface IGameRequest
 {

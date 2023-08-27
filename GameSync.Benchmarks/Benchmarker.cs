@@ -21,13 +21,13 @@ public class BggClient
 
 
     [Benchmark]
-    public async Task<List<BoardGameGeekGame>> GetDetailsNoCache()
+    public async Task<List<BoardGameGeekGameDetail>> GetDetailsNoCache()
     {
         return (await _noCacheClient.GetBoardGamesDetailAsync(ids)).ToList();
     }
 
     [Benchmark]
-    public async Task<List<BoardGameGeekGame>> GetDetailsCached()
+    public async Task<List<BoardGameGeekGameDetail>> GetDetailsCached()
     {
         return (await _cachedClient.GetBoardGamesDetailAsync(ids)).ToList();
     }

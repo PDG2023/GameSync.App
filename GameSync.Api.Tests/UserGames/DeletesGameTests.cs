@@ -1,8 +1,7 @@
 ﻿using FastEndpoints;
-using GameSync.Api.Common;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Persistence;
-using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,10 +28,10 @@ public class DeletesGameTests : TestsWithLoggedUser
             Factory.CreateTestGame(UserId)
         );
 
-        var request = new SingleGameRequest { Id = 90000 };
+        var request = new RequestToIdentifiableObject { Id = 8080 };
 
         // act
-        var (response, result) = await Client.DELETEAsync<DeleteGameEndpoint, SingleGameRequest, NotFound>(request);
+        var (response, result) = await Client.DELETEAsync<DeleteGame.Endpoint, RequestToIdentifiableObject, NotFound>(request);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -55,11 +54,11 @@ public class DeletesGameTests : TestsWithLoggedUser
             Factory.CreateTestGame(UserId),
             Factory.CreateTestGame(UserId)
         );
-        int id = games[0].Id;
-        var request = new SingleGameRequest { Id = id};
+        var needleId = games[0].Id;
+        var request = new RequestToIdentifiableObject { Id = needleId };
 
         // act
-        var (response, result) = await Client.DELETEAsync<DeleteGameEndpoint, SingleGameRequest, Ok>(request);
+        var (response, result) = await Client.DELETEAsync<DeleteGame.Endpoint, RequestToIdentifiableObject, Ok>(request);
 
         // assert
         response.EnsureSuccessStatusCode();
@@ -67,7 +66,7 @@ public class DeletesGameTests : TestsWithLoggedUser
         // Checks whether the deleted game is in fact correctly deleted
         using var scope = Factory.Services.CreateScope();
         var ctx = scope.Resolve<GameSyncContext>();
-        var gamesShouldBeDeleted = await ctx.Games.Where(x => x.Id == id).ToListAsync();
+        var gamesShouldBeDeleted = await ctx.Games.Where(x => x.Id == needleId).ToListAsync();
         Assert.Empty(gamesShouldBeDeleted);
     }
 

@@ -1,8 +1,7 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
-import {GameCollection, GameSearchRequest, GameSearchResult} from '../models/models';
-import {environment} from "../../environments/environment";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { Game, GameList } from '../models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +11,10 @@ export class GamesService {
   constructor(
     private httpClient: HttpClient
   ) {
+ }
+
+  getGameDetail(gameId: string): Observable<GameDetail> {
+    return this.httpClient.get<GameDetail>(`${environment.apiUrl}/games/${gameId}`)
   }
 
   getGames(req: GameSearchRequest): Observable<GameSearchResult> {
@@ -31,7 +34,8 @@ export class GamesService {
         minAge: 0,
         durationMinute: 0,
         description: "string",
-        userId: "string"
+        userId: "string",
+        imageUrl: "string"
       },
       {
         id: 0,
@@ -42,7 +46,8 @@ export class GamesService {
         minAge: 0,
         durationMinute: 0,
         description: "string",
-        userId: "string"
+        userId: "string",
+        imageUrl: "string"
       },
       {
         id: 0,
@@ -53,7 +58,8 @@ export class GamesService {
         minAge: 0,
         durationMinute: 0,
         description: "string",
-        userId: "string"
+        userId: "string",
+        imageUrl: "string"
       },
       {
         id: 0,
@@ -64,7 +70,8 @@ export class GamesService {
         minAge: 0,
         durationMinute: 0,
         description: "string",
-        userId: "string"
+        userId: "string",
+        imageUrl: "string"
       },
       {
         id: 0,
@@ -75,7 +82,8 @@ export class GamesService {
         minAge: 0,
         durationMinute: 0,
         description: "string",
-        userId: "string"
+        userId: "string",
+        imageUrl: "string"
       },
     ]);
   }

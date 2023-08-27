@@ -14,33 +14,33 @@ import {GameDetailComponent} from "./features/game-detail/game-detail.component"
 import {SearchResultComponent} from "./features/search-result/search-result.component";
 
 const anonymousOnlyRoutes: Routes = [
-    {path: 'login', component: LoginComponent},
-    {path: 'register', component: RegisterComponent}
+  {path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent}
 ]
 
 const authOnlyRoutes: Routes = [
-    {path: 'parties', component: PartiesComponent},
-    {path: 'collection', component: CollectionComponent},
-    {path: 'parties/:id', component: PartyDetailComponent},
-    {path: 'parties/:id/vote-guest', component: PartyGameVoteIdentifyComponent},
-    {path: 'games/:id', component: GameDetailComponent}
+  {path: 'parties', component: PartiesComponent},
+  {path: 'collection', component: CollectionComponent},
+  {path: 'parties/:id', component: PartyDetailComponent},
+  {path: 'parties/:id/vote-guest', component: PartyGameVoteIdentifyComponent},
 ]
 
 const routes: Routes = [
-    {path: '', component: HomeComponent, pathMatch: 'full'},
-    {path: '', canActivateChild: [authGuardChild], children: authOnlyRoutes},
-    {
-        path: '',
-        canActivateChild: [anonymousGuardChild],
-        component: SecurityLayoutComponent,
-        children: anonymousOnlyRoutes
-    },
+  {path: '', component: HomeComponent, pathMatch: 'full'},
+  {path: 'games/:id', component: GameDetailComponent},
+  {path: '', canActivateChild: [authGuardChild], children: authOnlyRoutes},
+  {
+    path: '',
+    canActivateChild: [anonymousGuardChild],
+    component: SecurityLayoutComponent,
+    children: anonymousOnlyRoutes
+  },
   {path: 'games', component: SearchResultComponent}
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {
 }

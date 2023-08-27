@@ -10,6 +10,27 @@ export interface HttpErrorResponseDetail {
   description: string;
 }
 
+export interface GameSearchRequest {
+  query: string;
+  pageSize: number;
+  page: number;
+}
+
+export interface GameSearchResult {
+  items: GameSearchResultItem[],
+  nextPage: string;
+  previousPage: string;
+}
+
+export interface GameSearchResultItem {
+  yearPublished: number;
+  name: string;
+  isExpansion: boolean;
+  id: number;
+  thumbnailUrl: string;
+  imageUrl: string;
+}
+
 export interface Game {
   name: string;
   minPlayer: number;

@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {map, Observable, of, startWith} from "rxjs";
+import {debounceTime, map, Observable, of, startWith, switchMap} from "rxjs";
 import {FormControl} from "@angular/forms";
+import {GamesService} from "../../services/games.service";
+import {GameList, GameSearchResult, GameSearchResultItem} from "../../models/models";
 
 @Component({
   selector: 'app-search',
@@ -8,17 +10,32 @@ import {FormControl} from "@angular/forms";
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
-  options: string[] = ['Cluedo', 'Loups-garoux', 'Uno'];
+  private readonly PAGE_SIZE_PREVIEW = 10;
+  private readonly PAGE_NUMBER_PREVIEW = 0;
   autoComplete = new FormControl('');
-  filteredOptions$: Observable<string[]> = of(['']);
+  gamesSearchedPreview$: Observable<GameSearchResultItem[]> = of([]);
+
+  constructor(
+    private gamesService: GamesService
+  ) {
+  }
 
   ngOnInit() {
-    //filters options based on user input value
-    this.filteredOptions$ = this.autoComplete.valueChanges.pipe(
+    this.gamesSearchedPreview$ = this.autoComplete.valueChanges.pipe(
       startWith(''),
-      map(value => this.options.filter(
-        option => option.toLowerCase().includes(value?.toLowerCase() || '')
-      ))
+      debounceTime(300),
+      switchMap(value => {
+          if (value === '') {
+            return of({items: []})
+          }
+          return this.gamesService.getGames({
+            query: value!,
+            pageSize: this.PAGE_SIZE_PREVIEW,
+            page: this.PAGE_NUMBER_PREVIEW
+          });
+        }
+      ),
+      map(result => result.items)
     );
   }
 }

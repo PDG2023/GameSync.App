@@ -6,8 +6,9 @@
          [formControl]="autoComplete"
          [matAutocomplete]="auto">
   <mat-autocomplete #auto="matAutocomplete">
-    <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option">
-      {{option}}
+    <mat-option *ngFor="let game of gamesSearchedPreview$ | async" [value]="game.name">
+      <img class="search-thumbnail" [src]="game.thumbnailUrl">
+      {{ game.name }} {{ game.yearPublished ? '(' + game.yearPublished + ')' : ''}}
     </mat-option>
   </mat-autocomplete>
 </mat-form-field>

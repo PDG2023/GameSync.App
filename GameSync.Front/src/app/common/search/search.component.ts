@@ -1,6 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {map, Observable, of, startWith} from "rxjs";
+import {debounceTime, map, Observable, of, startWith, switchMap} from "rxjs";
 import {FormControl} from "@angular/forms";
+import {GamesService} from "../../services/games.service";
+import {Router} from "@angular/router";
+import {Game} from "../../models/models";
+import {LoadingService} from "../../services/loading.service";
 
 @Component({
   selector: 'app-search',
@@ -8,17 +12,48 @@ import {FormControl} from "@angular/forms";
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
-  options: string[] = ['Cluedo', 'Loups-garoux', 'Uno'];
+  private readonly PAGE_SIZE_PREVIEW = 10;
+  private readonly PAGE_SIZE_FULL = 20;
+  protected readonly PAGE_NUMBER_PREVIEW = 0;
   autoComplete = new FormControl('');
-  filteredOptions$: Observable<string[]> = of(['']);
+  gamesSearchedPreview$: Observable<Game[]> = of([]);
+
+  constructor(
+    private gamesService: GamesService,
+    protected router: Router,
+    protected loadingService: LoadingService
+  ) {
+  }
 
   ngOnInit() {
-    //filters options based on user input value
-    this.filteredOptions$ = this.autoComplete.valueChanges.pipe(
+    this.gamesSearchedPreview$ = this.autoComplete.valueChanges.pipe(
       startWith(''),
-      map(value => this.options.filter(
-        option => option.toLowerCase().includes(value?.toLowerCase() || '')
-      ))
+      debounceTime(300),
+      switchMap(value => {
+          if (value === '') {
+            return of({items: []})
+          }
+          return this.gamesService.getGames({
+            query: value!,
+            pageSize: this.PAGE_SIZE_PREVIEW,
+            page: this.PAGE_NUMBER_PREVIEW
+          });
+        }
+      ),
+      map(result => result.items)
     );
+  }
+
+  goToSearchResult() {
+    this.router.navigate(
+      ['/games'],
+      {
+        queryParams: {
+          Query: this.autoComplete.value,
+          PageSize: this.PAGE_SIZE_FULL,
+          Page: this.PAGE_NUMBER_PREVIEW
+        }
+      }
+    )
   }
 }

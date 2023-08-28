@@ -13,6 +13,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {ReactiveFormsModule} from "@angular/forms";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('SideNavComponent', () => {
   let component: SideNavComponent;
@@ -31,7 +32,8 @@ describe('SideNavComponent', () => {
         MatFormFieldModule,
         MatInputModule,
         MatAutocompleteModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        HttpClientTestingModule
       ],
       providers: [
         ChangeDetectorRef,

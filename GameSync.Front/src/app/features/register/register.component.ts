@@ -5,6 +5,7 @@ import {MessagesService} from "../../services/messages.service";
 import {finalize, Subject} from "rxjs";
 import {Router} from "@angular/router";
 import {LoginService} from "../../services/login.service";
+import {LoadingService} from "../../services/loading.service";
 
 @Component({
   selector: 'app-register',
@@ -19,32 +20,24 @@ export class RegisterComponent {
     confirmPassword: ['', [Validators.required, passwordMatchValidator('password')]]
   });
 
-  isLoading$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private fb: FormBuilder,
     private loginService: LoginService,
     private messagesService: MessagesService,
-    private router: Router
+    private router: Router,
+    protected loadingService: LoadingService
   ) {
-  }
-
-  ngOnInit() {
-    this.isLoading$.next(true);
   }
 
   submit(): void {
     if (this.registerForm.valid) {
-      this.isLoading$.next(true);
       this.loginService.signUp({
         email: this.registerForm.value['email']!,
         userName: this.registerForm.value['userName']!,
         password: this.registerForm.value['password']!,
         token: null
       })
-        .pipe(
-          finalize(() => this.isLoading$.next(false))
-        )
         .subscribe((res) => {
           this.messagesService.success('Demande envoyée avec succès ! Vérifiez vos mails pour confirmer votre inscription');
           this.router.navigateByUrl('/');

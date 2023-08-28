@@ -1,7 +1,17 @@
+<mat-spinner class="d-flex justify-content-center" *ngIf="loadingService.isLoading$ | async"></mat-spinner>
 <ng-container *ngIf="searchResult$ | async as searchResult">
-  <div class="row justify-content-between">
-<!--    <app-collection-item class="col-sm" *ngFor="let game of searchResult.items" [game]="game">-->
-
-<!--    </app-collection-item>-->
+  <div class="row">
+    <app-collection-item [canBeDeleted]="false" class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex align-items-stretch"
+                         *ngFor="let game of searchResult.items" [game]="game">
+    </app-collection-item>
   </div>
+  <mat-paginator class="mb-4"
+                 [pageIndex]="currentPage"
+                 [length]="totalSize"
+                 [pageSize]="take"
+                 [pageSizeOptions]="[5, 10, 20]"
+                 (page)="updatePage($event)"
+  >
+
+  </mat-paginator>
 </ng-container>

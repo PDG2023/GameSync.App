@@ -1,35 +1,63 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
 import {GamesService} from "../../services/games.service";
-import {Observable, of} from "rxjs";
-import {GameSearchRequest, GameSearchResult} from "../../models/models";
-import {ActivatedRoute} from "@angular/router";
+import {Observable, of, skip, switchMap, tap} from "rxjs";
+import {GameSearchResult} from "../../models/models";
+import {ActivatedRoute, Params, Router} from "@angular/router";
+import {LoadingService} from "../../services/loading.service";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-search-result',
   templateUrl: './search-result.component.html',
   styleUrls: ['./search-result.component.scss']
 })
 export class SearchResultComponent implements OnInit {
-  searchRequest: GameSearchRequest = {
-    query: '',
-    pageSize: 0,
-    page: 0
-  };
   searchResult$: Observable<GameSearchResult> = of();
+  skip: number = 0;
+  take: number = 0;
+  totalSize: number = 0;
+  currentPage: number = 0;
+
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
 
   constructor(
     private gamesService: GamesService,
-    private route: ActivatedRoute
-  ) {
-    this.route.queryParams
-      .subscribe(params => this.searchRequest = {
-        query: params['Query'],
-        pageSize: params['PageSize'],
-        page: params['Page']
-      })
-  }
+    private router: Router,
+    protected route: ActivatedRoute,
+    protected loadingService: LoadingService
+  ) {}
 
   ngOnInit(): void {
-    this.searchResult$ = this.gamesService.getGames(this.searchRequest);
+    this.searchResult$ = this.route.queryParams
+      .pipe(
+        switchMap(params => this.gamesService.getGames({
+          query: params['Query'],
+          pageSize: params['PageSize'],
+          page: params['Page']
+        })),
+        tap(result => {
+          const queryParams = this.route.snapshot.queryParams;
+          this.currentPage = queryParams['Page'];
+          this.skip = queryParams['PageSize'] * this.currentPage;
+          this.take = Math.min(result.items.length, queryParams['PageSize']);
+          this.totalSize = Math.max(this.totalSize, this.skip + this.take);
+          if (result.nextPage) this.totalSize++;
+        })
+      )
+  }
+
+  updatePage(pageEvent: PageEvent) {
+    const queryParams: Params = {
+      Query: this.route.snapshot.queryParams['Query'],
+      PageSize: pageEvent.pageSize,
+      Page: pageEvent.pageIndex
+    }
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams,
+      queryParamsHandling: 'merge'
+    });
   }
 }

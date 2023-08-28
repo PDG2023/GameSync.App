@@ -4,9 +4,13 @@
       {{ game.name }}
     </mat-card-title>
   </mat-card-header>
-  <img src="https://placehold.co/400">
+    <ng-container *ngIf="game.thumbnailUrl !== undefined else placeholder">
+      <img [src]="game.imageUrl" class="img-fluid">
+    </ng-container>
+    <ng-template #placeholder>
+      <img src="https://placehold.co/400" class="img-fluid">
+    </ng-template>
   <mat-card-content>
-
   </mat-card-content>
   <mat-card-actions>
     <button mat-button (click)="navigateToDetails()">
@@ -18,18 +22,6 @@
     </button>
   </mat-card-actions>
 </mat-card>
-
-
-<div class="collection-item" *ngIf="game">
-  <div class="collection-image">
-
-  </div>
-  <div class="collection-title-wrapper">
-    <h1 class="collection-title">
-
-    </h1>
-    <div class="collection-delete">
-
-    </div>
-  </div>
-</div>
+<!--  <div *ngIf="game" class="custom-card">-->
+<!--    <img [src]="game.imageUrl" alt="Image 2">-->
+<!--  </div>-->

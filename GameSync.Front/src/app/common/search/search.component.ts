@@ -12,6 +12,7 @@ import {Game} from "../../models/models";
 })
 export class SearchComponent implements OnInit {
   private readonly PAGE_SIZE_PREVIEW = 10;
+  private readonly PAGE_SIZE_FULL = 20;
   protected readonly PAGE_NUMBER_PREVIEW = 0;
   autoComplete = new FormControl('');
   gamesSearchedPreview$: Observable<Game[]> = of([]);
@@ -47,7 +48,7 @@ export class SearchComponent implements OnInit {
       {
         queryParams: {
           Query: this.autoComplete.value,
-          PageSize: this.PAGE_SIZE_PREVIEW,
+          PageSize: this.PAGE_SIZE_FULL,
           Page: this.PAGE_NUMBER_PREVIEW
         }
       }

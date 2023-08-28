@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import {GameCollection} from "../../models/models";
+import {Game, GameCollection} from "../../models/models";
 import {MessagesService} from "../../services/messages.service";
 import {ConfirmationDialogService} from "../../services/confirmation-dialog.service";
 
@@ -11,7 +11,7 @@ import {ConfirmationDialogService} from "../../services/confirmation-dialog.serv
 })
 export class CollectionItemComponent {
 
-  @Input() game?: GameCollection;
+  @Input() game?: Game;
   @Input() canBeDeleted: boolean = true;
 
   constructor(

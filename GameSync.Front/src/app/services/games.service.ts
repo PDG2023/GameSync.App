@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Game, GameList } from '../models/models';
+import {GameCollection, GameDetail, GameSearchRequest, GameSearchResult} from "../models/models";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +36,6 @@ export class GamesService {
         durationMinute: 0,
         description: "string",
         userId: "string",
-        imageUrl: "string"
       },
       {
         id: 0,
@@ -47,7 +47,6 @@ export class GamesService {
         durationMinute: 0,
         description: "string",
         userId: "string",
-        imageUrl: "string"
       },
       {
         id: 0,
@@ -59,7 +58,6 @@ export class GamesService {
         durationMinute: 0,
         description: "string",
         userId: "string",
-        imageUrl: "string"
       },
       {
         id: 0,
@@ -71,7 +69,6 @@ export class GamesService {
         durationMinute: 0,
         description: "string",
         userId: "string",
-        imageUrl: "string"
       },
       {
         id: 0,
@@ -83,7 +80,6 @@ export class GamesService {
         durationMinute: 0,
         description: "string",
         userId: "string",
-        imageUrl: "string"
       },
     ]);
   }

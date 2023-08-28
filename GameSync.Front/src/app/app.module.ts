@@ -39,6 +39,8 @@ import { DialogYesNoComponent } from './common/dialog-yes-no/dialog-yes-no.compo
 import {MatDialogModule} from "@angular/material/dialog";
 import { GameDetailComponent } from './features/game-detail/game-detail.component';
 import { SearchResultComponent } from './features/search-result/search-result.component';
+import {LoadingInterceptor} from "./helpers/loading.interceptor";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 @NgModule({
   declarations: [
@@ -79,7 +81,8 @@ import { SearchResultComponent } from './features/search-result/search-result.co
     MatProgressSpinnerModule,
     MatProgressBarModule,
     MatMenuModule,
-    MatDialogModule
+    MatDialogModule,
+    MatPaginatorModule
   ],
   providers: [
     {
@@ -87,7 +90,8 @@ import { SearchResultComponent } from './features/search-result/search-result.co
       useClass: PathLocationStrategy
     },
     {provide: HTTP_INTERCEPTORS, multi: true, useClass: HttpErrorInterceptor},
-    {provide: HTTP_INTERCEPTORS, multi: true, useClass: AuthInterceptor}
+    {provide: HTTP_INTERCEPTORS, multi: true, useClass: AuthInterceptor},
+    {provide: HTTP_INTERCEPTORS, multi: true, useClass: LoadingInterceptor}
   ],
 
 

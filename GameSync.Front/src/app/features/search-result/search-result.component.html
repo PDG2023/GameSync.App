@@ -1,17 +1,24 @@
 <mat-spinner class="d-flex justify-content-center" *ngIf="loadingService.isLoading$ | async"></mat-spinner>
 <ng-container *ngIf="searchResult$ | async as searchResult">
-  <div class="row">
-    <app-collection-item [canBeDeleted]="false" class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex align-items-stretch"
-                         *ngFor="let game of searchResult.items" [game]="game">
-    </app-collection-item>
-  </div>
-  <mat-paginator class="mb-4"
-                 [pageIndex]="pageIndex"
-                 [pageSize]="pageSize"
-                 [length]="searchResult.count"
-                 [pageSizeOptions]="[5, 10, 20]"
-                 (page)="updatePage($event)"
-  >
+  <ng-container *ngIf="searchResult.count > 0 && !(loadingService.isLoading$ | async)">
+    <div class="row">
+      <app-collection-item [canBeDeleted]="false" class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex align-items-stretch"
+                           *ngFor="let game of searchResult.items" [game]="game">
+      </app-collection-item>
+    </div>
+    <mat-paginator
+      [pageIndex]="pageIndex"
+      [pageSize]="pageSize"
+      [length]="searchResult.count"
+      [pageSizeOptions]="[5, 10, 20]"
+      (page)="updatePage($event)"
+    >
 
-  </mat-paginator>
+    </mat-paginator>
+  </ng-container>
+    <div *ngIf="searchResult.count === 0 && !(loadingService.isLoading$ | async)" class="no-games">
+      <h1>
+        Oups ! Aucun résultat...
+      </h1>
+    </div>
 </ng-container>

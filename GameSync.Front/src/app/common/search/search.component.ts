@@ -20,7 +20,7 @@ export class SearchComponent implements OnInit {
 
   constructor(
     private gamesService: GamesService,
-    private router: Router,
+    protected router: Router,
     protected loadingService: LoadingService
   ) {
   }

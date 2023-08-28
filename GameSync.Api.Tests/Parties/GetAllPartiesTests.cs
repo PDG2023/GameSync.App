@@ -4,7 +4,7 @@ using GameSync.Api.Persistence.Entities;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GameSync.Api.Tests.Parties.Me;
+namespace GameSync.Api.Tests.Parties;
 
 [Collection("FullApp")]
 public class GetAllPartiesTests : TestsWithLoggedUser
@@ -55,13 +55,13 @@ public class GetAllPartiesTests : TestsWithLoggedUser
 
         // act
         var (response, result) = await Client.GETAsync<GetAllParties.Endpoint, IEnumerable<PartyPreview>>();
-        
+
         // assert
         await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
         Assert.NotNull(result);
 
         Assert.Collection(
-            result, 
+            result,
             firstParty => AssertEquivalence(expectedFirstParty, firstParty, 0),
             secondParty => AssertEquivalence(expectedSecondParty, secondParty, 2)
         );

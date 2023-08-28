@@ -9,7 +9,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using Xunit;
 
-namespace GameSync.Api.Tests.Parties.Me.Games;
+namespace GameSync.Api.Tests.Parties.Games;
 
 [Collection("FullApp")]
 public class AddGameToPartyTests : TestsWithLoggedUser
@@ -17,6 +17,8 @@ public class AddGameToPartyTests : TestsWithLoggedUser
     public AddGameToPartyTests(GameSyncAppFactory factory) : base(factory)
     {
     }
+
+
 
     [Fact]
     public async Task Add_non_existing_game_of_user_collection_produces_not_found()
@@ -42,13 +44,7 @@ public class AddGameToPartyTests : TestsWithLoggedUser
     public async Task Add_existing_game_to_party_stores_it()
     {
         // arrange
-        var party = await Factory.CreateDefaultParty(UserId);
-        var game = await Factory.CreateTestGame(UserId);
-        var request = new PartyGameRequest
-        {
-            GameId = game.Id,
-            PartyId = party.Id
-        };
+        var request = await Factory.GetRequestToNonExistingPartyGame(UserId);
 
         // act
         var (response, _)
@@ -56,7 +52,7 @@ public class AddGameToPartyTests : TestsWithLoggedUser
 
         // assert
         response.EnsureSuccessStatusCode();
-        
+
         Assert.NotNull(await Fetch(request.PartyId, request.GameId));
     }
 
@@ -64,13 +60,7 @@ public class AddGameToPartyTests : TestsWithLoggedUser
     public async Task Adding_twice_same_game_in_party_produces_bad_request()
     {
         // arrange
-        var party = await Factory.CreateDefaultParty(UserId);
-        var game = await Factory.CreateTestGame(UserId);
-        var request = new PartyGameRequest
-        {
-            GameId = game.Id,
-            PartyId = party.Id
-        };
+        var request = await Factory.GetRequestToNonExistingPartyGame(UserId);
 
         // act
         await Client.PUTAsync<AddGame.Endpoint, PartyGameRequest, Ok>(request);

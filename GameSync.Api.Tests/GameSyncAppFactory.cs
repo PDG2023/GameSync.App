@@ -1,6 +1,7 @@
 ﻿using Bogus.DataSets;
 using FakeItEasy;
 using FastEndpoints;
+using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Api.Tests.Identity;
@@ -98,7 +99,10 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
     public async Task<Party> CreatePartyOfAnotherUser()
     {
-        var userId = await CreateConfirmedUser(new Internet().Email(), "username", "MuCkT*sgb2TB4!4P^r7cwRx");
+        var userId = await CreateConfirmedUser(
+            new Internet().Email(), 
+            new Internet().UserName(), 
+            "MuCkT*sgb2TB4!4P^r7cwRx");
         return await CreateDefaultParty(userId);
     }
 
@@ -121,6 +125,18 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
             Votes = votes
         });
         await ctx.SaveChangesAsync();
+    }
+
+
+    public async Task<PartyGameRequest> GetRequestToNonExistingPartyGame(string userId)
+    {
+        var party = await CreateDefaultParty(userId);
+        var game = await CreateTestGame(userId);
+        return new PartyGameRequest
+        {
+            GameId = game.Id,
+            PartyId = party.Id
+        };
     }
 
     public async Task InitializeAsync() => await _postgreSqlContainer.StartAsync();

@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using Xunit;
 
-namespace GameSync.Api.Tests.Parties.Me;
+namespace GameSync.Api.Tests.Parties;
 
 [Collection("FullApp")]
 public class DeletePartyTests : TestsWithLoggedUser

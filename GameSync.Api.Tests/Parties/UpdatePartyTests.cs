@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using Xunit;
 
-namespace GameSync.Api.Tests.Parties.Me;
+namespace GameSync.Api.Tests.Parties;
 
 [Collection("FullApp")]
 public class UpdatePartyTests : TestsWithLoggedUser
@@ -34,8 +34,8 @@ public class UpdatePartyTests : TestsWithLoggedUser
     {
         // arrange
         var party = await Factory.CreatePartyOfAnotherUser();
-        var request = new UpdateParty.Request 
-        { 
+        var request = new UpdateParty.Request
+        {
             Id = party.Id,
             DateTime = DateTime.Now.AddDays(1),
             Location = "...",
@@ -44,7 +44,7 @@ public class UpdatePartyTests : TestsWithLoggedUser
 
         // act
         var (response, _) = await Client.PATCHAsync<UpdateParty.Endpoint, UpdateParty.Request, NotFound>(request);
-        
+
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
@@ -77,7 +77,7 @@ public class UpdatePartyTests : TestsWithLoggedUser
             Name = request.Name,
             Location = request.Location,
             DateTime = expectedDate,
-            UserId  = UserId,
+            UserId = UserId,
             Games = null
         };
 

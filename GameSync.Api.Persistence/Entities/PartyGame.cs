@@ -7,7 +7,8 @@ public class PartyGame
 {
     public int GameId { get; set; }
     public int PartyId { get; set; }
-    public ICollection<Vote>? Votes { get; set; }
+    public virtual ICollection<Vote>? Votes { get; set; }
+    public virtual Game Game { get; set; }
 }
 
 [Owned]

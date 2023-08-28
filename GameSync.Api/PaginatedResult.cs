@@ -20,27 +20,28 @@ public class PaginatedResult<T>
         }
 
         int offset = pageSize * pageNumber;
-        int count = collection.Count();
+        var items = collection.ToList();
+        Count = items.Count;
 
-        if (offset + pageSize < count) // there are items still left in the next page 
+        if (offset + pageSize < Count) // there are items still left in the next page 
         {
             NextPage = BuildPageUrl(pageNumber + 1, pageSize, absoluteUrlToDestination);
 
         }
 
-        if (pageNumber > 0 && count > 0)
+        if (pageNumber > 0 && Count > 0)
         {
             PreviousPage = BuildPageUrl(pageNumber - 1, pageSize, absoluteUrlToDestination);
         }
 
-        Items = collection.Skip(offset).Take(pageSize).ToList();
-
+        Items = items.Skip(offset).Take(pageSize);
     }
 
 
     public IEnumerable<T>? Items { get; init; }
     public string? NextPage { get; init; }
     public string? PreviousPage { get; init; }
+    public int Count { get; init; }
 
     private string BuildPageUrl(int page, int pageSize, string absoluteUrl)
     {

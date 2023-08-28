@@ -26,16 +26,10 @@ public static class DeleteGame
         {
             var userId = User.ClaimValue(ClaimsTypes.UserId);
 
-            // TODO : could be done in one roundtrip
-            var game = await _ctx.Games.AsNoTracking().FirstOrDefaultAsync(g => g.Id == req.GameId && g.UserId == userId);
-            if (game is null)
-            {
-                return TypedResults.NotFound();
-            }
-
             var numberDeletedRows = await _ctx.PartiesGames
                 .Where(g => g.GameId == req.GameId
-                         && g.PartyId == req.PartyId)
+                         && g.PartyId == req.PartyId
+                         && g.Game.UserId == userId)
                 .ExecuteDeleteAsync(ct);
 
             if (numberDeletedRows == 0)

@@ -54,3 +54,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 mat-spinner {
   margin: auto
 }
+
+//Spinner in search bar
+.loading-option > span.mdc-list-item__primary-text{
+  margin: auto;
+  opacity: 1;
+}

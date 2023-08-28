@@ -20,6 +20,7 @@ export interface GameSearchResult {
   items: Game[],
   nextPage: string;
   previousPage: string;
+  count: number;
 }
 
 export interface Game {

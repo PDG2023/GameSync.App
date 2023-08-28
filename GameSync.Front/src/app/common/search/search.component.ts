@@ -4,6 +4,7 @@ import {FormControl} from "@angular/forms";
 import {GamesService} from "../../services/games.service";
 import {Router} from "@angular/router";
 import {Game} from "../../models/models";
+import {LoadingService} from "../../services/loading.service";
 
 @Component({
   selector: 'app-search',
@@ -19,7 +20,8 @@ export class SearchComponent implements OnInit {
 
   constructor(
     private gamesService: GamesService,
-    private router: Router
+    private router: Router,
+    protected loadingService: LoadingService
   ) {
   }
 

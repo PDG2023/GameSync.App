@@ -14,13 +14,9 @@ import {MatPaginator, PageEvent} from "@angular/material/paginator";
 })
 export class SearchResultComponent implements OnInit {
   searchResult$: Observable<GameSearchResult> = of();
-  skip: number = 0;
-  take: number = 0;
-  totalSize: number = 0;
-  currentPage: number = 0;
 
-  @ViewChild(MatPaginator)
-  paginator!: MatPaginator;
+  pageIndex: number = 0;
+  pageSize: number = 0;
 
   constructor(
     private gamesService: GamesService,
@@ -39,11 +35,8 @@ export class SearchResultComponent implements OnInit {
         })),
         tap(result => {
           const queryParams = this.route.snapshot.queryParams;
-          this.currentPage = queryParams['Page'];
-          this.skip = queryParams['PageSize'] * this.currentPage;
-          this.take = Math.min(result.items.length, queryParams['PageSize']);
-          this.totalSize = Math.max(this.totalSize, this.skip + this.take);
-          if (result.nextPage) this.totalSize++;
+          this.pageIndex = queryParams['Page']
+          this.pageSize = queryParams['PageSize']
         })
       )
   }

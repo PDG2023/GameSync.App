@@ -6,9 +6,9 @@
     </app-collection-item>
   </div>
   <mat-paginator class="mb-4"
-                 [pageIndex]="currentPage"
-                 [length]="totalSize"
-                 [pageSize]="take"
+                 [pageIndex]="pageIndex"
+                 [pageSize]="pageSize"
+                 [length]="searchResult.count"
                  [pageSizeOptions]="[5, 10, 20]"
                  (page)="updatePage($event)"
   >

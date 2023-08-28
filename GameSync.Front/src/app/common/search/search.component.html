@@ -8,13 +8,28 @@
          [matAutocomplete]="auto"
   >
   <mat-autocomplete #auto="matAutocomplete">
-    <mat-option
-      *ngFor="let game of gamesSearchedPreview$ | async"
-      [value]="game.name"
-      [routerLink]="'/games/' + game.id"
-    >
-      <img class="search-thumbnail" [src]="game.thumbnailUrl">
-      {{ game.name }} {{ game.yearPublished ? '(' + game.yearPublished + ')' : ''}}
+    <!--Loading-->
+    <mat-option *ngIf="loadingService.isLoading$ | async" disabled class="loading-option">
+      <mat-spinner></mat-spinner>
     </mat-option>
+    <ng-container *ngIf="gamesSearchedPreview$ | async as games">
+      <!--Games found-->
+      <ng-container *ngIf="games.length > 0 && !(loadingService.isLoading$ | async) else notFound">
+        <mat-option
+          *ngFor="let game of games"
+          [value]="game.name"
+          [routerLink]="'/games/' + game.id"
+        >
+          <img class="search-thumbnail" [src]="game.thumbnailUrl">
+          {{ game.name }} {{ game.yearPublished ? '(' + game.yearPublished + ')' : ''}}
+        </mat-option>
+      </ng-container>
+      <!--Not Found-->
+      <ng-template #notFound>
+        <mat-option *ngIf="games.length === 0 && !(loadingService.isLoading$ | async)" disabled>
+          Aucun résultat
+        </mat-option>
+      </ng-template>
+    </ng-container>
   </mat-autocomplete>
 </mat-form-field>

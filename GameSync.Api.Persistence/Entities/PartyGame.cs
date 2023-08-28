@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GameSync.Api.Persistence.Entities;
 
@@ -8,7 +10,7 @@ public class PartyGame
     public int GameId { get; set; }
     public int PartyId { get; set; }
     public virtual ICollection<Vote>? Votes { get; set; }
-    public virtual Game Game { get; set; }
+    public virtual Game Game { get; set; } = null!;
 }
 
 [Owned]
@@ -21,12 +23,14 @@ public class Vote
     /// </summary>
     public bool? VoteYes { get; set; }
 
-    public required string UserName { get; set; }
+    public string? UserName { get; set; }
 
     /// <summary>
     /// When null, the vote has been made by a guest
     /// </summary>
-    public int? UserId { get; set; }
+    [ForeignKey(nameof(User))]
+    public string? UserId { get; set; }
+    public virtual User? User { get; set; }
 
 }
 

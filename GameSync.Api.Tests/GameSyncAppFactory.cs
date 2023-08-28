@@ -53,7 +53,8 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
             UserId = userId,
             MinAge = 5,
             Name = "game",
-            Description = "Game's description"
+            Description = "Game's description",
+            ImageUrl = "img"
         };
 
         using var scope = Services.CreateScope();

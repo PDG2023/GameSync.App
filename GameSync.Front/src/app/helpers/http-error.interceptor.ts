@@ -20,6 +20,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError(
         errorResponse => {
+          console.log('fdp', errorResponse);
           switch (errorResponse.status) {
             case 0:
               this.messagesService.error('Le serveur ne répond pas.');

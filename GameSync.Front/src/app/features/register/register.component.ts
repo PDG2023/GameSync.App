@@ -36,7 +36,6 @@ export class RegisterComponent {
         email: this.registerForm.value['email']!,
         userName: this.registerForm.value['userName']!,
         password: this.registerForm.value['password']!,
-        token: null
       })
         .subscribe((res) => {
           this.messagesService.success('Demande envoyée avec succès ! Vérifiez vos mails pour confirmer votre inscription');

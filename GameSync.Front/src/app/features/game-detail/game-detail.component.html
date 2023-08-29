@@ -29,11 +29,13 @@
           <td>environ {{ game.durationMinute }} mn</td>
         </tr>
       </table>
-      <button color="primary" mat-flat-button>
+      <button color="primary" mat-flat-button (click)="addToCollection()" [disabled]="(loadingService.isLoading$ | async)!">
         <mat-icon>favorite_outline</mat-icon>
-        <!--<mat-icon>favorite</mat-icon> // Lorsque dans la collection  -->
         Ajouter à la collection
-        <!-- Retirer de la collection -->
+      </button>
+      <button color="primary" mat-flat-button (click)="removeFromCollection()" [disabled]="(loadingService.isLoading$ | async)!">
+        <mat-icon>favorite</mat-icon>
+        Retirer de la collection
       </button>
     </div>
   </div>

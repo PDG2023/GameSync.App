@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { LoginService } from "../../services/login.service";
 import {User} from "../../models/models";
 import {MessagesService} from "../../services/messages.service";
@@ -14,10 +14,7 @@ import {StateService} from "../../services/state.service";
 })
 export class LoginComponent implements OnInit {
 
-  loginForm = this.fb.nonNullable.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required]
-  });
+  loginForm: FormGroup;
 
   constructor(
     private state: StateService,
@@ -26,6 +23,10 @@ export class LoginComponent implements OnInit {
     private messagesService: MessagesService,
     private router: Router
   ) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
+    });
   }
 
   ngOnInit() {
@@ -34,10 +35,7 @@ export class LoginComponent implements OnInit {
   submit(): void {
     if (this.loginForm.valid) {
       this.loginService.signIn({
-        email: this.loginForm.value['email']!,
-        password: this.loginForm.value['password']!,
-        token: null,
-        userName: null
+        ...this.loginForm.value,
       }).subscribe((user) => {
         localStorage.setItem(environment.securityStorage, user.token!);
         this.state.setConnectedUser(user);

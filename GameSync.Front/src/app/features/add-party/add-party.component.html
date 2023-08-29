@@ -1,0 +1,32 @@
+<form [formGroup]="partyForm">
+  <div class="row">
+    <div class="col-sm-12">
+      <mat-form-field>
+        <mat-label>Nom</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <mat-form-field>
+        <mat-label>Lieu</mat-label>
+        <input matInput formControlName="location">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-6">
+      <mat-form-field>
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dateTime">
+        <mat-hint>DD.MM.YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="actions">
+    <button mat-flat-button color="primary" (click)="submit()">
+      Sauver
+    </button>
+  </div>
+</form>

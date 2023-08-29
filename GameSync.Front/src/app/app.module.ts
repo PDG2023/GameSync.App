@@ -41,6 +41,10 @@ import { GameDetailComponent } from './features/game-detail/game-detail.componen
 import { SearchResultComponent } from './features/search-result/search-result.component';
 import {LoadingInterceptor} from "./helpers/loading.interceptor";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import { AddCustomGameComponent } from './components/add-custom-game/add-custom-game.component';
+import { AddPartyComponent } from './features/add-party/add-party.component';
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
 
 @NgModule({
   declarations: [
@@ -61,6 +65,8 @@ import {MatPaginatorModule} from "@angular/material/paginator";
     DialogYesNoComponent,
     GameDetailComponent,
     SearchResultComponent,
+    AddCustomGameComponent,
+    AddPartyComponent,
   ],
   imports: [
     BrowserModule,
@@ -82,9 +88,12 @@ import {MatPaginatorModule} from "@angular/material/paginator";
     MatProgressBarModule,
     MatMenuModule,
     MatDialogModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
+
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy

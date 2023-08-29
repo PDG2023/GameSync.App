@@ -1,4 +1,10 @@
 import {Component} from '@angular/core';
+import {PartiesService} from "../../services/parties.service";
+import {Observable, of} from "rxjs";
+import {Party} from "../../models/models";
+import {Router} from "@angular/router";
+import {ConfirmationDialogService} from "../../services/confirmation-dialog.service";
+import {MessagesService} from "../../services/messages.service";
 
 @Component({
   selector: 'app-parties',
@@ -6,5 +12,23 @@ import {Component} from '@angular/core';
   styleUrls: ['./parties.component.scss']
 })
 export class PartiesComponent {
+
+  myParties$: Observable<Party[]> = of();
+
+  constructor(
+    private partiesService: PartiesService,
+    private router: Router,
+  ){
+    this.refresh();
+  }
+
+  refresh(){
+    this.myParties$ = this.partiesService.getMyParties();
+  }
+
+  addParty(){
+    this.router.navigateByUrl('/add-party');
+  }
+
 
 }

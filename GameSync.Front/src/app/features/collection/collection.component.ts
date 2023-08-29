@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, finalize, of } from 'rxjs';
 import {GamesService} from "../../services/games.service";
 import {GameCollection} from "../../models/models";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-collection',
@@ -13,11 +14,20 @@ export class CollectionComponent implements OnInit {
 
 
   constructor(
-    private gamesService: GamesService
+    private gamesService: GamesService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.refresh();
+  }
 
+  refresh() {
     this.myGames$ = this.gamesService.getMyGames();
   }
+
+  addGame() {
+    this.router.navigateByUrl('/add-game');
+  }
+
 }

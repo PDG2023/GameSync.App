@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import {GameCollection, GameDetail, GameSearchRequest, GameSearchResult} from "../models/models";
+import {AddGame, GameCollection, GameDetail, GameSearchRequest, GameSearchResult} from "../models/models";
 import {environment} from "../../environments/environment";
 
 @Injectable({
@@ -24,63 +24,19 @@ export class GamesService {
     );
   }
 
+  addGame(model: AddGame) {
+    return this.httpClient.post(`${environment.apiUrl}/users/me/games`, model);
+  }
+
+  addGameToCollection(id: number) {
+    return this.httpClient.post(`${environment.apiUrl}/users/me/games/from-bgg/${id}`, {id});
+  }
+
+  deleteGameFromCollection(id: number) {
+    return this.httpClient.delete(`${environment.apiUrl}/users/me/games/${id}`);
+  }
+
   getMyGames(): Observable<GameCollection[]> {
-    return of([
-      {
-        id: 0,
-        name: "string",
-        yearPublished: 2000,
-        minPlayer: 0,
-        maxPlayer: 0,
-        minAge: 0,
-        durationMinute: 0,
-        description: "string",
-        userId: "string",
-      },
-      {
-        id: 0,
-        name: "string",
-        yearPublished: 2000,
-        minPlayer: 0,
-        maxPlayer: 0,
-        minAge: 0,
-        durationMinute: 0,
-        description: "string",
-        userId: "string",
-      },
-      {
-        id: 0,
-        name: "string",
-        yearPublished: 2000,
-        minPlayer: 0,
-        maxPlayer: 0,
-        minAge: 0,
-        durationMinute: 0,
-        description: "string",
-        userId: "string",
-      },
-      {
-        id: 0,
-        name: "string",
-        yearPublished: 2000,
-        minPlayer: 0,
-        maxPlayer: 0,
-        minAge: 0,
-        durationMinute: 0,
-        description: "string",
-        userId: "string",
-      },
-      {
-        id: 0,
-        name: "string",
-        yearPublished: 2000,
-        minPlayer: 0,
-        maxPlayer: 0,
-        minAge: 0,
-        durationMinute: 0,
-        description: "string",
-        userId: "string",
-      },
-    ]);
+    return this.httpClient.get<GameCollection[]>(`${environment.apiUrl}/users/me/games`);
   }
 }

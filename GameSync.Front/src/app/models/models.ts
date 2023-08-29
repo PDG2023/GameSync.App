@@ -1,8 +1,8 @@
 export interface User {
   email: string;
-  userName: string | null;
-  password: string | null;
-  token: string | null;
+  userName?: string;
+  password: string ;
+  token?: string;
 }
 
 export interface HttpErrorResponseDetail {
@@ -23,6 +23,15 @@ export interface GameSearchResult {
   count: number;
 }
 
+export interface AddGame {
+  minPlayer: number;
+  maxPlayer: number;
+  minAge?: number;
+  description: string;
+  durationMinute?: number;
+  name: string;
+}
+
 export interface Game {
   id: number;
   name: string;
@@ -41,6 +50,19 @@ export interface GameDetail extends Game {
   imageUrl?: string;
 }
 
+
+
 export interface GameCollection extends GameDetail {
   userId: string;
+}
+
+export interface BaseParty {
+  location: string;
+  name: string;
+  dateTime: Date;
+}
+
+export interface Party extends BaseParty {
+  id: number;
+  numberOfGames: 0;
 }

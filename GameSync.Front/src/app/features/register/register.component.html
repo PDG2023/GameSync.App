@@ -34,8 +34,8 @@
           Les mots de passe ne correspondent pas
         </mat-error>
       </mat-form-field>
-      <button mat-raised-button color="primary" [disabled]="(isLoading$ | async)!" (click)="submit()">
-        <mat-spinner *ngIf="isLoading$ | async else registerSpan" diameter="30"></mat-spinner>
+      <button mat-raised-button color="primary" [disabled]="(loadingService.isLoading$ | async)!" (click)="submit()">
+        <mat-spinner *ngIf="loadingService.isLoading$ | async else registerSpan" diameter="30"></mat-spinner>
         <ng-template #registerSpan>
           <span>S'inscrire</span>
         </ng-template>

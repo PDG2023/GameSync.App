@@ -6,6 +6,7 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {NoopAnimationsModule} from "@angular/platform-browser/animations";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('SearchComponent', () => {
   let component: SearchComponent;
@@ -19,7 +20,8 @@ describe('SearchComponent', () => {
         MatAutocompleteModule,
         ReactiveFormsModule,
         MatInputModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
+        HttpClientTestingModule
       ]
     });
     fixture = TestBed.createComponent(SearchComponent);

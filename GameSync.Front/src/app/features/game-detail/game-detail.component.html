@@ -1,7 +1,5 @@
-<div>
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
-</div>
-<ng-container *ngIf="game$ | async as game">
+<mat-spinner *ngIf="loadingService.isLoading$ | async"></mat-spinner>
+<ng-container *ngIf="game$ | async as game else gameNotFound">
   <div class="row mb-4">
     <div class="col-sm-4">
       <ng-container *ngIf="game.imageUrl else placeholder">
@@ -46,8 +44,10 @@
     </div>
   </div>
 </ng-container>
-<div class="game-not-existing" *ngIf="!isLoading && !(game$ | async)">
+<ng-template #gameNotFound>
+  <div class="game-not-existing" *ngIf="!(loadingService.isLoading$ | async)">
     <h1>
       Oups ! Le jeu recherché ne semble pas exister...
     </h1>
-</div>
+  </div>
+</ng-template>

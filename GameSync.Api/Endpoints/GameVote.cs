@@ -20,7 +20,7 @@ public static class GameVote
 
     }
 
-    public class Endpoint : Endpoint<Request, Results<Ok, NotFound>>
+    public class Endpoint : Endpoint<Request, Results<Ok, NotFound, BadRequest>>
     {
         private readonly GameSyncContext _ctx;
 
@@ -41,7 +41,7 @@ public static class GameVote
         }
 
 
-        public override async Task<Results<Ok, NotFound>> ExecuteAsync(Request req, CancellationToken ct)
+        public override async Task<Results<Ok, NotFound, BadRequest>> ExecuteAsync(Request req, CancellationToken ct)
         {
             var userId = User.ClaimValue(ClaimsTypes.UserId);
 
@@ -54,34 +54,42 @@ public static class GameVote
                 return TypedResults.NotFound();
             }
 
+            Vote? voteOfUser;
             if (userId is null) // anonymous
             {
-                var voteOfUser = partyGame.Votes?.FirstOrDefault(v => v.UserName == req.UserName);
-
-                if (voteOfUser is null)
+                if (req.UserName is null)
                 {
-                    var vote = new Vote { UserName = req.UserName, VoteYes = req.VoteYes };
-                    if (partyGame.Votes is null)
-                    {
-                        partyGame.Votes = new List<Vote> { vote };
-                    }
-                    else
-                    {
-                        partyGame.Votes.Add(vote);
-                    }
-                }
-                else
-                {
-                    voteOfUser.VoteYes = req.VoteYes;
+                    return TypedResults.BadRequest();
                 }
 
-                await _ctx.SaveChangesAsync();
+                voteOfUser = partyGame.Votes?.FirstOrDefault(v => v.UserName == req.UserName);
             }
             else
             {
-                // TODO
+                voteOfUser = partyGame.Votes?.FirstOrDefault(v => v.UserName == req.UserName);
             }
-            
+
+            if (voteOfUser is null)
+            {
+                var vote = new Vote { VoteYes = req.VoteYes };
+
+                if (userId is null)
+                {
+                    vote.UserName = req.UserName;
+                }
+                else
+                {
+                    vote.UserId = userId;
+                }
+                partyGame.Votes.Add(vote);
+            }
+            else
+            {
+                voteOfUser.VoteYes = req.VoteYes;
+            }
+
+            await _ctx.SaveChangesAsync();
+
             return TypedResults.Ok();
         }
 

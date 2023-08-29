@@ -9,7 +9,7 @@ public class PartyGame
 {
     public int GameId { get; set; }
     public int PartyId { get; set; }
-    public virtual ICollection<Vote>? Votes { get; set; }
+    public virtual ICollection<Vote> Votes { get; set; } = new List<Vote>();
     public virtual Game Game { get; set; } = null!;
 }
 

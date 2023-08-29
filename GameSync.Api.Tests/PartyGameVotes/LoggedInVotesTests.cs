@@ -1,0 +1,106 @@
+﻿using FastEndpoints;
+using GameSync.Api.Endpoints;
+using GameSync.Api.Persistence.Entities;
+using GameSync.Api.Persistence;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Xunit;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace GameSync.Api.Tests.PartyGameVotes;
+
+[Collection("FullApp")]
+public class LoggedInVotesTests : TestsWithLoggedUser
+{
+    public LoggedInVotesTests(GameSyncAppFactory factory) : base(factory)
+    {
+    }
+
+    [Fact]
+    public async Task Put_new_vote_creates_it_with_user_id()
+    {
+        // arrange
+        var pg = await Factory.CreateFullPartyGameAsync();
+
+        // act
+        var (response, _) = await DoReq<Ok>(pg.PartyId, pg.GameId, true);
+        var vote = await GetVote(pg.PartyId, pg.GameId);
+
+        // assert
+        response.EnsureSuccessStatusCode();
+
+        Assert.NotNull(vote);
+        Assert.True(vote.VoteYes);
+        Assert.Equal(UserId,  vote.UserId);
+    }
+
+
+    [Fact]
+    public async Task Put_false_in_existing_vote_updates_it_to_false()
+    {
+        // arrange
+
+        var vote = new Vote { UserId = UserId, VoteYes = true };
+        var pg = await Factory.CreateFullPartyGameAsync(new List<Vote> { vote });
+
+        // act
+        var (response, _) = await DoReq<Ok>(pg.PartyId, pg.GameId, false); ;
+        var voteResult = await GetVote(pg.PartyId, pg.GameId);
+
+        // assert
+        response.EnsureSuccessStatusCode();
+        Assert.NotNull(voteResult);
+        Assert.False(voteResult.VoteYes);
+        Assert.Equal(UserId, vote.UserId);
+    }
+
+
+    [Fact]
+    public async Task Put_new_vote_in_existing_list_adds_it()
+    {
+        // arrange
+        const string otherUserName = "Other user";
+        var vote = new Vote { UserName = otherUserName, VoteYes = true };
+        var pg = await Factory.CreateFullPartyGameAsync(new List<Vote> { vote });
+
+        // act
+        var (response, _) = await DoReq<Ok>(pg.PartyId, pg.GameId, false);
+        var voteResult = await GetVote(pg.PartyId, pg.GameId);
+
+        // assert
+        response.EnsureSuccessStatusCode();
+        Assert.NotNull(voteResult);
+        Assert.False(voteResult.VoteYes);
+        Assert.Equal(UserId, voteResult.UserId);
+
+
+
+
+    }
+
+
+    private async Task<TestResult<TRes>> DoReq<TRes>(int partyId, int gameId, bool? voteYes)
+    {
+        var voteReq = new GameVote.Request
+        {
+            GameId = gameId,
+            PartyId = partyId,
+            VoteYes = voteYes
+        };
+
+        return await Client.PUTAsync<GameVote.Endpoint, GameVote.Request, TRes>(voteReq);
+
+    }
+
+    public async Task<Vote?> GetVote(int partyId, int gameId)
+    {
+        using var scope = Factory.Services.CreateScope();
+        var ctx = scope.Resolve<GameSyncContext>();
+        var pg = await ctx.PartiesGames.AsNoTracking().FirstAsync(pg => pg.PartyId == partyId && pg.GameId == gameId);
+        return pg
+            .Votes?
+            .FirstOrDefault(r => r.UserId == UserId);
+
+    }
+
+}

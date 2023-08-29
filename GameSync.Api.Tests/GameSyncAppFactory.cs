@@ -200,4 +200,5 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         context.Database.Migrate();
     }
 
+
 }

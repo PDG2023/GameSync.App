@@ -39,7 +39,6 @@ public class LoggedInVotesTests : TestsWithLoggedUser
     public async Task Put_false_in_existing_vote_updates_it_to_false()
     {
         // arrange
-
         var vote = new Vote { UserId = UserId, VoteYes = true };
         var pg = await Factory.CreateFullPartyGameAsync(new List<Vote> { vote });
 
@@ -59,12 +58,13 @@ public class LoggedInVotesTests : TestsWithLoggedUser
     public async Task Put_new_vote_in_existing_list_adds_it()
     {
         // arrange
-        var vote = new Vote { UserId = UserId, VoteYes = true };
-        var pg = await Factory.CreateFullPartyGameAsync(new List<Vote> { vote });
+        const string otherUsername = "Hello";
+        var vote = new Vote { UserName = otherUsername, VoteYes = true };
+        var existingPartyGame = await Factory.CreateFullPartyGameAsync(new List<Vote> { vote });
 
         // act
-        var (response, _) = await DoReq<Ok>(pg.PartyId, pg.GameId, false);
-        var voteResult = await GetVote(pg.PartyId, pg.GameId);
+        var (response, _) = await DoReq<Ok>(existingPartyGame.PartyId, existingPartyGame.GameId, false);
+        var voteResult = await GetVote(existingPartyGame.PartyId, existingPartyGame.GameId);
 
         // assert
         response.EnsureSuccessStatusCode();
@@ -72,9 +72,13 @@ public class LoggedInVotesTests : TestsWithLoggedUser
         Assert.False(voteResult.VoteYes);
         Assert.Equal(UserId, voteResult.UserId);
 
-
-
-
+        using var scope = Factory.Services.CreateScope();
+        var ctx = scope.Resolve<GameSyncContext>();
+        var insertedPg = await ctx.PartiesGames
+            .AsNoTracking()
+            .FirstAsync(pg => pg.PartyId == existingPartyGame.PartyId && pg.GameId == existingPartyGame.GameId);
+        var otherUserVote = insertedPg.Votes!.FirstOrDefault(pg => pg.UserName == otherUsername);
+        Assert.NotNull(otherUserVote);
     }
 
 

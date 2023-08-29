@@ -35,7 +35,7 @@ public static class GetAllParties
                     DateTime = party.DateTime,
                     Location = party.Location
                 })
-                .ToListAsync();
+                .ToListAsync(ct);
 
 
             return previews;

@@ -3,7 +3,7 @@ using GameSync.Api.Endpoints.Users.Me.Parties;
 using System.Net;
 using Xunit;
 
-namespace GameSync.Api.Tests.Parties.Me;
+namespace GameSync.Api.Tests.Parties;
 
 [Collection("FullApp")]
 public class CreatePartyTests : TestsWithLoggedUser
@@ -18,10 +18,10 @@ public class CreatePartyTests : TestsWithLoggedUser
         // arrange
         var date = new DateTime(2025, 08, 08, 17, 0, 0);
         var request = new CreateParty.Request
-        { 
-            DateTime = date, 
-            Name = "<script>hackerman</script>", 
-            Location = "<b>trying some stuff</b>" 
+        {
+            DateTime = date,
+            Name = "<script>hackerman</script>",
+            Location = "<b>trying some stuff</b>"
         };
 
 

@@ -3,6 +3,7 @@ using System;
 using GameSync.Api.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,16 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GameSync.Api.Persistence.Migrations
 {
     [DbContext(typeof(GameSyncContext))]
-    partial class GameSyncContextModelSnapshot : ModelSnapshot
+    [Migration("20230825142212_PartyGames_And_Votes")]
+    partial class PartyGames_And_Votes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
-                .HasAnnotation("Proxies:ChangeTracking", false)
-                .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
+                .HasAnnotation("ProductVersion", "7.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -42,9 +42,6 @@ namespace GameSync.Api.Persistence.Migrations
 
                     b.Property<int?>("DurationMinute")
                         .HasColumnType("integer");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("text");
 
                     b.Property<int>("MaxPlayer")
                         .HasColumnType("integer");
@@ -115,7 +112,7 @@ namespace GameSync.Api.Persistence.Migrations
 
                     b.HasIndex("PartyId");
 
-                    b.ToTable("PartiesGames");
+                    b.ToTable("PartyGame");
                 });
 
             modelBuilder.Entity("GameSync.Api.Persistence.Entities.User", b =>
@@ -347,12 +344,6 @@ namespace GameSync.Api.Persistence.Migrations
 
             modelBuilder.Entity("GameSync.Api.Persistence.Entities.PartyGame", b =>
                 {
-                    b.HasOne("GameSync.Api.Persistence.Entities.Game", "Game")
-                        .WithMany()
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("GameSync.Api.Persistence.Entities.Party", null)
                         .WithMany("Games")
                         .HasForeignKey("PartyId")
@@ -373,10 +364,11 @@ namespace GameSync.Api.Persistence.Migrations
 
                             NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
 
-                            b1.Property<string>("UserId")
-                                .HasColumnType("text");
+                            b1.Property<int?>("UserId")
+                                .HasColumnType("integer");
 
                             b1.Property<string>("UserName")
+                                .IsRequired()
                                 .HasColumnType("text");
 
                             b1.Property<bool?>("VoteYes")
@@ -389,17 +381,9 @@ namespace GameSync.Api.Persistence.Migrations
 
                             b1.ToTable("Vote");
 
-                            b1.HasOne("GameSync.Api.Persistence.Entities.User", "User")
-                                .WithMany()
-                                .HasForeignKey("UserId");
-
                             b1.WithOwner()
                                 .HasForeignKey("PartyGameGameId", "PartyGamePartyId");
-
-                            b1.Navigation("User");
                         });
-
-                    b.Navigation("Game");
 
                     b.Navigation("Votes");
                 });

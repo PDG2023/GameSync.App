@@ -1,4 +1,5 @@
-﻿using Bogus.DataSets;
+﻿using Bogus;
+using Bogus.DataSets;
 using Duende.IdentityServer.Validation;
 using FastEndpoints;
 using GameSync.Api.CommonRequests;
@@ -9,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using Xunit;
 
-namespace GameSync.Api.Tests.Parties.Me;
+namespace GameSync.Api.Tests.Parties;
 
 [Collection("FullApp")]
 public class DeletePartyTests : TestsWithLoggedUser
@@ -23,7 +24,7 @@ public class DeletePartyTests : TestsWithLoggedUser
     {
         var request = new RequestToIdentifiableObject { Id = 295203 };
 
-        var (response, result) = await Client.DELETEAsync<DeleteParty.Endpoint, RequestToIdentifiableObject, NotFound>(request);
+        var (response, _) = await Client.DELETEAsync<DeleteParty.Endpoint, RequestToIdentifiableObject, NotFound>(request);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -31,12 +32,12 @@ public class DeletePartyTests : TestsWithLoggedUser
     public async Task Deletion_of_party_of_another_user_produces_not_found()
     {
         // arrange : create another user and retrieve its id
-        var otherUserPartyId = await Factory.CreatePartyOfAnotherUser();
+        var otherUserParty = await Factory.CreatePartyOfAnotherUser();
 
-        var request = new RequestToIdentifiableObject { Id = otherUserPartyId };
+        var request = new RequestToIdentifiableObject { Id = otherUserParty.Id };
 
         // act
-        var (response, result) = await Client.DELETEAsync<DeleteParty.Endpoint, RequestToIdentifiableObject, NotFound>(request);
+        var (response, _) = await Client.DELETEAsync<DeleteParty.Endpoint, RequestToIdentifiableObject, NotFound>(request);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -47,11 +48,11 @@ public class DeletePartyTests : TestsWithLoggedUser
     public async Task Deletion_of_existing_party_deletes_it_from_storage()
     {
         // arrange
-        var partyId = await Factory.CreateDefaultParty(UserId);
-        var request = new RequestToIdentifiableObject { Id = partyId };
+        var party = await Factory.CreateDefaultParty(UserId);
+        var request = new RequestToIdentifiableObject { Id = party.Id };
 
         //act
-        var (response, result) = await Client.DELETEAsync<DeleteParty.Endpoint, RequestToIdentifiableObject, Ok>(request);
+        var (response, _) = await Client.DELETEAsync<DeleteParty.Endpoint, RequestToIdentifiableObject, Ok>(request);
 
         // assert
         response.EnsureSuccessStatusCode();
@@ -59,7 +60,7 @@ public class DeletePartyTests : TestsWithLoggedUser
         // ensure the party is not there
         using var scope = Factory.Services.CreateScope();
         var ctx = scope.Resolve<GameSyncContext>();
-        Assert.False(ctx.Parties.Any(x => x.Id == partyId));
+        Assert.False(ctx.Parties.Any(x => x.Id == party.Id));
     }
 
 }

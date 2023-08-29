@@ -13,6 +13,7 @@ import {SearchComponent} from "./common/search/search.component";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -26,7 +27,8 @@ describe('AppComponent', () => {
       MatListModule,
       MatFormFieldModule,
       MatInputModule,
-      MatAutocompleteModule
+      MatAutocompleteModule,
+      HttpClientTestingModule
     ],
     providers: [
       {

@@ -15,9 +15,8 @@
       </button>
     </mat-menu>
   </div>
-  <div class="row justify-content-between">
-    <app-collection-item class="col-sm" *ngFor="let game of myGames" [game]="game">
-
+  <div class="row">
+    <app-collection-item class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex align-items-stretch" *ngFor="let game of myGames" [game]="game">
     </app-collection-item>
   </div>
 </ng-container>

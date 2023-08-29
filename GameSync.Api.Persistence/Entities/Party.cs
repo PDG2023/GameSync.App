@@ -9,8 +9,7 @@ public class Party
     public string? Location { get; set; }
     public required string Name { get; set; }
     public required DateTime DateTime { get; set; }
-    public required string UserId { get; set; }
+    public string UserId { get; set; }
 
-    [Column(TypeName = "jsonb")]
-    public IEnumerable<PartyGame>? Games { get; set; }
+    public virtual ICollection<PartyGame>? Games { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿using Bogus.DataSets;
 using FakeItEasy;
 using FastEndpoints;
+using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Api.Tests.Identity;
@@ -52,7 +53,8 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
             UserId = userId,
             MinAge = 5,
             Name = "game",
-            Description = "Game's description"
+            Description = "Game's description",
+            ImageUrl = "img"
         };
 
         using var scope = Services.CreateScope();
@@ -87,28 +89,56 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
     }
 
-    public async Task<int> CreateParty(Party party)
+    public async Task<Party> CreateParty(Party party)
     {
         using var scope = Services.CreateScope();
         var manager = scope.Resolve<GameSyncContext>();
         await manager.Parties.AddAsync(party);
         await manager.SaveChangesAsync();
-        return party.Id;
+        return party;
     }
 
-    public async Task<int> CreatePartyOfAnotherUser()
+    public async Task<Party> CreatePartyOfAnotherUser()
     {
-        var userId = await CreateConfirmedUser(new Internet().Email(), "username", "MuCkT*sgb2TB4!4P^r7cwRx");
+        var userId = await CreateConfirmedUser(
+            new Internet().Email(), 
+            new Internet().UserName(), 
+            "MuCkT*sgb2TB4!4P^r7cwRx");
         return await CreateDefaultParty(userId);
     }
 
-    public async Task<int> CreateDefaultParty(string userId) => await CreateParty(new Party
+    public async Task<Party> CreateDefaultParty(string userId) => await CreateParty(new Party
     {
         DateTime = DateTime.Now.AddDays(1),
         Location = "...",
         Name = "...",
         UserId = userId
     });
+
+    public async Task CreatePartyGame(int partyId, int gameId, List<Vote>? votes = null)
+    {
+        using var scope = Services.CreateScope();
+        var ctx = scope.Resolve<GameSyncContext>();
+        await ctx.PartiesGames.AddAsync(new PartyGame
+        {
+            GameId = gameId,
+            PartyId = partyId,
+            Votes = votes
+        });
+        await ctx.SaveChangesAsync();
+    }
+
+
+    public async Task<PartyGameRequest> GetRequestToNonExistingPartyGame(string userId)
+    {
+        var party = await CreateDefaultParty(userId);
+        var game = await CreateTestGame(userId);
+        return new PartyGameRequest
+        {
+            GameId = game.Id,
+            PartyId = party.Id
+        };
+    }
 
     public async Task InitializeAsync() => await _postgreSqlContainer.StartAsync();
 

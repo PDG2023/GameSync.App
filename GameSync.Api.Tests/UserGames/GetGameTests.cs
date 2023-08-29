@@ -2,6 +2,7 @@
 using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Persistence.Entities;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Xunit;
 
 namespace GameSync.Api.Tests.UserGames;
@@ -54,17 +55,15 @@ public class GetGameTests
             // assert
             response.EnsureSuccessStatusCode();
             Assert.NotNull(result);
-            Assert.Equal(games[0].Id, result.Id);
+            Assert.Equivalent(games[0], result);
         }
 
         [Fact]
         public async Task Getting_games_of_user_with_two_games_should_return_them_all()
         {
             // arrange : add said games
-            var games = await Task.WhenAll(
-                Factory.CreateTestGame(UserId),
-                Factory.CreateTestGame(UserId)
-            );
+            var expectedFirstGame = await Factory.CreateTestGame(UserId);
+            var expectedSecondGame = await Factory.CreateTestGame(UserId);
 
             // act 
            var (response, result) = await Client.GETAsync<GetAllGames.Endpoint, IEnumerable<Game>>();
@@ -73,9 +72,25 @@ public class GetGameTests
             Assert.NotNull(result);
             response.EnsureSuccessStatusCode();
             Assert.Collection(result,
-                first => Assert.Equal(games[0].Id, first.Id),
-                second => Assert.Equal(games[1].Id, second.Id));
+                first => AssertEquivalence(expectedFirstGame, first),
+                second => AssertEquivalence(expectedSecondGame, second));
         }
+
+
+        private void AssertEquivalence(Game expectedGame, Game result)
+        {
+            var expected = new
+            {
+                expectedGame.Name,
+                expectedGame.MinPlayer,
+                expectedGame.Description,
+                expectedGame.MaxPlayer,
+                expectedGame.DurationMinute
+            };
+
+            Assert.Equivalent(expected, result);
+        }
+
     }
 
 }

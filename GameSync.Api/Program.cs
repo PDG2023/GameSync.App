@@ -28,8 +28,8 @@ builder.Services.AddMemoryCache();
 builder.Services.AddDbContext<GameSyncContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default"));
+    options.UseLazyLoadingProxies();
 });
-
 
 builder.Services.AddIdentityCore<User>(x =>
     {

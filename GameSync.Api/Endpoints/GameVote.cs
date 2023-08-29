@@ -66,7 +66,7 @@ public static class GameVote
             }
             else
             {
-                voteOfUser = partyGame.Votes?.FirstOrDefault(v => v.UserName == req.UserName);
+                voteOfUser = partyGame.Votes?.FirstOrDefault(v => v.UserId == userId);
             }
 
             if (voteOfUser is null)

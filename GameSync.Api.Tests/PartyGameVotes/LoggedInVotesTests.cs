@@ -59,8 +59,7 @@ public class LoggedInVotesTests : TestsWithLoggedUser
     public async Task Put_new_vote_in_existing_list_adds_it()
     {
         // arrange
-        const string otherUserName = "Other user";
-        var vote = new Vote { UserName = otherUserName, VoteYes = true };
+        var vote = new Vote { UserId = UserId, VoteYes = true };
         var pg = await Factory.CreateFullPartyGameAsync(new List<Vote> { vote });
 
         // act

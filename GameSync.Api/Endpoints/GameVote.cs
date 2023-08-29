@@ -1,7 +1,9 @@
 ﻿using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
 using GameSync.Api.Persistence;
+using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 
@@ -43,7 +45,9 @@ public static class GameVote
         {
             var userId = User.ClaimValue(ClaimsTypes.UserId);
 
-            var partyGame = _ctx.PartiesGames.FirstOrDefaultAsync(pg => pg.PartyId == req.PartyId && pg.GameId == req.GameId);
+            var partyGameSearch = _ctx.PartiesGames.Where(pg => pg.PartyId == req.PartyId && pg.GameId == req.GameId);
+
+            var partyGame = await partyGameSearch.FirstOrDefaultAsync();
 
             if (partyGame is null)
             {
@@ -52,24 +56,33 @@ public static class GameVote
 
             if (userId is null) // anonymous
             {
-                var userVote = _ctx.PartiesGames
-                    
-                    .Where(pg => pg.Votes.Any(x => x.UserName == req.UserName))
-                    .SelectMany(pg => pg.Votes);
-                if (await userVote.AnyAsync())
+                var voteOfUser = partyGame.Votes?.FirstOrDefault(v => v.UserName == req.UserName);
+
+                if (voteOfUser is null)
                 {
-                    await userVote.ExecuteUpdateAsync(builder =>
+                    var vote = new Vote { UserName = req.UserName, VoteYes = req.VoteYes };
+                    if (partyGame.Votes is null)
                     {
-                        builder.SetProperty(v => v.)
-                    })
+                        partyGame.Votes = new List<Vote> { vote };
+                    }
+                    else
+                    {
+                        partyGame.Votes.Add(vote);
+                    }
                 }
+                else
+                {
+                    voteOfUser.VoteYes = req.VoteYes;
+                }
+
+                await _ctx.SaveChangesAsync();
             }
             else
             {
-                _ctx.
+                // TODO
             }
             
-            return base.ExecuteAsync(req, ct);
+            return TypedResults.Ok();
         }
 
     }

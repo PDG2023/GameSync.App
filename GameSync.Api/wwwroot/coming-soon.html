@@ -2,99 +2,100 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameSync - Coming Soon</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.css"
-          integrity="sha512-otONSJGv1l0LjJXcgyqi2MeKXtnthkiXAleeQjFJOKYcVD5u+mOuPb7xCnlsb74Ld+N0ONbP7KYRmW2/OWrvaA=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Landing page for the upcoming app 'GameSync'. Presents its functionalities and shows off the main selling points">
 
-    <link rel="stylesheet" href="css/landingStyle.min.css" />
+	<title>GameSync - Coming Soon</title>
 
-    <script src="js/landingScript.min.js" defer></script>
+	<link rel="stylesheet" href="css/landingStyle.min.css" />
+
+	<script src="js/landingScript.min.js" defer></script>
 
 </head>
 
 <body>
-    <div id="fullpage">
-        <div class="section" id="welcome">
-            <div id="welcome-texts" class="neon">
-                <h1 id="Title">GameSync</h1>
+	<div id="onePageContainer">
+		<section id="welcome">
+			<div class="popFromRightOnce" id="presentation-block">
+				<img src="img/welcome.webp" loading="lazy" alt="Pile de jeux de société; image d'illustration"/>
+			</div>
+			<div id="welcome-texts" class="spaceLeft">
+				<h1 id="Title" class="neon">GameSync</h1>
 
-                <h2 id="Subtitle">
-                    Passez au niveau supérieur.
-                </h2>
-            </div>
-            <div class="popFromRightOnce presentation-block" id="presentation-block">
-                <img src="img/welcome.webp" loading="lazy" alt="Pile de jeux de société; image d'illustration"/>
-            </div>
-        </div>
+				<h2 id="Subtitle" class="neon">
+					Passez au niveau supérieur.
+				</h2>
+			</div>
+		</section>
 
-        <div class="section " id="features">
-            <div id="secondPresBlock" class="presentation-block"></div>
-            <div class="slide">
-                <div class="slide-content">
-                    <h2>Organisez des soirées mémorables.</h2>
-                    <img src="img/f1.jpg" loading="lazy" alt="4 jeunes jouant à un jeu de plateau; image d'illustration"/>
-                </div>
-            </div>
-            <div class="slide">
-                <div class="slide-content">
-                    <h2>Ne vous encombrez plus.<br />Votez pour votre jeu favori.</h2>
-                    <img src="img/f2.webp" loading="lazy" alt="Capture schématique d'un écran de vote"/>
-                </div>
-            </div>
-            <div class="slide">
-                <div class="slide-content">
-                    <h2>Ne vous encombrez plus. <br /> Créez et organisez vos collections.</h2>
-                    <img src="img/f3.webp" loading="lazy" alt="Étagère pleine de jeux bien présentés et organisés; image d'illustration"/>
-                </div>
-            </div>
+		<section id="features">
+			<div class="carousel">
+				<div class="slide">
+					<div class="slide-content">
+						<h2>Organisez des soirées mémorables.</h2>
+						<img src="img/f1.jpg" loading="lazy" alt="4 jeunes jouant à un jeu de plateau; image d'illustration"/>
+					</div>
+				</div>
 
-            <div class="slide">
-                <div class="slide-content" style="grid-template-columns: 100%; text-align: center;">
-                    <h2 style="padding-left: 0;">Ne vous encombrez plus. <br />Des milliers de jeux, à quelques clics.</h2>
-                </div>
-            </div>
-        </div>
-        <div class="section" id="aboutus">
-            <h1 style="margin-bottom: 32px;"> Les Maîtres de Jeu.</h1>
-            <div id="touristes">
-                <div class="touriste popFromRight">
-                    <img src="img/bg.webp" loading="lazy" alt="Bastian"/>
-                    <h3>Bastian</h3>
-                </div>
+				<div class="slide">
+					<div class="slide-content">
+						<h2>Ne vous encombrez plus.<br />Votez pour votre jeu favori.</h2>
+						<img src="img/f2.webp" loading="lazy" alt="Capture schématique d'un écran de vote"/>
+					</div>
+				</div>
 
-                <div class="touriste popFromRight">
-                    <img src="img/flavio.webp" loading="lazy" alt="Flavio"/>
-                    <h3>Flavio</h3>
-                </div>
+				<div class="slide">
+					<div class="slide-content">
+						<h2>Ne vous encombrez plus. <br /> Créez et organisez vos collections.</h2>
+						<img src="img/f3.webp" loading="lazy" alt="Étagère pleine de jeux bien présentés et organisés; image d'illustration"/>
+					</div>
+				</div>
 
-                <div class="touriste popFromRight">
-                    <img src="img/jorand.webp" loading="lazy" alt="Kévin"/>
-                    <h3>Kévin</h3>
-                </div>
+				<div class="slide">
+					<div class="slide-content text-only">
+						<h2>Ne vous encombrez plus. <br />Des milliers de jeux, à quelques clics.</h2>
+					</div>
+				</div>
+			</div>
+		</section>
 
+		<section id="aboutUs">
+			<div class="contentWrapper">
+				<h1 class="spaceLeft spaceUnder">Les Maîtres de Jeu.</h1>
+				<div id="touristes">
+					<figure class="touriste popFromRight">
+						<img src="img/bg.webp" loading="lazy" alt="Bastian"/>
+						<figcaption>Bastian</figcaption>
+					</figure>
+	
+					<figure class="touriste popFromRight">
+						<img src="img/flavio.webp" loading="lazy" alt="Flavio"/>
+						<figcaption>Flavio</figcaption>
+					</figure>
+	
+					<figure class="touriste popFromRight">
+						<img src="img/jorand.webp" loading="lazy" alt="Kévin"/>
+						<figcaption>Kévin</figcaption>
+					</figure>
+	
+					<figure class="touriste popFromRight">
+						<img src="img/ferati.webp" loading="lazy" alt="Kevin"/>
+						<figcaption>Kevin 2</figcaption>
+					</figure>
+				</div>
+			</div>
+		</section>
 
-                <div class="touriste popFromRight">
-                    <img src="img/ferati.webp" loading="lazy" alt="Kevin"/>
-                    <h3>Kevin 2</h3>
-                </div>
-            </div>
-        </div>
-        <div class="section" style="display: flex; justify-content: center; align-items: center;">
-            <h1>Bientôt disponible.</h1>
-            <h1 class="neon" id="final">À vos <a href="/">Jeux!</a></h1>
+		<section id="comingSoon" class="center">
+			<div class="contentWrapper">
+				<h1>Bientôt disponible.</h1>
+				<h1 class="neon" id="final">À vos <a href="/">Jeux!</a></h1>
+			</div>
+		</section>
 
-        </div>
-    </div>
+	</div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.js"
-            integrity="sha512-LGiXf+jHGTHcIybSsOWO3I/in+OObCkcEsWIZ7IyhzfD6RzD5qDUw2CK+JveuI7zTSEcDG//bIOvOpAJW2BWsg=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-
-    </script>
 </body>
 
 </html>

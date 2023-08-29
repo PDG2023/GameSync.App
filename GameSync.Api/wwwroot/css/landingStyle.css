@@ -26,9 +26,81 @@ body {
 	/* background-image: linear-gradient(var(--cDark), var(--cDark1)); */
 }
 
+/* One page and sections ("subpages") */
+#onePageContainer {
+	width: 100%;
+	height: 100dvh;
+	overflow-y: scroll;
+	scroll-snap-type: y mandatory;
+	scroll-behavior: smooth;
+}
+
+#onePageContainer > section {
+	scroll-snap-align: center;
+	height: 100%;
+}
+
+section {
+	position: relative;
+	overflow: hidden;
+	display: grid;
+	height: 100%;
+	align-items: center;
+}
+
+section.text-only {
+	justify-content: center;
+	text-align: center;
+}
+
+/* All about carousel */
+.carousel {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+	--slide: 0;
+}
+
+.carousel > .slide {
+	height: 100%;
+	width: 100%;
+	flex: 0 0 100%;
+	transition: left 0.4s;
+	position: relative;
+	left: calc(-100% * var(--slide));
+}
+
+/* Carousel (slides) arrows */
+.carousel > .arrow {
+	content: "";
+	width: 0;
+	height: 0;
+	border-style: solid;
+	user-select: none;
+	position: absolute;
+	z-index: 4;
+	top: 50%;
+	cursor: pointer;
+	margin-top: -38px;
+	transform: translate3d(0,0,0);
+}
+
+.carousel > .prev {
+	border-color: transparent var(--cPrimary) transparent transparent;
+	border-width: 38.5px 34px 38.5px 0;
+	left: 15px;
+}
+
+.carousel > .next {
+	border-color: transparent transparent transparent var(--cPrimary);
+	border-width: 38.5px 0 38.5px 34px;
+	right: 15px;
+}
+
+/* Base style adaptations */
 h1 {
 	margin: 0;
-	padding-top: 4rem;
 	font-size: 5rem;
 }
 
@@ -37,8 +109,6 @@ h2 {
 }
 
 h3 {
-	padding-bottom: 16px;
-	margin-top: 16px;
 	font-size: 2rem;
 }
 
@@ -46,6 +116,7 @@ a {
 	color: var(--cBright);
 }
 
+/* Neon text and adjustments */
 .neon {
 	text-shadow:
 		/* First layer : white glow */
@@ -64,6 +135,45 @@ a {
 	margin: 75px auto;
 }
 
+.neon > a {
+	text-decoration: none;
+	animation: animateColor 3s infinite linear;
+}
+
+.neon > a:hover {
+	animation: animateColor 0.4s infinite linear;
+}
+
+@keyframes animateColor {
+	0%, 100% {
+		text-shadow:
+			0 0 8px var(--cSecondary),
+			0 0 32px var(--cSecondary);
+	}
+
+	50% {
+		text-shadow:
+			0 0 8px var(--cSecondary),
+			0 0 32px var(--cSecondary),
+			0 0 36px var(--cSecondary),
+			0 0 42px var(--cSecondary),
+			0 0 62px var(--cSecondary),
+			0 0 82px var(--cSecondary),
+			0 0 86px var(--cSecondary),
+			0 0 92px var(--cSecondary),
+			0 0 102px var(--cSecondary),
+			0 0 151px var(--cSecondary);
+	}
+}
+
+/* Popping */
+.popFromRight.is-inViewport,
+.popFromRightOnce {
+	transform: translate(100%);
+	animation: popFromRight 1.4s !important;
+	animation-fill-mode: forwards !important;
+}
+
 @keyframes popFromRight {
 	0% {
 		opacity: 0;
@@ -75,11 +185,17 @@ a {
 	}
 }
 
-.popFromRight.is-inViewport,
-.popFromRightOnce {
-	transform: translate(100%);
-	animation: popFromRight 1.4s !important;
-	animation-fill-mode: forwards !important;
+/* Utilities */
+.center {
+	text-align: center;
+}
+
+.spaceLeft {
+	padding-left: 10%;
+}
+
+.spaceUnder {
+	margin-bottom: 32px;
 }
 
 /* ------
@@ -92,27 +208,24 @@ Opening - Presentation
 */
 
 /* Right circle */
-.presentation-block {
+#presentation-block {
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
 	background-color: var(--cPrimary);
-}
-
-#presentation-block {
 	clip-path: circle(50% at 100% 50%);
 	background-image: radial-gradient(circle at right center, var(--cPrimary) 10%, var(--cDark) 30%);
-	animation: circle 2.1s ease;
+	animation: circleGrowth 2.1s ease 1.5s;
 	display: flex;
 	align-content: center;
 	align-items: center;
 	justify-content: flex-end;
-	z-index: 1;
+	z-index: -100;
 }
 
-@keyframes circle {
+@keyframes circleGrowth {
 	0% {
 		clip-path: circle(0% at 100% 50%);
 	}
@@ -181,6 +294,15 @@ Slides
 	align-items: center;
 }
 
+.slide-content.text-only > h2{
+	padding-left: 0;
+}
+
+.slide-content.text-only {
+	grid-template-columns: 100%; 
+	text-align: center;
+}
+
 .slide-content > img {
 	max-height: 100%;
 	max-width: 60%;
@@ -192,6 +314,7 @@ Slides
 		flex-direction: column;
 		display: flex;
 	}
+
 }
 
 @media (min-width: 800px) {
@@ -209,19 +332,7 @@ Slides
 
 .slide > * {
 	height: 100%;
-}
-
-/* Carousel (slides) arrows */
-.fp-arrow.fp-prev {
-	border-color: transparent var(--cPrimary) transparent transparent;
-}
-
-.fp-arrow.fp-next {
-	border-color: transparent transparent transparent var(--cPrimary);
-}
-
-.fp-arrow {
-	border-color: black;
+	width: 100%;
 }
 
 /* Section : 
@@ -230,16 +341,18 @@ GameMasters - Touristes
 #touristes {
 	display: grid;
 	grid-template-columns: repeat(4, 15%);
-	padding-left: 12rem;
-	padding-right: 12rem;
+	padding-left: 10%;
+	padding-right: 10%;
 	justify-content: space-between;
 	text-align: center;
 	overflow-x: hidden;
 }
 
 .touriste {
-	border-bottom: 3px solid var(--cPrimary);
-	height: 90%;
+	margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 0;
+	height: 100%;
 
 	opacity: 0;
 	animation-fill-mode: forwards !important;
@@ -247,8 +360,12 @@ GameMasters - Touristes
 	animation-duration: 1s;
 }
 
-.touriste h3 {
-	margin-bottom: 24px;
+.touriste figcaption {
+	margin-block-start: 1em;
+	margin-block-end: 1em;
+	font-weight: bold;
+	font-size: 2rem;
+	border-bottom: 3px solid var(--cPrimary);
 }
 
 .touriste:nth-of-type(2) {
@@ -271,42 +388,3 @@ GameMasters - Touristes
 /* Section : 
 End - Link
 */
-#final {
-	text-align: center;
-}
-
-.neon > a {
-	text-decoration: none;
-	animation: animateColor 3s infinite linear;
-}
-
-.neon > a:hover {
-	animation: animateColor 0.4s infinite linear;
-}
-
-@keyframes animateColor {
-	0%, 100% {
-		text-shadow:
-			0 0 8px var(--cSecondary),
-			0 0 32px var(--cSecondary);
-	}
-
-	50% {
-		text-shadow:
-			0 0 8px var(--cSecondary),
-			0 0 32px var(--cSecondary),
-			0 0 36px var(--cSecondary),
-			0 0 42px var(--cSecondary),
-			0 0 62px var(--cSecondary),
-			0 0 82px var(--cSecondary),
-			0 0 86px var(--cSecondary),
-			0 0 92px var(--cSecondary),
-			0 0 102px var(--cSecondary),
-			0 0 151px var(--cSecondary);
-	}
-}
-
-#welcome-texts, #aboutus h1 {
-	padding-top: 12rem;
-	padding-left: 12rem;
-}

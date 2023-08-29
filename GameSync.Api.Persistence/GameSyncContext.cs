@@ -11,6 +11,7 @@ public class GameSyncContext : IdentityDbContext<User>
     public DbSet<Party> Parties { get; set; }
     public DbSet<PartyGame> PartiesGames { get; set; }
 
+
     // Needed for migrations
     public GameSyncContext() { }
 

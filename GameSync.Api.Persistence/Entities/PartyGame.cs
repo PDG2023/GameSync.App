@@ -17,7 +17,6 @@ public class PartyGame
 [Index(nameof(UserId), IsUnique = true)]
 public class Vote
 {
-
     /// <summary>
     /// Null = the user has not voted yet. Samey effect if the vote doesn't exist 
     /// </summary>

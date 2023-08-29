@@ -10,19 +10,37 @@ export interface HttpErrorResponseDetail {
   description: string;
 }
 
+export interface GameSearchRequest {
+  query: string;
+  pageSize: number;
+  page: number;
+}
+
+export interface GameSearchResult {
+  items: Game[],
+  nextPage: string;
+  previousPage: string;
+  count: number;
+}
+
 export interface Game {
+  id: number;
   name: string;
-  minPlayer: number;
-  maxPlayer: number;
-  minAge: number;
-  description: string;
-  durationMinute: number;
+  yearPublished: number;
+  isExpansion?: boolean;
+  thumbnailUrl?: string;
+  imageUrl?: string;
 }
 
 export interface GameDetail extends Game {
-  id: number;
+  minPlayer: number;
+  maxPlayer: number;
+  minAge?: number;
+  description: string;
+  durationMinute?: number;
+  imageUrl?: string;
 }
 
-export interface GameList extends GameDetail {
+export interface GameCollection extends GameDetail {
   userId: string;
 }

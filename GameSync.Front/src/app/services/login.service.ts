@@ -13,10 +13,10 @@ export class LoginService {
   }
 
   signUp(user: User): Observable<User> {
-    return this.http.post<User>(`${environment.apiUrl}/api/users/sign-up`, user);
+    return this.http.post<User>(`${environment.apiUrl}/users/sign-up`, user);
   }
 
   signIn(user: User): Observable<User> {
-    return this.http.post<User>(`${environment.apiUrl}/api/users/sign-in`, user);
+    return this.http.post<User>(`${environment.apiUrl}/users/sign-in`, user);
   }
 }

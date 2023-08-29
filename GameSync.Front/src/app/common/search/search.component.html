@@ -3,11 +3,33 @@
          aria-label="Number"
          placeholder="Rechercher un jeu"
          matInput
+         (keyup.enter)="goToSearchResult()"
          [formControl]="autoComplete"
-         [matAutocomplete]="auto">
+         [matAutocomplete]="auto"
+  >
   <mat-autocomplete #auto="matAutocomplete">
-    <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option">
-      {{option}}
-    </mat-option>
+    <ng-container *ngIf="!router.url.startsWith('/games?')">
+      <!--Loading-->
+      <mat-option *ngIf="loadingService.isLoading$ | async" disabled class="loading-option">
+        <mat-spinner></mat-spinner>
+      </mat-option>
+      <ng-container *ngIf="gamesSearchedPreview$ | async as games">
+        <!--Games found-->
+        <ng-container *ngIf="games.length > 0 && !(loadingService.isLoading$ | async)">
+          <mat-option
+            *ngFor="let game of games"
+            [value]="game.name"
+            [routerLink]="'/games/' + game.id"
+          >
+            <img class="search-thumbnail" [src]="game.thumbnailUrl">
+            {{ game.name }} {{ game.yearPublished ? '(' + game.yearPublished + ')' : ''}}
+          </mat-option>
+        </ng-container>
+        <!--Not Found-->
+        <mat-option *ngIf="games.length === 0 && !(loadingService.isLoading$ | async)" disabled>
+          Aucun résultat
+        </mat-option>
+      </ng-container>
+    </ng-container>
   </mat-autocomplete>
 </mat-form-field>

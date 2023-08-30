@@ -64,11 +64,14 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         return game;
     }
 
-    public async Task<PartyGame> CreateFullPartyGameAsync(List<Vote>? votes = null)
+    public async Task<PartyGame> CreatePartyGameWithDependency(List<Vote>? votes = null, string? invitationToken = null)
     {
-        var party = await CreatePartyOfAnotherUser();
+        var party = await CreatePartyOfAnotherUser(invitationToken);
         var game = await CreateTestGame(party.UserId);
         await CreatePartyGame(party.Id, game.Id, votes);
+
+
+
         return new PartyGame { GameId = game.Id, PartyId = party.Id };
     }
 
@@ -106,21 +109,22 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         return party;
     }
 
-    public async Task<Party> CreatePartyOfAnotherUser()
+    public async Task<Party> CreatePartyOfAnotherUser(string? invitationToken = null)
     {
         var userId = await CreateConfirmedUser(
             new Internet().Email(), 
             new Internet().UserName(), 
             "MuCkT*sgb2TB4!4P^r7cwRx");
-        return await CreateDefaultParty(userId);
+        return await CreateDefaultParty(userId, invitationToken);
     }
 
-    public async Task<Party> CreateDefaultParty(string userId) => await CreateParty(new Party
+    public async Task<Party> CreateDefaultParty(string userId, string? invitationToken = null) => await CreateParty(new Party
     {
         DateTime = DateTime.Now.AddDays(1),
         Location = "...",
         Name = "...",
-        UserId = userId
+        UserId = userId,
+        InvitationToken = invitationToken
     });
 
     public async Task CreatePartyGame(int partyId, int gameId, List<Vote>? votes = null)

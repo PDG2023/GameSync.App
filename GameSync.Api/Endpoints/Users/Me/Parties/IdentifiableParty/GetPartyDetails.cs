@@ -49,6 +49,9 @@ public class GetPartyDetails
         {
             var userId = User.ClaimValue(ClaimsTypes.UserId);
 
+
+            // TODO : This is extremely inefficient. Refactor, maybe using a raw sql or something.
+
             var partyDetails = _ctx.Parties
                 .Where(p => p.UserId == userId && p.Id == req.Id)
                 .Select(p => new Party

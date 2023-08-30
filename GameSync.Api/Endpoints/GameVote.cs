@@ -44,7 +44,7 @@ public static class GameVote
         {
             Put("users/me/parties/{PartyId}/games/{GameId}/vote", "parties/{InvitationToken}/games/{GameId}/vote");
             DontAutoTag();
-            Options(x => x.WithTags("Votes"));
+            Options(x => x.WithTags("Vote"));
             AllowAnonymous();
         }
 

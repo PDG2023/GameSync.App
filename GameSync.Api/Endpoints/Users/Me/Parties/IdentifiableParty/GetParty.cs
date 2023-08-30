@@ -9,16 +9,13 @@ namespace GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty;
 public static class GetParty
 {
 
-    public class GameVoteInfo
+    public class Request
     {
-        public string? GameImageUrl { get; init; }
-        public string? GameName { get; init; }
-        public IEnumerable<string>? WhoVotedYes { get; init; }
-        public int CountVotedYes => WhoVotedYes?.Count() ?? 0;
-        public IEnumerable<string>? WhoVotedNo { get; init; }
-        public int CountVotedNo => WhoVotedNo?.Count() ?? 0;
+        public required int Id { get; set; }
+        public string? InvitationToken { get; set; }
 
     }
+
     public class Response
     {
         public required string Name { get; init; }
@@ -27,9 +24,21 @@ public static class GetParty
 
         public IEnumerable<GameVoteInfo>? GamesVoteInfo { get; init; }
 
+        public class GameVoteInfo
+        {
+            public string? GameImageUrl { get; init; }
+            public string? GameName { get; init; }
+            public IEnumerable<string>? WhoVotedYes { get; init; }
+            public int CountVotedYes => WhoVotedYes?.Count() ?? 0;
+            public IEnumerable<string>? WhoVotedNo { get; init; }
+            public int CountVotedNo => WhoVotedNo?.Count() ?? 0;
+
+        }
+
+
     }
 
-    public class Endpoint : Endpoint<RequestToIdentifiableObject, Results<Ok<Response>, NotFound>>
+    public class Endpoint : Endpoint<Request, Results<Ok<Response>, NotFound>>
     {
         private readonly GameSyncContext _ctx;
 
@@ -40,20 +49,26 @@ public static class GetParty
 
         public override void Configure()
         {
-            Get("{Id}");
-            Group<PartiesGroup>();
-
+            Get("users/me/parties/{Id}", "parties/{InvitationToken}");
+            DontAutoTag();
+            Options(x => x.WithTags("Parties"));
+            AllowAnonymous();
         }
 
-        public override async Task<Results<Ok<Response>, NotFound>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
+        public override async Task<Results<Ok<Response>, NotFound>> ExecuteAsync(Request req, CancellationToken ct)
         {
             var userId = User.ClaimValue(ClaimsTypes.UserId);
 
+            if (userId is null && req.InvitationToken is null)
+            {
+                return TypedResults.NotFound();
+            }
 
-            // TODO : This is extremely inefficient. Refactor, maybe using a raw sql or something.
+            // TODO : This is extremely inefficient as the EF core query builder makes a lot a shit.
+            //        Refactor, maybe using a raw sql or something.
 
             var partyDetails = _ctx.Parties
-                .Where(p => p.UserId == userId && p.Id == req.Id)
+                .Where(p => p.Id == req.Id && (p.UserId == userId || p.InvitationToken == req.InvitationToken))
                 .Select(p => new Party
                 {
                     DateTime = p.DateTime,
@@ -87,7 +102,7 @@ public static class GetParty
                 DateTime = res.DateTime,
                 Name = res.Name,
                 Location = res.Location,
-                GamesVoteInfo = res.Games?.Select(pg => new GameVoteInfo
+                GamesVoteInfo = res.Games?.Select(pg => new Response.GameVoteInfo
                 {
                     GameImageUrl = pg.Game.ImageUrl,
                     GameName = pg.Game.Name,

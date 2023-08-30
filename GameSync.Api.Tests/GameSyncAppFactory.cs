@@ -64,6 +64,14 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         return game;
     }
 
+    public async Task<PartyGame> CreateFullPartyGameAsync(List<Vote>? votes = null)
+    {
+        var party = await CreatePartyOfAnotherUser();
+        var game = await CreateTestGame(party.UserId);
+        await CreatePartyGame(party.Id, game.Id, votes);
+        return new PartyGame { GameId = game.Id, PartyId = party.Id };
+    }
+
     public async Task CreateUnconfirmedUser(string mail, string username, string password)
     {
         var user = new User
@@ -191,5 +199,6 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         var context = scopedServices.GetRequiredService<GameSyncContext>();
         context.Database.Migrate();
     }
+
 
 }

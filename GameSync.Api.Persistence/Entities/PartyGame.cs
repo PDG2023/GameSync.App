@@ -9,7 +9,7 @@ public class PartyGame
 {
     public int GameId { get; set; }
     public int PartyId { get; set; }
-    public virtual ICollection<Vote>? Votes { get; set; }
+    public virtual ICollection<Vote> Votes { get; set; } = new List<Vote>();
     public virtual Game Game { get; set; } = null!;
 }
 
@@ -17,7 +17,6 @@ public class PartyGame
 [Index(nameof(UserId), IsUnique = true)]
 public class Vote
 {
-
     /// <summary>
     /// Null = the user has not voted yet. Samey effect if the vote doesn't exist 
     /// </summary>

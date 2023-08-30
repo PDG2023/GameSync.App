@@ -13,12 +13,7 @@ namespace GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty;
 public static class GetInvitationLink
 {
 
-    public class Response
-    {
-        public required string Link { get; set; }
-    }
-
-    public class Endpoint : Endpoint<RequestToIdentifiableObject, Results<NotFound, Ok<Response>>>
+    public class Endpoint : Endpoint<RequestToIdentifiableObject, Results<NotFound, Ok<string>>>
     {
         private readonly GameSyncContext _context;
         private readonly IConfiguration _configuration;
@@ -34,7 +29,7 @@ public static class GetInvitationLink
             Group<PartiesGroup>();
         }
 
-        public override async Task<Results<NotFound, Ok<Response>>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
+        public override async Task<Results<NotFound, Ok<string>>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
         {
             var userId = User.ClaimValue(ClaimsTypes.UserId);
 
@@ -58,7 +53,7 @@ public static class GetInvitationLink
 
             var url = GetAbsoluteUrlToDestination(party.InvitationToken);
 
-            return TypedResults.Ok(new Response { Link = url });
+            return TypedResults.Ok(url);
         }
 
         private string GetAbsoluteUrlToDestination(string token)

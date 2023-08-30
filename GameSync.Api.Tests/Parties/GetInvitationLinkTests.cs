@@ -31,7 +31,7 @@ public class GetInvitationLinkTests : TestsWithLoggedUser
 
         // assert
         await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
-        Assert.NotNull(result?.Link);
+        Assert.NotNull(result);
 
         using var scope = Factory.Services.CreateAsyncScope();
         var ctx = scope.Resolve<GameSyncContext>();
@@ -59,14 +59,14 @@ public class GetInvitationLinkTests : TestsWithLoggedUser
 
         // assert
         await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
-        Assert.NotNull(result?.Link);
-        Assert.EndsWith(expectedToken, result.Link);
+        Assert.NotNull(result);
+        Assert.EndsWith(expectedToken, result);
     }
 
-    private async Task<TestResult<GetInvitationLink.Response>> DoReq(int partyId)
+    private async Task<TestResult<string>> DoReq(int partyId)
     {
         var req = new RequestToIdentifiableObject { Id = partyId };
-        return await Client.GETAsync<GetInvitationLink.Endpoint, RequestToIdentifiableObject, GetInvitationLink.Response>(req);
+        return await Client.GETAsync<GetInvitationLink.Endpoint, RequestToIdentifiableObject, string>(req);
     }
 
 }

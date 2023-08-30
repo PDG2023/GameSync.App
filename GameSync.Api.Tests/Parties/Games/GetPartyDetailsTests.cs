@@ -63,7 +63,7 @@ public class GetPartyDetailsTests : TestsWithLoggedUser
         await Factory.CreatePartyGame(party.Id, originalGame.Id, votes1);
 
         // act
-        var (response, result) = await DoReq<GetPartyDetails.Response>(party.Id);
+        var (response, result) = await DoReq<GetParty.Response>(party.Id);
 
         // assert
         response.EnsureSuccessStatusCode();
@@ -95,7 +95,7 @@ public class GetPartyDetailsTests : TestsWithLoggedUser
     private async Task<TestResult<TRes>>  DoReq<TRes>(int partyId)
     {
         var req = new RequestToIdentifiableObject { Id = partyId };
-        return await Client.GETAsync<GetPartyDetails.Endpoint, RequestToIdentifiableObject, TRes>(req);
+        return await Client.GETAsync<GetParty.Endpoint, RequestToIdentifiableObject, TRes>(req);
     }
 
 }

@@ -1,5 +1,5 @@
 ﻿using FastEndpoints;
-using GameSync.Api.Endpoints.Users.Me.Parties;
+using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;

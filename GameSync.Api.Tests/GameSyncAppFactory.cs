@@ -177,10 +177,10 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
     private static void SetupFakeConfiguration(IServiceCollection services)
     {
         // Create a mock config which returns a temp password signing key for the jwt token
-        const string mockKey = "yD2%#M3meB@nB6Q$%bFbL4naAEjpHdWSQXyUexgJimSkQrc6PMppoTN%";
         var fakeConfig = A.Fake<IConfiguration>();
-        A.CallTo(() => fakeConfig["Jwt:SignKey"]).Returns(mockKey);
+        A.CallTo(() => fakeConfig["Jwt:SignKey"]).Returns("yD2%#M3meB@nB6Q$%bFbL4naAEjpHdWSQXyUexgJimSkQrc6PMppoTN%");
         A.CallTo(() => fakeConfig["Jwt:Issuer"]).Returns("https://localhost");
+        A.CallTo(() => fakeConfig["FrontPathToInvitedParty"]).Returns("{InvitationToken}");
         services.RemoveService<IConfiguration>();
         services.AddSingleton(fakeConfig);
     }

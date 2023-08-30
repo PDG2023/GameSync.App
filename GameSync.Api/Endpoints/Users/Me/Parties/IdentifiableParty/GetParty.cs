@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty;
 
-public class GetPartyDetails
+public static class GetParty
 {
 
     public class GameVoteInfo

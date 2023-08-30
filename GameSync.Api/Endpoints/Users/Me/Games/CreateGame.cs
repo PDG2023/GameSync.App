@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GameSync.Api.Endpoints.Users.Me.Games.Validator;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using System.Net;
@@ -35,7 +35,7 @@ public static class CreateGame
         public Validator()
         {
             RuleFor(r => r.Name).NotEmpty();
-            Include(new GameValidator());
+            Include(new GameRequestValidator());
         }
     }
 

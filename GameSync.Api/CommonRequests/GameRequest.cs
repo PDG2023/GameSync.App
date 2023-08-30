@@ -1,12 +1,23 @@
 ﻿using FluentValidation;
 using GameSync.Api.Resources;
 
-namespace GameSync.Api.Endpoints.Users.Me.Games.Validator;
+namespace GameSync.Api.CommonRequests;
 
-public class GameValidator : AbstractValidator<IGameRequest>
+public interface IGameRequest
+{
+    public string? Name { get; }
+    public int? MinPlayer { get; }
+    public int? MaxPlayer { get; }
+    public int? MinAge { get; }
+    public string? Description { get; }
+    public int? DurationMinute { get; }
+}
+
+
+public class GameRequestValidator : AbstractValidator<IGameRequest>
 {
 
-    public GameValidator()
+    public GameRequestValidator()
     {
         RuleFor(x => x.Name)
             .Matches(@"^\S(.*\S)?$") // no whitespace at the beggining

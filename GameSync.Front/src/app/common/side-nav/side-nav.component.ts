@@ -1,5 +1,6 @@
 import {ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
 import {MediaMatcher} from "@angular/cdk/layout";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-side-nav',
@@ -12,6 +13,7 @@ export class SideNavComponent implements OnDestroy {
   private mobileQueryListener: () => void;
 
   constructor(
+    protected authService: AuthService,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
   ) {
@@ -22,5 +24,10 @@ export class SideNavComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.mobileQuery.removeEventListener('change', this.mobileQueryListener);
+  }
+
+
+  signOut() {
+    this.authService.signOut();
   }
 }

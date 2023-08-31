@@ -1,18 +1,21 @@
-import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable} from "rxjs";
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from "rxjs";
 import {User} from "../models/models";
 
 @Injectable({
   providedIn: 'root'
 })
 export class StateService {
-  private connectedUserSubject$: BehaviorSubject<User> | null = null;
-  connectedUser$: Observable<User> | undefined = this.connectedUserSubject$?.asObservable();
+  connectedUserSubject$: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
 
   constructor() {
   }
 
   setConnectedUser(connectedUser: User) : void {
-    this.connectedUserSubject$?.next(connectedUser);
+    this.connectedUserSubject$.next(connectedUser);
+  }
+
+  clearConnectedUser() {
+    this.connectedUserSubject$.next(null);
   }
 }

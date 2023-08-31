@@ -31,7 +31,14 @@ const authOnlyRoutes: Routes = [
 
 const routes: Routes = [
   {path: '', component: HomeComponent, pathMatch: 'full'},
-  {path: 'games/:id', component: GameDetailComponent},
+  {path: 'games', component: SearchResultComponent},
+  {
+    path: 'games',
+    children: [
+      {path: ':id', component: GameDetailComponent},
+      {path: 'custom/:id', component: GameDetailComponent}
+    ],
+  },
   {path: '', canActivateChild: [authGuardChild], children: authOnlyRoutes},
   {
     path: '',
@@ -39,7 +46,6 @@ const routes: Routes = [
     component: SecurityLayoutComponent,
     children: anonymousOnlyRoutes
   },
-  {path: 'games', component: SearchResultComponent}
 ];
 
 @NgModule({

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, finalize, of } from 'rxjs';
+import {Component, OnInit} from '@angular/core';
+import {Observable, of} from 'rxjs';
 import {GamesService} from "../../services/games.service";
 import {GameCollection} from "../../models/models";
 import {Router} from "@angular/router";
@@ -30,4 +30,16 @@ export class CollectionComponent implements OnInit {
     this.router.navigateByUrl('/add-game');
   }
 
+  goToSearch() {
+    this.router.navigate(
+      ['/games'],
+      {
+        queryParams: {
+          Query: 'a',
+          PageSize: 20,
+          Page: 0
+        }
+      }
+    );
+  }
 }

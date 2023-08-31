@@ -1,4 +1,3 @@
-<mat-spinner *ngIf="loadingService.isLoading$ | async"></mat-spinner>
 <ng-container *ngIf="game$ | async as game else gameNotFound">
   <div class="row mb-4">
     <div class="col-sm-4">
@@ -29,27 +28,31 @@
           <td>environ {{ game.durationMinute }} mn</td>
         </tr>
       </table>
-      <button color="primary" mat-flat-button (click)="addToCollection()" [disabled]="(loadingService.isLoading$ | async)!">
-        <mat-icon>favorite_outline</mat-icon>
-        Ajouter à la collection
-      </button>
-      <button color="primary" mat-flat-button (click)="removeFromCollection()" [disabled]="(loadingService.isLoading$ | async)!">
-        <mat-icon>favorite</mat-icon>
-        Retirer de la collection
-      </button>
+      <ng-container *ngIf="!isCustom">
+        <button color="primary" mat-flat-button (click)="addToCollection()"
+                [disabled]="(loadingService.isLoading$ | async)!">
+          <mat-icon>favorite_outline</mat-icon>
+          Ajouter à la collection
+        </button>
+        <button color="primary" mat-flat-button (click)="removeFromCollection()"
+                [disabled]="(loadingService.isLoading$ | async)!">
+          <mat-icon>favorite</mat-icon>
+          Retirer de la collection
+        </button>
+      </ng-container>
     </div>
   </div>
   <div class="row">
     <div class="col-sm-12 description-wrapper">
       <h1>Description</h1>
-      {{ game.description }}
+      {{ formatDescription(game.description) | async }}
     </div>
   </div>
 </ng-container>
 <ng-template #gameNotFound>
   <div class="game-not-existing" *ngIf="!(loadingService.isLoading$ | async)">
     <h1>
-      Oups ! Le jeu recherché ne semble pas exister...
+      Oups ! Ce jeu ne semble pas exister...
     </h1>
   </div>
 </ng-template>

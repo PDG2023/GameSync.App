@@ -1,16 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CollectionItemComponent } from './collection-item.component';
+import {GameItemComponent} from './game-item.component';
 import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 describe('CollectionItemComponent', () => {
-  let component: CollectionItemComponent;
-  let fixture: ComponentFixture<CollectionItemComponent>;
+  let component: GameItemComponent;
+  let fixture: ComponentFixture<GameItemComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CollectionItemComponent],
+      declarations: [GameItemComponent],
       imports: [
         MatDialogModule,
         MatSnackBarModule
@@ -22,7 +22,7 @@ describe('CollectionItemComponent', () => {
         }
       ]
     });
-    fixture = TestBed.createComponent(CollectionItemComponent);
+    fixture = TestBed.createComponent(GameItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

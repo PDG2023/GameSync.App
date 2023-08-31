@@ -1,19 +1,19 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import { Router } from '@angular/router';
-import {Game, GameCollection} from "../../models/models";
+import {Router} from '@angular/router';
+import {Game} from "../../models/models";
 import {MessagesService} from "../../services/messages.service";
 import {ConfirmationDialogService} from "../../services/confirmation-dialog.service";
 import {GamesService} from "../../services/games.service";
 
 @Component({
-  selector: 'app-collection-item',
-  templateUrl: './collection-item.component.html',
-  styleUrls: ['./collection-item.component.scss']
+  selector: 'app-game-item',
+  templateUrl: './game-item.component.html',
+  styleUrls: ['./game-item.component.scss']
 })
-export class CollectionItemComponent {
+export class GameItemComponent {
 
   @Input() game?: Game;
-  @Input() canBeDeleted: boolean = true;
+  @Input() isReadOnly: boolean = true;
 
   @Output() itemDeleted = new EventEmitter();
 
@@ -21,7 +21,7 @@ export class CollectionItemComponent {
     private confirmationDialogService: ConfirmationDialogService,
     private messagesService: MessagesService,
     private gamesService: GamesService,
-    private router: Router
+    protected router: Router
   ) {
 
   }
@@ -45,4 +45,7 @@ export class CollectionItemComponent {
   }
 
 
+  editMe() {
+
+  }
 }

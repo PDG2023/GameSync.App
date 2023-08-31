@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {delay, finalize, map, Observable, of, switchMap, take, tap} from 'rxjs';
+import {Observable, of, switchMap} from 'rxjs';
 import {GameDetail} from "../../models/models";
 import {GamesService} from "../../services/games.service";
 import {ActivatedRoute} from "@angular/router";
@@ -14,6 +14,7 @@ import {MessagesService} from "../../services/messages.service";
 })
 export class GameDetailComponent implements OnInit {
 
+  isCustom: boolean = false;
   game$: Observable<GameDetail> = of();
 
   constructor(
@@ -25,15 +26,20 @@ export class GameDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.game$ = this.route.params.pipe(
-      switchMap(params => this.gamesService.getGameDetail(params['id']))
+    this.game$ = this.route.url.pipe(
+      switchMap(params => {
+        this.isCustom = params[0].path === 'custom';
+        return this.isCustom ?
+          this.gamesService.getCustomGameDetail(params[1].path)
+          : this.gamesService.getGameDetail(params[0].path)
+      })
     );
   }
 
   addToCollection() {
     this.game$.subscribe(res => {
       this.gamesService.addGameToCollection(res.id).subscribe(() => {
-        this.messagesService.success('Jeu ajouté à la collection. N\'oublie pas connard.');
+        this.messagesService.success('Jeu ajouté à la collection.');
       })
     })
   }
@@ -44,5 +50,10 @@ export class GameDetailComponent implements OnInit {
         this.messagesService.success('Jeu retiré de la collection.');
       })
     })
+  }
+
+  formatDescription(description: string): Observable<string> {
+    //TODO: The backend should encode correctly
+    return of(description.replace(/&#10;&#10;/g, '\n\r\n\r'));
   }
 }

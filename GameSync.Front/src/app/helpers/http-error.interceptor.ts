@@ -1,11 +1,6 @@
-import { Injectable } from '@angular/core';
-import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor
-} from '@angular/common/http';
-import { Observable, catchError, of } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {catchError, Observable, of} from 'rxjs';
 import {MessagesService} from "../services/messages.service";
 import {HttpErrorResponseDetail} from "../models/models";
 
@@ -20,7 +15,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError(
         errorResponse => {
-          console.log('fdp', errorResponse);
           switch (errorResponse.status) {
             case 0:
               this.messagesService.error('Le serveur ne répond pas.');

@@ -54,6 +54,6 @@ export class SearchComponent implements OnInit {
           Page: this.PAGE_NUMBER_PREVIEW
         }
       }
-    )
+    );
   }
 }

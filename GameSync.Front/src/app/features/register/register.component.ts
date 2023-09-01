@@ -1,8 +1,7 @@
 import {Component} from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {passwordMatchValidator} from "../../helpers/validators";
 import {MessagesService} from "../../services/messages.service";
-import {finalize, Subject} from "rxjs";
 import {Router} from "@angular/router";
 import {LoginService} from "../../services/login.service";
 import {LoadingService} from "../../services/loading.service";
@@ -13,7 +12,7 @@ import {LoadingService} from "../../services/loading.service";
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
-  registerForm = this.fb.nonNullable.group({
+  registerForm: FormGroup = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
     userName: ['', Validators.required],
@@ -33,9 +32,7 @@ export class RegisterComponent {
   submit(): void {
     if (this.registerForm.valid) {
       this.loginService.signUp({
-        email: this.registerForm.value['email']!,
-        userName: this.registerForm.value['userName']!,
-        password: this.registerForm.value['password']!,
+        ...this.registerForm.value
       })
         .subscribe((res) => {
           this.messagesService.success('Demande envoyée avec succès ! Vérifiez vos mails pour confirmer votre inscription');

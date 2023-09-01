@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {StateService} from "./state.service";
 import {environment} from "../../environments/environment";
 import {Router} from "@angular/router";
 
@@ -8,15 +7,25 @@ import {Router} from "@angular/router";
 })
 export class AuthService {
 
+  connectedUserSubject$: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+
   constructor(
-    private stateService: StateService,
     private router: Router
-  ) { }
+  ) {
+  }
+
+  setConnectedUser(connectedUser: User): void {
+    this.connectedUserSubject$.next(connectedUser);
+  }
+
+  clearConnectedUser() {
+    this.connectedUserSubject$.next(null);
+  }
 
 
   signOut() {
     localStorage.removeItem(environment.securityStorage);
-    this.stateService.clearConnectedUser();
+    this.clearConnectedUser();
     this.router.navigateByUrl('/login');
   }
 

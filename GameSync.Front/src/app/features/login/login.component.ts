@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import { LoginService } from "../../services/login.service";
-import {User} from "../../models/models";
+import {LoginService} from "../../services/login.service";
 import {MessagesService} from "../../services/messages.service";
 import {Router} from "@angular/router";
 import {environment} from "../../../environments/environment";
-import {StateService} from "../../services/state.service";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-login',
@@ -14,10 +13,13 @@ import {StateService} from "../../services/state.service";
 })
 export class LoginComponent implements OnInit {
 
-  loginForm: FormGroup;
+  loginForm: FormGroup = this.fb.nonNullable.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required]
+  });
 
   constructor(
-    private state: StateService,
+      private authService: AuthService,
     private fb: FormBuilder,
     private loginService: LoginService,
     private messagesService: MessagesService,
@@ -35,10 +37,10 @@ export class LoginComponent implements OnInit {
   submit(): void {
     if (this.loginForm.valid) {
       this.loginService.signIn({
-        ...this.loginForm.value,
+        ...this.loginForm.value
       }).subscribe((user) => {
         localStorage.setItem(environment.securityStorage, user.token!);
-        this.state.setConnectedUser(user);
+        this.authService.setConnectedUser(user);
         this.messagesService.success(`Bienvenu(e) ${user.userName}`);
         this.router.navigateByUrl('/');
       })

@@ -1,6 +1,6 @@
-import {HttpInterceptor, HttpHandler, HttpRequest, HttpEvent} from "@angular/common/http";
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
 import {Injectable} from "@angular/core";
-import {catchError, Observable, of, throwError} from "rxjs";
+import {catchError, Observable, throwError} from "rxjs";
 import {Router} from "@angular/router";
 import {MessagesService} from "../services/messages.service";
 import {environment} from "../../environments/environment";

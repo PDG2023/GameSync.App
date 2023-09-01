@@ -12,7 +12,7 @@
     <div class="login-button-container">
       <div *ngIf="!mobileQuery.matches" class="spacer"></div>
       <div>
-        <ng-container *ngIf="stateService.connectedUserSubject$ | async as user else loggedOut">
+        <ng-container *ngIf="authService.connectedUserSubject$ | async as user else loggedOut">
           <button mat-button [matMenuTriggerFor]="userMenu">
             <mat-icon>account_circle</mat-icon>
             <ng-container *ngIf="!mobileQuery.matches">
@@ -26,7 +26,7 @@
             </button>
           </mat-menu>
         </ng-container>
-        <ng-template #loggedOut >
+        <ng-template #loggedOut>
           <a class="toolbar-link" routerLink="/login" mat-list-item>
             <mat-icon matListItemIcon>account_circle</mat-icon>
             <ng-container *ngIf="!mobileQuery.matches">

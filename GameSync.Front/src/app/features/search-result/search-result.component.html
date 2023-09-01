@@ -1,7 +1,7 @@
 <ng-container *ngIf="searchResult$ | async as searchResult">
   <ng-container *ngIf="searchResult.count > 0 && !(loadingService.isLoading$ | async)">
     <div class="row">
-      <app-game-item [isReadOnly]="false" class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex align-items-stretch"
+      <app-game-item class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex align-items-stretch"
                            *ngFor="let game of searchResult.items" [game]="game">
       </app-game-item>
     </div>

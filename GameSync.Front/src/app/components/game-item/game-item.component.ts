@@ -37,7 +37,7 @@ export class GameItemComponent {
         if(res){
           this.gamesService.deleteGameFromCollection(this.game!.id).subscribe(() => {
             this.itemDeleted.next(null);
-            this.messagesService.success('super, supprimé!');
+            this.messagesService.success('Jeu personnalisé supprimé.');
           });
 
         }
@@ -46,6 +46,6 @@ export class GameItemComponent {
 
 
   editMe() {
-
+    this.router.navigate(['collection/edit-game/', this.game?.id])
   }
 }

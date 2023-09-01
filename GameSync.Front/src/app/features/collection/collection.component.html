@@ -17,7 +17,7 @@
   </div>
   <div class="row">
     <app-collection-game-item class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex align-items-stretch"
-                              *ngFor="let game of myGames" [game]="game" (itemDeleted)="refresh()">
+                              *ngFor="let game of myGames" [game]="game" [isReadOnly]="false" (itemDeleted)="refresh()">
     </app-collection-game-item>
   </div>
 </ng-container>

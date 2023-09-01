@@ -23,19 +23,10 @@ export interface GameSearchResult {
   count: number;
 }
 
-export interface AddGame {
-  minPlayer: number;
-  maxPlayer: number;
-  minAge?: number;
-  description: string;
-  durationMinute?: number;
-  name: string;
-}
-
 export interface Game {
   id: number;
   name: string;
-  yearPublished: number;
+  yearPublished?: number;
   isExpansion?: boolean;
   thumbnailUrl?: string;
   imageUrl?: string;
@@ -47,10 +38,7 @@ export interface GameDetail extends Game {
   minAge?: number;
   description: string;
   durationMinute?: number;
-  imageUrl?: string;
 }
-
-
 
 export interface GameCollection extends GameDetail {
   userId: string;

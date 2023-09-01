@@ -4,7 +4,7 @@
       {{ game.name }} {{ game.yearPublished ? '(' + game.yearPublished + ')' : ''}}
     </mat-card-title>
   </mat-card-header>
-    <ng-container *ngIf="game.thumbnailUrl !== undefined else placeholder">
+  <ng-container *ngIf="game.imageUrl else placeholder">
       <img [src]="game.imageUrl" class="img-fluid">
     </ng-container>
     <ng-template #placeholder>

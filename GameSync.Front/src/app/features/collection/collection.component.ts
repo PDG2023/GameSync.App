@@ -27,7 +27,7 @@ export class CollectionComponent implements OnInit {
   }
 
   addGame() {
-    this.router.navigateByUrl('/add-game');
+    this.router.navigate(['collection/add-game']);
   }
 
   goToSearch() {

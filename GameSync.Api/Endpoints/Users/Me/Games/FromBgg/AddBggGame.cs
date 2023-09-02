@@ -12,7 +12,7 @@ public static class AddBggGame
 {
 
 
-    public class Endpoint : Endpoint<RequestToIdentifiableObject, Results<NotFound, Ok, BadRequestWhateverError>>
+    public class Endpoint : Endpoint<RequestToIdentifiableObject, Results<NotFound, Ok<Game>, BadRequestWhateverError>>
     {
         private readonly BoardGameGeekClient _client;
         private readonly GameSyncContext _context;
@@ -29,7 +29,7 @@ public static class AddBggGame
             Group<CollectionGroup>();
         }
 
-        public override async Task<Results<NotFound, Ok, BadRequestWhateverError>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
+        public override async Task<Results<NotFound, Ok<Game>, BadRequestWhateverError>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
         {
             var ids = new List<int> { req.Id };
             var games = await _client.GetBoardGamesDetailAsync(ids);
@@ -40,8 +40,12 @@ public static class AddBggGame
             }
 
             var userId = User.ClaimValue(ClaimsTypes.UserId);
+
             // check if the game has already been added 
-            var existingGame = await _context.BoardGameGeekGames.Where(g => g.UserId == userId && g.BoardGameGeekId == req.Id).FirstOrDefaultAsync();
+            var existingGame = await _context.BoardGameGeekGames
+                .Where(g => g.UserId == userId && g.BoardGameGeekId == req.Id)
+                .FirstOrDefaultAsync();
+
             if (existingGame is not null)
             {
                 AddError(Resources.Resource.GameAlreadyAdded, nameof(Resources.Resource.GameAlreadyAdded));
@@ -57,13 +61,17 @@ public static class AddBggGame
                 MinAge = game.MinAge.GetValueOrDefault(),
                 MinPlayer = game.MinPlayer.GetValueOrDefault(),
                 DurationMinute = game.DurationMinute,
+                ImageUrl = game.ImageUrl,
+                ThumbnailUrl = game.ThumbnailUrl,
+                YearPublished = game.YearPublished ?? 0,
+                IsExpansion = game.IsExpansion,
                 UserId = userId!
             };
 
             await _context.BoardGameGeekGames.AddAsync(entityGame);
             await _context.SaveChangesAsync();
 
-            return TypedResults.Ok();
+            return TypedResults.Ok(entityGame as Game);
         }
     }
 

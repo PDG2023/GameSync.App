@@ -1,5 +1,4 @@
 ﻿using GameSync.Api.CommonRequests;
-using GameSync.Api.Endpoints.Users.Me.Games.Validator;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Api.Resources;
@@ -26,7 +25,7 @@ public static class UpdateGame
     {
         public Validator()
         {
-            Include(new GameValidator());
+            Include(new GameRequestValidator());
             Include(new RequestToIdentifiableObjectValidator());
         }
     }

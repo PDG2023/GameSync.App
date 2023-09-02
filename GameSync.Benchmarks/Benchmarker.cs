@@ -34,13 +34,13 @@ public class BggClient
     
 
     [Benchmark]
-    public async Task<List<BoardGameSearchResult>> SearchCluedoNoCache()
+    public async Task<List<GamePreview>> SearchCluedoNoCache()
     {
         return (await _noCacheClient.SearchBoardGamesAsync("Clu")).ToList();
     }
 
     [Benchmark]
-    public async Task<List<BoardGameSearchResult>> SearchCluedoCache()
+    public async Task<List<GamePreview>> SearchCluedoCache()
     {
         return (await _cachedClient.SearchBoardGamesAsync("Clu")).ToList();
     }

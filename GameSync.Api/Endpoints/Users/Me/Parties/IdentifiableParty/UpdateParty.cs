@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
-namespace GameSync.Api.Endpoints.Users.Me.Parties;
+namespace GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty;
 
 public static class UpdateParty
 {

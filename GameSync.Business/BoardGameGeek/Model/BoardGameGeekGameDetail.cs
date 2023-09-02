@@ -14,4 +14,7 @@ public class BoardGameGeekGameDetail
     public string? Description { get; set; }
 
     public string? ImageUrl { get; set; }
+    public string? ThumbnailUrl { get; set; }
+    public bool IsExpansion { get; set; }
+    public int? YearPublished { get; set; }
 }

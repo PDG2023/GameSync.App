@@ -3,7 +3,7 @@ using Bogus.DataSets;
 using Duende.IdentityServer.Validation;
 using FastEndpoints;
 using GameSync.Api.CommonRequests;
-using GameSync.Api.Endpoints.Users.Me.Parties;
+using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty;
 using GameSync.Api.Persistence;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.DependencyInjection;

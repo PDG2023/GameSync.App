@@ -31,7 +31,7 @@ public static class SearchGames
     }
 
 
-    public class Endpoint : Endpoint<Request, PaginatedResult<BoardGameSearchResult>>
+    public class Endpoint : Endpoint<Request, PaginatedResult<GamePreview>>
     {
         public const string Route = "search";
 
@@ -48,11 +48,11 @@ public static class SearchGames
             Group<GamesGroup>();
         }
 
-        public override async Task<PaginatedResult<BoardGameSearchResult>> ExecuteAsync(Request req, CancellationToken ct)
+        public override async Task<PaginatedResult<GamePreview>> ExecuteAsync(Request req, CancellationToken ct)
         {
             var collection = await _client.SearchBoardGamesAsync(req.Query);
             var request = HttpContext.Request;
-            return new PaginatedResult<BoardGameSearchResult>(
+            return new PaginatedResult<GamePreview>(
                 collection,
                 req.PageSize,
                 req.Page,

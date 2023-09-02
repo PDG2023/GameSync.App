@@ -40,7 +40,7 @@ public class BoardGameGeekClient
     }
 
 
-    public async Task<IEnumerable<BoardGameSearchResult>> SearchBoardGamesAsync(string term)
+    public async Task<IEnumerable<GamePreview>> SearchBoardGamesAsync(string term)
     {
         var body = await Client.GetStreamAsync($"search?type={Both}&query={term}");
 
@@ -52,7 +52,7 @@ public class BoardGameGeekClient
         return boardGames.Zip(searchResults).Select(pair =>
         {
             var (boardGame, searchResult) = pair;
-            return new BoardGameSearchResult
+            return new GamePreview
             {
                 Id = int.Parse(searchResult.Id),
                 Name = searchResult.Name.Value,

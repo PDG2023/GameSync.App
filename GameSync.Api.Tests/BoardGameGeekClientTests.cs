@@ -14,7 +14,7 @@ public class BoardGameGeekClientTests
 
         var result = await _client.SearchBoardGamesAsync("Vimto Cluedo");
 
-        var expected = new BoardGameSearchResult
+        var expected = new GamePreview
         {
             Id = 72917,
             Name = "Vimto Cluedo",

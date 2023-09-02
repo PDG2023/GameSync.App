@@ -26,13 +26,13 @@ public class GameSearchTests
 
         var response = await client.GetAsync("/api/games/search?query=Vimto Cluedo&pageSize=10&page=0");
         await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
-        var searchResult = await response.Content.ReadFromJsonAsync<PaginatedResult<BoardGameSearchResult>>();
+        var searchResult = await response.Content.ReadFromJsonAsync<PaginatedResult<GamePreview>>();
 
         Assert.Null(searchResult.PreviousPage);
         Assert.Null(searchResult.NextPage);
 
         var actual = Assert.Single(searchResult!.Items);
-        var expected = new BoardGameSearchResult
+        var expected = new GamePreview
         {
             Id = 72917,
             Name = "Vimto Cluedo",

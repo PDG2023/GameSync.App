@@ -1,6 +1,6 @@
 ﻿namespace GameSync.Business.BoardGameGeek.Model;
 
-public class BoardGameSearchResult
+public class GamePreview
 {
     public required int YearPublished { get; init; }
     public required string Name { get; init; }

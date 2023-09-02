@@ -6,7 +6,7 @@ public class PartiesGroup : SubGroup<MeGroup>
     {
         Configure("parties", x => {
             x.DontAutoTag();
-            x.Options(x => x.WithTags("User's parties"));
+            x.Options(x => x.WithTags("Parties"));
         });
     }
 }

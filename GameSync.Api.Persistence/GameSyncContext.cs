@@ -1,5 +1,4 @@
 ﻿using GameSync.Api.Persistence.Entities;
-using GameSync.Api.Persistence.Migrations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace GameSync.Api.Persistence;

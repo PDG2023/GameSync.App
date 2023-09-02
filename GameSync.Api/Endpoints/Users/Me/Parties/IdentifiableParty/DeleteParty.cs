@@ -3,7 +3,7 @@ using GameSync.Api.Persistence;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameSync.Api.Endpoints.Users.Me.Parties;
+namespace GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty;
 
 public static class DeleteParty
 {

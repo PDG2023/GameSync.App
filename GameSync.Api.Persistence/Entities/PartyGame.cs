@@ -7,10 +7,14 @@ namespace GameSync.Api.Persistence.Entities;
 [PrimaryKey(nameof(GameId), nameof(PartyId))]
 public class PartyGame
 {
+    [ForeignKey(nameof(GameId))]
     public int GameId { get; set; }
+
+    [ForeignKey(nameof(PartyId))]
     public int PartyId { get; set; }
     public virtual ICollection<Vote> Votes { get; set; } = new List<Vote>();
     public virtual Game Game { get; set; } = null!;
+    public virtual Party Party { get; set;} = null!;
 }
 
 [Owned]

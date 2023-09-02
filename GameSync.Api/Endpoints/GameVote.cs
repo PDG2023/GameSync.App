@@ -53,14 +53,17 @@ public static class GameVote
         {
             var userId = User.ClaimValue(ClaimsTypes.UserId);
 
-            if (userId is null && req.InvitationToken is null)
+            if (userId is null)
             {
-                return TypedResults.NotFound();
+                if (req.InvitationToken is null)
+                    return TypedResults.NotFound();
+
+                if (req.UserName is null)
+                    return TypedResults.BadRequest();
             }
 
             var partyGameSearch = _ctx.PartiesGames
-                .Where(pg => pg.PartyId == req.PartyId 
-                            && pg.GameId == req.GameId 
+                .Where(pg => pg.GameId == req.GameId 
                             && (pg.Party.UserId == userId || pg.Party.InvitationToken == req.InvitationToken));
 
             var partyGame = await partyGameSearch.FirstOrDefaultAsync();
@@ -73,11 +76,6 @@ public static class GameVote
             Vote? voteOfUser;
             if (userId is null) // anonymous
             {
-                if (req.UserName is null)
-                {
-                    return TypedResults.BadRequest();
-                }
-
                 voteOfUser = partyGame.Votes?.FirstOrDefault(v => v.UserName == req.UserName);
             }
             else
@@ -101,6 +99,11 @@ public static class GameVote
             }
             else
             {
+                if (voteOfUser.VoteYes == req.VoteYes)
+                {
+                    return TypedResults.Ok();
+                }
+
                 voteOfUser.VoteYes = req.VoteYes;
             }
 

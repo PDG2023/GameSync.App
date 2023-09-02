@@ -49,7 +49,11 @@ public class GetGameTests
             MaxPlayer = 6,
             MinAge = 8,
             MinPlayer = 3,
-            Name = "Matschig"
+            Name = "Matschig",
+            IsExpansion = false,
+            ThumbnailUrl = "https://cf.geekdo-images.com/KQTDwFXMTsDRCRIvHybXaQ__thumb/img/-tVDyCw7Gl3CUOyN99bJ8L6t2eg=/fit-in/200x150/filters:strip_icc()/pic1197487.jpg",
+            YearPublished = 1998
+
         };
         Assert.Equivalent(expected, result);
     }

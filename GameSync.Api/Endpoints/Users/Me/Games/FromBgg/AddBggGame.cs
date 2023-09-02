@@ -40,8 +40,12 @@ public static class AddBggGame
             }
 
             var userId = User.ClaimValue(ClaimsTypes.UserId);
+
             // check if the game has already been added 
-            var existingGame = await _context.BoardGameGeekGames.Where(g => g.UserId == userId && g.BoardGameGeekId == req.Id).FirstOrDefaultAsync();
+            var existingGame = await _context.BoardGameGeekGames
+                .Where(g => g.UserId == userId && g.BoardGameGeekId == req.Id)
+                .FirstOrDefaultAsync();
+
             if (existingGame is not null)
             {
                 AddError(Resources.Resource.GameAlreadyAdded, nameof(Resources.Resource.GameAlreadyAdded));
@@ -57,6 +61,10 @@ public static class AddBggGame
                 MinAge = game.MinAge.GetValueOrDefault(),
                 MinPlayer = game.MinPlayer.GetValueOrDefault(),
                 DurationMinute = game.DurationMinute,
+                ImageUrl = game.ImageUrl,
+                ThumbnailUrl = game.ThumbnailUrl,
+                YearPublished = game.YearPublished ?? 0,
+                IsExpansion = game.IsExpansion,
                 UserId = userId!
             };
 

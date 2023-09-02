@@ -60,6 +60,9 @@ namespace GameSync.Business.BoardGamesGeek.Schemas.Thing
         
         [XmlElement("thumbnail")]
         public string Thumbnail { get; set; }
+
+        [XmlAttribute("type")]
+        public string Type { get; set; }
     }
 
     [Serializable]

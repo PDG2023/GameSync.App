@@ -85,6 +85,9 @@ public class BoardGameGeekClient
             DurationMinute = thing.PlayingTime?.ValueAsInt,
             MinAge = thing.MinAge?.ValueAsInt,
             ImageUrl = thing.Image,
+            ThumbnailUrl = thing.Thumbnail,
+            YearPublished = thing.YearPublished?.ValueAsInt,
+            IsExpansion = (thing.Type ?? BoardGameType) == ExpansionType,
             Name = thing.Names?.FirstOrDefault(x => x.Type == "primary")?.Value ?? thing.Names?.FirstOrDefault()?.Value
         });
     }

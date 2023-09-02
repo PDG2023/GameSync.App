@@ -75,7 +75,7 @@ public class SignInTests
         var errors = await response.Content.ReadFromJsonAsync<JsonObject>(_failedSignInOpt);
         Assert.NotNull(errors?["errors"]);
         var error = Assert.Single(errors["errors"]!.AsArray());
-        Assert.Equal("ConfirmationNeeded", error!["code"]!.ToString());
+        Assert.Equal("EmailMustBeConfirmed", error!["code"]!.ToString());
     }
 
     [Fact]

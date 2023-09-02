@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using GameSync.Api.CommonRequests;
+using GameSync.Api.Resources;
 
 namespace GameSync.Api.Endpoints.Users;
 
@@ -51,8 +52,7 @@ public static class SignIn
             {
                 if (signInResult.IsNotAllowed)
                 {
-                    // TODO : Translate
-                    AddError(r => r.Email, "The email needs to be confirmed", "ConfirmationNeeded");
+                    AddError(r => r.Email, Resource.EmailMustBeConfirmed, nameof(Resource.EmailMustBeConfirmed));
                 }
                 else
                 {
@@ -83,8 +83,7 @@ public static class SignIn
 
         private void AddNotFoundCredentialsErrors()
         {
-            // TODO : Translate
-            AddError(r => r.Email, "Nothing has been found for the given credentials", "NotFound");
+            AddError(r => r.Email, Resource.UnknownUser, nameof(Resource.UnknownUser));
         }
     }
 

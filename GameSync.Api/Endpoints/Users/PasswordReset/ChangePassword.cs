@@ -3,6 +3,8 @@ using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using GameSync.Api.CommonRequests;
+using GameSync.Api.Extensions;
+using GameSync.Api.Resources;
 
 namespace GameSync.Api.Endpoints.Users.PasswordReset;
 
@@ -19,11 +21,14 @@ public static class ChangePassword
         public Validator()
         {
             Include(new RequestWithCredentialsValidator());
-            RuleFor(x => x.Token).NotEmpty();
+            RuleFor(x => x.Token)
+                .NotEmpty()
+                .WithResourceError(() => Resource.InvalidToken);
+
             RuleFor(x => x.PasswordRepetition)
                 .NotEmpty()
                 .Must((req, x) => req.Password == x)
-                .WithMessage(Resources.Resource.PasswordDontMatch);
+                .WithResourceError(() => Resource.PasswordDontMatch);
         }
     }
 

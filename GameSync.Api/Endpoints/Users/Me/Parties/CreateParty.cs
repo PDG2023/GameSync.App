@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
+using GameSync.Api.Extensions;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
+using GameSync.Api.Resources;
 using System.Web;
 
 namespace GameSync.Api.Endpoints.Users.Me.Parties;
@@ -20,11 +22,13 @@ public static class CreateParty
     {
         public Validator()
         {
-            RuleFor(x => x.Name).NotEmpty();
+            RuleFor(x => x.Name)
+                .NotEmpty()
+                .WithResourceError(() => Resource.InvalidName);
+
             RuleFor(x => x.DateTime)
                 .GreaterThan(DateTime.Now)
-                .WithMessage(Resources.Resource.DateTimeMustBeAfterNow)
-                .WithErrorCode(nameof(Resources.Resource.DateTimeMustBeAfterNow));
+                .WithResourceError(() => Resource.DateTimeMustBeAfterNow);
         }
     }
 

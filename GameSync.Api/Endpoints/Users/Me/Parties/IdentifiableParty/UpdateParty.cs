@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
 using GameSync.Api.CommonRequests;
+using GameSync.Api.Extensions;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
+using GameSync.Api.Resources;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -23,12 +25,14 @@ public static class UpdateParty
     {
         public Validator()
         {
-            RuleFor(x => x.Name).Must(x => x is null || !string.IsNullOrWhiteSpace(x));
+            RuleFor(x => x.Name)
+                .Must(x => x is null || !string.IsNullOrWhiteSpace(x))
+                .WithObjectDoesNotExistError();
+
             RuleFor(x => x.DateTime)
                 .GreaterThan(DateTime.Now)
                 .When(x => x is not null)
-                .WithMessage(Resources.Resource.DateTimeMustBeAfterNow)
-                .WithErrorCode(nameof(Resources.Resource.DateTimeMustBeAfterNow));
+                .WithResourceError(() => Resource.DateTimeMustBeAfterNow);
 
             Include(new RequestToIdentifiableObjectValidator());
         }

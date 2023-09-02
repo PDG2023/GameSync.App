@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
+using GameSync.Api.Extensions;
 using GameSync.Api.Persistence.Entities;
+using GameSync.Api.Resources;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
@@ -23,8 +25,12 @@ public static class Confirm
     {
         public Validator()
         {
-            RuleFor(x => x.ConfirmationToken).NotEmpty();
-            RuleFor(x => x.Email).EmailAddress();
+            RuleFor(x => x.ConfirmationToken)
+                .NotEmpty()
+                .WithResourceError(() => Resource.InvalidToken);
+            RuleFor(x => x.Email)
+                .EmailAddress()
+                .WithResourceError(() => Resource.InvalidEmail);
         }
     }
 

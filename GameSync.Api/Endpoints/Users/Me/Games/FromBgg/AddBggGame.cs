@@ -12,7 +12,7 @@ public static class AddBggGame
 {
 
 
-    public class Endpoint : Endpoint<RequestToIdentifiableObject, Results<NotFound, Ok, BadRequestWhateverError>>
+    public class Endpoint : Endpoint<RequestToIdentifiableObject, Results<NotFound, Ok<Game>, BadRequestWhateverError>>
     {
         private readonly BoardGameGeekClient _client;
         private readonly GameSyncContext _context;
@@ -29,7 +29,7 @@ public static class AddBggGame
             Group<CollectionGroup>();
         }
 
-        public override async Task<Results<NotFound, Ok, BadRequestWhateverError>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
+        public override async Task<Results<NotFound, Ok<Game>, BadRequestWhateverError>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
         {
             var ids = new List<int> { req.Id };
             var games = await _client.GetBoardGamesDetailAsync(ids);
@@ -71,7 +71,7 @@ public static class AddBggGame
             await _context.BoardGameGeekGames.AddAsync(entityGame);
             await _context.SaveChangesAsync();
 
-            return TypedResults.Ok();
+            return TypedResults.Ok(entityGame as Game);
         }
     }
 

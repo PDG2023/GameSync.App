@@ -40,10 +40,6 @@ export interface GameDetail extends Game {
   durationMinute?: number;
 }
 
-export interface GameCollection extends GameDetail {
-  userId: string;
-}
-
 export interface BaseParty {
   location: string;
   name: string;

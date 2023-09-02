@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {GameCollection, GameDetail, GameSearchRequest, GameSearchResult} from "../models/models";
+import {Game, GameDetail, GameSearchRequest, GameSearchResult} from "../models/models";
 import {environment} from "../../environments/environment";
 
 @Injectable({
@@ -44,7 +44,7 @@ export class GamesService {
     return this.httpClient.delete(`${environment.apiUrl}/users/me/games/${id}`);
   }
 
-  getMyGames(): Observable<GameCollection[]> {
-    return this.httpClient.get<GameCollection[]>(`${environment.apiUrl}/users/me/games`);
+  getMyGames(): Observable<Game[]> {
+    return this.httpClient.get<Game[]>(`${environment.apiUrl}/users/me/games`);
   }
 }

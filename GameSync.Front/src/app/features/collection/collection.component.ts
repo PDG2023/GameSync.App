@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {GamesService} from "../../services/games.service";
-import {GameCollection} from "../../models/models";
+import {Game} from "../../models/models";
 import {Router} from "@angular/router";
 
 @Component({
@@ -10,7 +10,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./collection.component.scss']
 })
 export class CollectionComponent implements OnInit {
-  myGames$: Observable<GameCollection[]> = of();
+  myGames$: Observable<Game[]> = of();
 
 
   constructor(

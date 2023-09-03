@@ -29,11 +29,6 @@ export class GameDetailComponent implements OnInit {
     this.game$ = this.route.url.pipe(
       switchMap(params => {
         this.isCustom = params[0].path === 'custom';
-        let res = this.isCustom ?
-        this.gamesService.getCustomGameDetail(params[1].path)
-        : this.gamesService.getGameDetail(params[0].path);
-        res.subscribe(g => console.log(g));
-        console.log(params[1].path);
         return this.isCustom ?
           this.gamesService.getCustomGameDetail(params[1].path)
           : this.gamesService.getGameDetail(params[0].path)

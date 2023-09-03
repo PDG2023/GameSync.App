@@ -44,6 +44,11 @@ export interface GameCollectionItem extends Game {
   isCustom?: boolean;
 }
 
+export interface GameDetailResult {
+  game: GameDetail;
+  inCollection: boolean;
+}
+
 export interface BaseParty {
   location: string;
   name: string;

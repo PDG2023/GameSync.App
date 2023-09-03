@@ -22,6 +22,7 @@ export class CollectionGameItemComponent extends GameItemComponent {
   }
 
   override navigateToDetails() {
-    this.router.navigate(['/games/custom', this.game?.id])
+    let routeSuffix = this.game?.isCustom ? "custom" : "";
+    this.router.navigate([`/games/${routeSuffix}`, this.game?.id])
   }
 }

@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {Game, GameCollectionItem, GameDetail, GameSearchRequest, GameSearchResult} from "../models/models";
+import {GameDetailResult, GameCollectionItem, GameDetail, GameSearchRequest, GameSearchResult} from "../models/models";
 import {environment} from "../../environments/environment";
 
 @Injectable({
@@ -14,8 +14,8 @@ export class GamesService {
   ) {
  }
 
-  getGameDetail(gameId: string): Observable<GameDetail> {
-    return this.httpClient.get<GameDetail>(`${environment.apiUrl}/games/${gameId}`);
+  getGameDetail(gameId: string): Observable<GameDetailResult> {
+    return this.httpClient.get<GameDetailResult>(`${environment.apiUrl}/games/${gameId}`);
   }
 
   getCustomGameDetail(gameId: number | string): Observable<GameDetail> {

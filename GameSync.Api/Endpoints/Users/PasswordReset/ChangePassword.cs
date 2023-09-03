@@ -15,7 +15,7 @@ public static class ChangePassword
 {
     public class Request : RequestWithCredentials
     {
-        public required string PasswordRepetition { get; init; }
+        public required string ConfirmPassword { get; init; }
         public required string Token { get; init; }
     }
 
@@ -28,7 +28,7 @@ public static class ChangePassword
                 .NotEmpty()
                 .WithResourceError(() => Resource.InvalidToken);
 
-            RuleFor(x => x.PasswordRepetition)
+            RuleFor(x => x.ConfirmPassword)
                 .NotEmpty()
                 .Must((req, x) => req.Password == x)
                 .WithResourceError(() => Resource.PasswordDontMatch);

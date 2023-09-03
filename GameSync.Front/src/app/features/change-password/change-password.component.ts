@@ -36,13 +36,11 @@ export class ChangePasswordComponent implements OnInit {
     if (!this.changePasswordForm.valid) {
       return;
     }
-    console.log(this.email);
-    this.loginService.changePassword(
-      this.email,
-      this.token,
-      this.changePasswordForm.controls['password'].value,
-      this.changePasswordForm.controls['confirmPassword'].value
-    ).subscribe(() => {
+    this.loginService.changePassword( {
+      ...this.changePasswordForm.value,
+      email: this.email,
+      token: this.token
+    }).subscribe(() => {
       this.messagesService.success("Votre mot de passe a été correctement changé. Veuillez vous connecter.");
       this.router.navigate(["/login"]);
     })
@@ -56,7 +54,6 @@ export class ChangePasswordComponent implements OnInit {
       if (!this.token || !this.email) {
         this.messagesService.error("Le token ou le mail sont manquants");
       }
-
     })
   }
 }

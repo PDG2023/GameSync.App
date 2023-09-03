@@ -36,7 +36,7 @@ public class ChangePasswordTests
         {
             Email = mail,
             Password = password,
-            PasswordRepetition = password,
+            ConfirmPassword = password,
             Token = token
         };
         // act
@@ -58,7 +58,7 @@ public class ChangePasswordTests
         {
             Email = mail,
             Password = password,
-            PasswordRepetition = password,
+            ConfirmPassword = password,
             Token = "..."
         };
 

@@ -13,7 +13,7 @@ public static class GameVote
 
     public class Request
     {
-        public int GameId { get; init; }
+        public int PartyGameId { get; set; } 
 
         public int? PartyId { get; init; }
         public string? InvitationToken { get; init; }
@@ -27,7 +27,7 @@ public static class GameVote
     {
         public Validator()
         {
-            RuleFor(r => r.GameId)
+            RuleFor(r => r.PartyGameId)
                 .GreaterThan(0)
                 .WithObjectDoesNotExistError();
 
@@ -49,7 +49,7 @@ public static class GameVote
 
         public override void Configure()
         {
-            Put("users/me/parties/{PartyId}/games/{GameId}/vote", "parties/{InvitationToken}/games/{GameId}/vote");
+            Put("users/me/parties/{PartyId}/games/{PartyGameId}/vote", "parties/{InvitationToken}/games/{PartyGameId}/vote");
             DontAutoTag();
             Options(x => x.WithTags("Vote"));
             AllowAnonymous();
@@ -69,11 +69,8 @@ public static class GameVote
                     return TypedResults.BadRequest();
             }
 
-            var partyGameSearch = _ctx.PartiesGames
-                .Where(pg => pg.GameId == req.GameId 
-                            && (pg.Party.UserId == userId || pg.Party.InvitationToken == req.InvitationToken));
-
-            var partyGame = await partyGameSearch.FirstOrDefaultAsync();
+            var partyGame = await _ctx.PartiesGames
+                .FirstOrDefaultAsync(pg => pg.Id == req.PartyGameId && (pg.Party.UserId == userId || pg.Party.InvitationToken == req.InvitationToken));
 
             if (partyGame is null)
             {

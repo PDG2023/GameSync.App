@@ -1,4 +1,5 @@
 ﻿using GameSync.Api.CommonRequests;
+using GameSync.Api.Endpoints.Games;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Api.Persistence.Entities.Games;
@@ -27,6 +28,7 @@ public static class GetParty
 
         public class GameVoteInfo
         {
+            public required int Id { get; set; }
             public string? GameImageUrl { get; init; }
             public string? GameName { get; init; }
             public IEnumerable<string>? WhoVotedYes { get; init; }
@@ -75,13 +77,13 @@ public static class GetParty
                     DateTime = p.DateTime,
                     Location = p.Location,
                     Name = p.Name,
-                    GamesVoteInfo = p.Games == null ? null : p.Games.Select(g => new Response.GameVoteInfo
+                    GamesVoteInfo = p.Games == null ? null : p.Games.Select(pg => new Response.GameVoteInfo
                     {
-
-                        GameImageUrl = g.Game is UserBoardGameGeekGame ? ((UserBoardGameGeekGame)g.Game).BoardGameGeekGame.ImageUrl : ((CustomGame)g.Game).ImageUrl,
-                        GameName = g.Game is UserBoardGameGeekGame ? ((UserBoardGameGeekGame)g.Game).BoardGameGeekGame.Name : ((CustomGame)g.Game).Name,
-                        WhoVotedNo = g.Votes == null ? null : g.Votes.Where(g => g.VoteYes == false).Select(v => v.UserId == null ? v.UserName : v.User.UserName).ToArray(),
-                        WhoVotedYes = g.Votes == null ? null : g.Votes.Where(g => g.VoteYes == true).Select(v => v.UserId == null ? v.UserName : v.User.UserName).ToArray(),
+                        Id = pg.Id,
+                        GameImageUrl = pg is PartyBoardGameGeekGame ? BggGame(pg).ImageUrl : CustomGame(pg).ImageUrl,
+                        GameName = pg is PartyCustomGame ? BggGame(pg).Name : CustomGame(pg).Name,
+                        WhoVotedNo = pg.Votes == null ? null : pg.Votes.Where(g => g.VoteYes == false).Select(v => v.UserId == null ? v.UserName : v.User.UserName).ToArray(),
+                        WhoVotedYes = pg.Votes == null ? null : pg.Votes.Where(g => g.VoteYes == true).Select(v => v.UserId == null ? v.UserName : v.User.UserName).ToArray(),
                     }).ToArray()
                 });
 
@@ -93,5 +95,16 @@ public static class GetParty
 
             return TypedResults.Ok(res);
         }
+
+        private static BoardGameGeekGame BggGame(PartyGame pg)
+        {
+            return ((PartyBoardGameGeekGame)pg).BoardGameGeekGame;
+        }
+
+        private static CustomGame CustomGame(PartyGame pg)
+        {
+            return ((PartyCustomGame)pg).Game;
+        }
+
     }
 }

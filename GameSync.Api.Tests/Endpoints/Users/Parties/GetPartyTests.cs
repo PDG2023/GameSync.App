@@ -4,7 +4,9 @@ using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Net;
+using Tests.Extensions;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Tests.Endpoints.Users.Parties;
 
@@ -12,11 +14,13 @@ namespace Tests.Endpoints.Users.Parties;
 public class GetPartyAsAnonymousTests
 {
     private readonly GameSyncAppFactory _factory;
+    private readonly ITestOutputHelper _output;
     private readonly HttpClient _client;
 
-    public GetPartyAsAnonymousTests(GameSyncAppFactory factory)
+    public GetPartyAsAnonymousTests(GameSyncAppFactory factory, ITestOutputHelper output)
     {
         _factory = factory;
+        _output = output;
         _client = factory.CreateClient();
     }
 
@@ -73,8 +77,11 @@ public class GetPartyAsAnonymousTests
 [Collection(GameSyncAppFactoryFixture.Name)]
 public class GetPartyTests : TestsWithLoggedUser
 {
-    public GetPartyTests(GameSyncAppFactory factory) : base(factory)
+    private readonly ITestOutputHelper _output;
+
+    public GetPartyTests(GameSyncAppFactory factory, ITestOutputHelper output) : base(factory)
     {
+        _output = output;
     }
 
     [Fact]
@@ -127,7 +134,7 @@ public class GetPartyTests : TestsWithLoggedUser
         var (response, result) = await DoReq<GetParty.Response>(party.Id);
 
         // assert
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
         Assert.NotNull(result);
         var expected = new
         {

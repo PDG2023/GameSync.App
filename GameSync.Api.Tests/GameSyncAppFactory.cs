@@ -31,7 +31,6 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
 
     private readonly PostgreSqlContainer _postgreSqlContainer;
-
     public GameSyncAppFactory()
     {
 
@@ -69,15 +68,11 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         return game;
     }
 
-    public async Task<PartyGame> CreatePartyGameWithDependencyAsync(List<Vote>? votes = null, string? invitationToken = null)
+    public async Task<PartyCustomGame> CreatePartyGameWithDependencyAsync(List<Vote>? votes = null, string? invitationToken = null)
     {
         var party = await CreatePartyOfAnotherUserAsync(invitationToken);
         var game = await CreateTestGameAsync(party.UserId);
-        await CreatePartyGameAsync(party.Id, game.Id, votes);
-
-
-
-        return new PartyGame { GameId = game.Id, PartyId = party.Id };
+        return await CreatePartyGameAsync(party.Id, game.Id, votes);
     }
 
     public async Task CreateUnconfirmedUserAsync(string mail, string username, string password)
@@ -132,29 +127,18 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         InvitationToken = invitationToken
     });
 
-    public async Task CreatePartyGameAsync(int partyId, int gameId, List<Vote>? votes = null)
+    public async Task<PartyCustomGame> CreatePartyGameAsync(int partyId, int gameId, List<Vote>? votes = null)
     {
         using var scope = Services.CreateScope();
-        var ctx = scope.Resolve<GameSyncContext>();
-        await ctx.PartiesGames.AddAsync(new PartyGame
+        var manager = scope.Resolve<GameSyncContext>();
+        var entity = await manager.PartyCustomGames.AddAsync(new PartyCustomGame
         {
             GameId = gameId,
             PartyId = partyId,
             Votes = votes
         });
-        await ctx.SaveChangesAsync();
-    }
-
-
-    public async Task<PartyGameRequest> GetRequestToNonExistingPartyGameAsync(string userId)
-    {
-        var party = await CreateDefaultPartyAsync(userId);
-        var game = await CreateTestGameAsync(userId);
-        return new PartyGameRequest
-        {
-            GameId = game.Id,
-            PartyId = party.Id
-        };
+        await manager.SaveChangesAsync();
+        return entity.Entity;
     }
 
     public async Task InitializeAsync() => await _postgreSqlContainer.StartAsync();

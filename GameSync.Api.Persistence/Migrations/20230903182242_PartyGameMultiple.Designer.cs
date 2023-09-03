@@ -3,6 +3,7 @@ using System;
 using GameSync.Api.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GameSync.Api.Persistence.Migrations
 {
     [DbContext(typeof(GameSyncContext))]
-    partial class GameSyncContextModelSnapshot : ModelSnapshot
+    [Migration("20230903182242_PartyGameMultiple")]
+    partial class PartyGameMultiple
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -405,9 +408,6 @@ namespace GameSync.Api.Persistence.Migrations
 
                     b.HasIndex("BoardGameGeekId");
 
-                    b.HasIndex("PartyId", "BoardGameGeekId")
-                        .IsUnique();
-
                     b.HasDiscriminator().HasValue("PartyBoardGameGeekGame");
                 });
 
@@ -419,9 +419,6 @@ namespace GameSync.Api.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.HasIndex("GameId");
-
-                    b.HasIndex("PartyId", "GameId")
-                        .IsUnique();
 
                     b.HasDiscriminator().HasValue("PartyCustomGame");
                 });

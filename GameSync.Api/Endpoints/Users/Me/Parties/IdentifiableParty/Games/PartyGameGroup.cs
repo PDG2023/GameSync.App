@@ -4,7 +4,7 @@ public class PartyGameGroup : SubGroup<PartiesGroup>
 {
     public PartyGameGroup()
     {
-        Configure("{PartyId}/games/{GameId}", x =>
+        Configure("{PartyId}/games/{PartyGameId}", x =>
         {
             x.DontAutoTag();
             x.Options(builder => builder.WithTags("Party's games"));

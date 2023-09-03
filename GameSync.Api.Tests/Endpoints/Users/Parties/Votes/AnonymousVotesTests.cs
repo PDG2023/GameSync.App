@@ -33,7 +33,7 @@ public class AnonymousVotesTests
         var pg = await _factory.CreatePartyGameWithDependencyAsync();
 
         // act
-        var (response, _) = await DoReq<Ok>(pg.PartyId, pg.GameId, _username, true);
+        var (response, _) = await DoReq<Ok>(pg.PartyId, _username, false, string.Empty);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -46,8 +46,8 @@ public class AnonymousVotesTests
         var pg = await _factory.CreatePartyGameWithDependencyAsync(invitationToken: _token);
 
         // act
-        var (response, _) = await DoReq<Ok>(pg.PartyId, pg.GameId, _username, true, _token);
-        var vote = await GetVote(pg.PartyId, pg.GameId, _username);
+        var (response, _) = await DoReq<Ok>(pg.Id, _username, true, _token);
+        var vote = await GetVote(pg.Id, _username);
 
         // assert
         response.EnsureSuccessStatusCode();
@@ -65,8 +65,8 @@ public class AnonymousVotesTests
         var pg = await _factory.CreatePartyGameWithDependencyAsync(new List<Vote> { vote }, _token);
 
         // act
-        var (response, _) = await DoReq<Ok>(pg.PartyId, pg.GameId, _username, false, _token);
-        var voteResult = await GetVote(pg.PartyId, pg.GameId, _username);
+        var (response, _) = await DoReq<Ok>(pg.Id, _username, false, _token);
+        var voteResult = await GetVote(pg.Id, _username);
 
         // assert
         response.EnsureSuccessStatusCode();
@@ -84,9 +84,9 @@ public class AnonymousVotesTests
         var pg = await _factory.CreatePartyGameWithDependencyAsync(new List<Vote> { vote }, _token);
 
         // act
-        var (response, _) = await DoReq<Ok>(pg.PartyId, pg.GameId, _username, false, _token);
-        var voteResult = await GetVote(pg.PartyId, pg.GameId, _username);
-        var otherUserVoteResult = await GetVote(pg.PartyId, pg.GameId, otherUserName);
+        var (response, _) = await DoReq<Ok>(pg.Id, _username, false, _token);
+        var voteResult = await GetVote(pg.Id, _username);
+        var otherUserVoteResult = await GetVote(pg.Id, otherUserName);
 
         // assert
         response.EnsureSuccessStatusCode();
@@ -101,26 +101,25 @@ public class AnonymousVotesTests
     }
 
 
-    private async Task<Vote?> GetVote(int partyId, int gameId, string username)
+    private async Task<Vote?> GetVote(int partyGameId, string username)
     {
         using var scope = _factory.Services.CreateScope();
         var ctx = scope.Resolve<GameSyncContext>();
-        var pg = await ctx.PartiesGames.AsNoTracking().FirstAsync(pg => pg.PartyId == partyId && pg.GameId == gameId);
+        var pg = await ctx.PartiesGames.AsNoTracking().FirstAsync(pg => pg.Id == partyGameId);
         return pg
             .Votes?
             .FirstOrDefault(r => r.UserName == username);
 
     }
 
-    private async Task<TestResult<TRes>> DoReq<TRes>(int partyId, int gameId, string username, bool? voteYes, string? token = null)
+    private async Task<TestResult<TRes>> DoReq<TRes>(int id, string username, bool? voteYes, string? token = null)
     {
         var voteReq = new GameVote.Request
         {
-            GameId = gameId,
-            PartyId = partyId,
+            PartyGameId = id,
             UserName = username,
             VoteYes = voteYes,
-            InvitationToken = token
+            InvitationToken = token,
         };
 
         return await _client.PUTAsync<GameVote.Endpoint, GameVote.Request, TRes>(voteReq);

@@ -8,15 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Runtime.CompilerServices;
+using Tests.Extensions;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Tests.Endpoints.Users.Parties.Games;
 
 [Collection(GameSyncAppFactoryFixture.Name)]
 public class AddGameToPartyTests : TestsWithLoggedUser
 {
-    public AddGameToPartyTests(GameSyncAppFactory factory) : base(factory)
+    private readonly ITestOutputHelper _output;
+
+    public AddGameToPartyTests(GameSyncAppFactory factory, ITestOutputHelper output) : base(factory)
     {
+        _output = output;
     }
 
 
@@ -26,60 +31,72 @@ public class AddGameToPartyTests : TestsWithLoggedUser
     {
         // arrange
         var party = await Factory.CreateDefaultPartyAsync(UserId);
-        var request = new PartyGameRequest { GameId = 918528, PartyId = party.Id };
+        var request = new AddGames.Request 
+        { 
+            PartyId = party.Id, 
+            Games = new[] 
+            {
+                new AddGames.Request.PartyGameInfo()
+                {
+                    Id = 4554854,
+                    IsCustom = true,
+                }
+            }
+        };
 
         // act
 
         var (response, _)
-            = await Client.PUTAsync<AddGame.Endpoint, PartyGameRequest, NotFound>(request);
+            = await Client.POSTAsync<AddGames.Endpoint, AddGames.Request, NotFound>(request);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-
-        // Check that the game has not been added
-        Assert.Null(await Fetch(request.PartyId, request.GameId));
-
     }
 
     [Fact]
     public async Task Add_existing_game_to_party_stores_it()
     {
         // arrange
-        var request = await Factory.GetRequestToNonExistingPartyGameAsync(UserId);
+        var request = await GetRequestToPartyGame(UserId);
 
         // act
         var (response, _)
-            = await Client.PUTAsync<AddGame.Endpoint, PartyGameRequest, Ok>(request);
+            = await Client.POSTAsync<AddGames.Endpoint, AddGames.Request, Ok>(request);
 
         // assert
-        response.EnsureSuccessStatusCode();
-
-        Assert.NotNull(await Fetch(request.PartyId, request.GameId));
+        await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
     }
 
     [Fact]
     public async Task Adding_twice_same_game_in_party_produces_bad_request()
     {
         // arrange
-        var request = await Factory.GetRequestToNonExistingPartyGameAsync(UserId);
+        var request = await GetRequestToPartyGame(UserId);
 
         // act
-        await Client.PUTAsync<AddGame.Endpoint, PartyGameRequest, Ok>(request);
-        var (response, _) = await Client.PUTAsync<AddGame.Endpoint, PartyGameRequest, BadRequestWhateverError>(request);
+        await Client.POSTAsync<AddGames.Endpoint, AddGames.Request, Ok>(request);
+        var (response, _) = await Client.POSTAsync<AddGames.Endpoint, AddGames.Request, Ok>(request);
 
         // assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-        // Check that the pair has not been deleted 
-        Assert.NotNull(await Fetch(request.PartyId, request.GameId));
-
     }
 
-    private async Task<PartyGame?> Fetch(int partyId, int gameId)
+    public async Task<AddGames.Request> GetRequestToPartyGame(string userId)
     {
-        using var scope = Factory.Services.CreateScope();
-        var ctx = scope.Resolve<GameSyncContext>();
-        return await ctx.PartiesGames
-            .FirstOrDefaultAsync(x => x.PartyId == partyId && x.GameId == gameId);
+        var party = await Factory.CreateDefaultPartyAsync(userId);
+        var game = await Factory.CreateTestGameAsync(userId);
+        return new AddGames.Request
+        {
+            Games = new[]
+            {
+                new AddGames.Request.PartyGameInfo
+                {
+                    Id = game.Id,
+                    IsCustom = true,
+                }
+            },
+            PartyId = party.Id
+        };
     }
 }

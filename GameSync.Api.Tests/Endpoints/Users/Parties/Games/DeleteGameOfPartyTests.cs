@@ -1,4 +1,5 @@
 ﻿using FastEndpoints;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
@@ -21,15 +22,15 @@ public class DeleteGameOfPartyTests : TestsWithLoggedUser
         // arrange
         var party = await Factory.CreateDefaultPartyAsync(UserId);
         var game = await Factory.CreateTestGameAsync(UserId);
-        await Factory.CreatePartyGameAsync(party.Id, game.Id);
+        var pg = await Factory.CreatePartyGameAsync(party.Id, game.Id);
 
         // act
-        var (response, _) = await DoDelete<Ok>(game.Id, party.Id);
+        var (response, _) = await DoDelete<Ok>(pg.Id);
 
         // assert
         response.EnsureSuccessStatusCode();
 
-        var deletedPartyGame = await GetPartyGame(game.Id, party.Id);
+        var deletedPartyGame = await GetPartyGame(pg.Id);
         Assert.Null(deletedPartyGame);
     }
 
@@ -39,15 +40,15 @@ public class DeleteGameOfPartyTests : TestsWithLoggedUser
         // arrange
         var otherParty = await Factory.CreatePartyOfAnotherUserAsync();
         var game = await Factory.CreateTestGameAsync(otherParty.UserId);
-        await Factory.CreatePartyGameAsync(otherParty.Id, game.Id);
+        var pg = await Factory.CreatePartyGameAsync(otherParty.Id, game.Id);
 
         // act
-        var (response, _) = await DoDelete<NotFound>(game.Id, otherParty.Id);
+        var (response, _) = await DoDelete<NotFound>(pg.Id);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
-        var deletedPartyGame = await GetPartyGame(game.Id, otherParty.Id);
+        var deletedPartyGame = await GetPartyGame(pg.Id);
         Assert.NotNull(deletedPartyGame);
     }
 
@@ -58,24 +59,24 @@ public class DeleteGameOfPartyTests : TestsWithLoggedUser
         var party = await Factory.CreateDefaultPartyAsync(UserId);
 
         // act
-        var (response, _) = await DoDelete<NotFound>(2095, 2409);
+        var (response, _) = await DoDelete<NotFound>(45487874);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
 
-    private async Task<TestResult<TResponse>> DoDelete<TResponse>(int gameId, int partyId)
+    private async Task<TestResult<TResponse>> DoDelete<TResponse>(int pgId)
     {
-        var req = new PartyGameRequest { GameId = gameId, PartyId = partyId };
-        return await Client.DELETEAsync<DeleteGame.Endpoint, PartyGameRequest, TResponse>(req);
+        var req = new RequestToIdentifiableObject { Id = pgId };
+        return await Client.DELETEAsync<DeleteGame.Endpoint, RequestToIdentifiableObject, TResponse>(req);
     }
 
-    private async Task<PartyGame?> GetPartyGame(int gameId, int partyId)
+    private async Task<PartyGame?> GetPartyGame(int id)
     {
         using var scope = Factory.Services.CreateScope();
         var ctx = scope.Resolve<GameSyncContext>();
         return await ctx.PartiesGames
-            .FirstOrDefaultAsync(pg => pg.GameId == gameId && pg.PartyId == partyId);
+            .FirstOrDefaultAsync(pg => pg.Id == id);
     }
 }

@@ -18,7 +18,7 @@
       Détails
     </button>
     <div>
-      <button *ngIf="!isReadOnly" mat-icon-button (click)="editMe()">
+      <button *ngIf="!isReadOnly && game.isCustom" mat-icon-button (click)="editMe()">
         <mat-icon>edit</mat-icon>
       </button>
       <button *ngIf="!isReadOnly" mat-icon-button color="warn" (click)="deleteMe()">

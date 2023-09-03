@@ -1,23 +1,41 @@
-﻿using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
+﻿using FluentValidation;
+using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
+using GameSync.Api.Extensions;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
-using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
 
 namespace GameSync.Api.Endpoints;
 
 public static class GameVote
 {
 
-    public class Request : PartyGameRequest
+    public class Request
     {
+        public int GameId { get; init; }
+
+        public int? PartyId { get; init; }
+        public string? InvitationToken { get; init; }
         public bool? VoteYes { get; init; }
 
         public string? UserName { get; init; }
 
+    }
+
+    public class Validator : Validator<Request>
+    {
+        public Validator()
+        {
+            RuleFor(r => r.GameId)
+                .GreaterThan(0)
+                .WithObjectDoesNotExistError();
+
+            RuleFor(r => r.PartyId)
+                .GreaterThan(0)
+                .When(r => r.PartyId is not null)
+                .WithObjectDoesNotExistError();
+        }
     }
 
     public class Endpoint : Endpoint<Request, Results<Ok, NotFound, BadRequest>>
@@ -31,12 +49,9 @@ public static class GameVote
 
         public override void Configure()
         {
-            Put("parties/{PartyId}/games/{GameId}/vote");
+            Put("users/me/parties/{PartyId}/games/{GameId}/vote", "parties/{InvitationToken}/games/{GameId}/vote");
             DontAutoTag();
-            Options(x =>
-            {
-                x.WithTags("Votes");
-            });
+            Options(x => x.WithTags("Vote"));
             AllowAnonymous();
         }
 
@@ -45,7 +60,18 @@ public static class GameVote
         {
             var userId = User.ClaimValue(ClaimsTypes.UserId);
 
-            var partyGameSearch = _ctx.PartiesGames.Where(pg => pg.PartyId == req.PartyId && pg.GameId == req.GameId);
+            if (userId is null)
+            {
+                if (req.InvitationToken is null)
+                    return TypedResults.NotFound();
+
+                if (req.UserName is null)
+                    return TypedResults.BadRequest();
+            }
+
+            var partyGameSearch = _ctx.PartiesGames
+                .Where(pg => pg.GameId == req.GameId 
+                            && (pg.Party.UserId == userId || pg.Party.InvitationToken == req.InvitationToken));
 
             var partyGame = await partyGameSearch.FirstOrDefaultAsync();
 
@@ -57,11 +83,6 @@ public static class GameVote
             Vote? voteOfUser;
             if (userId is null) // anonymous
             {
-                if (req.UserName is null)
-                {
-                    return TypedResults.BadRequest();
-                }
-
                 voteOfUser = partyGame.Votes?.FirstOrDefault(v => v.UserName == req.UserName);
             }
             else
@@ -85,6 +106,11 @@ public static class GameVote
             }
             else
             {
+                if (voteOfUser.VoteYes == req.VoteYes)
+                {
+                    return TypedResults.Ok();
+                }
+
                 voteOfUser.VoteYes = req.VoteYes;
             }
 

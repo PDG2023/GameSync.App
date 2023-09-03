@@ -1,6 +1,7 @@
 ﻿using FastEndpoints;
 using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users.Me.Games;
+using GameSync.Api.Endpoints.Users.Me.Games.FromBgg;
 using GameSync.Api.Persistence;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -18,29 +19,19 @@ public class DeletesGameTests : TestsWithLoggedUser
     }
 
     [Fact]
-    public async Task Trying_to_delete_nonexisting_games_of_a_user_returns_not_found_without_deleting_the_found_games()
+    public async Task Deleting_a_non_existing_game_produces_not_found()
     {
         // arrange
-
-        var games = await Task.WhenAll(
-            Factory.CreateTestGame(UserId),
-            Factory.CreateTestGame(UserId),
-            Factory.CreateTestGame(UserId)
-        );
-
-        var request = new RequestToIdentifiableObject { Id = 8080 };
+        var request = new DeleteGame.Request { Id = 8080, IsCustomGame = false };
+        var requestCustom = new DeleteGame.Request { Id = 8080, IsCustomGame = true };
 
         // act
-        var (response, result) = await Client.DELETEAsync<DeleteGame.Endpoint, RequestToIdentifiableObject, NotFound>(request);
+        var (response, _) = await Client.DELETEAsync<DeleteGame.Endpoint, DeleteGame.Request, NotFound>(request);
+        var (responseCustom, _) = await Client.DELETEAsync<DeleteGame.Endpoint, DeleteGame.Request, NotFound>(requestCustom);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-
-        // checks whether the first two games are still there
-        using var scope = Factory.Services.CreateScope();
-        var ctx = scope.Resolve<GameSyncContext>();
-        var remainingGames = await ctx.Games.Where(x => x.UserId == UserId).Select(x => x.Id).ToListAsync();
-        Assert.True(games.Select(x => x.Id).All(remainingGames.Contains));
+        Assert.Equal(HttpStatusCode.NotFound, responseCustom.StatusCode);
     }
 
 
@@ -55,10 +46,10 @@ public class DeletesGameTests : TestsWithLoggedUser
             Factory.CreateTestGame(UserId)
         );
         var needleId = games[0].Id;
-        var request = new RequestToIdentifiableObject { Id = needleId };
+        var request = new DeleteGame.Request { Id = needleId, IsCustomGame = true };
 
         // act
-        var (response, result) = await Client.DELETEAsync<DeleteGame.Endpoint, RequestToIdentifiableObject, Ok>(request);
+        var (response, result) = await Client.DELETEAsync<DeleteGame.Endpoint, DeleteGame.Request, Ok>(request);
 
         // assert
         response.EnsureSuccessStatusCode();
@@ -66,8 +57,31 @@ public class DeletesGameTests : TestsWithLoggedUser
         // Checks whether the deleted game is in fact correctly deleted
         using var scope = Factory.Services.CreateScope();
         var ctx = scope.Resolve<GameSyncContext>();
-        var gamesShouldBeDeleted = await ctx.Games.Where(x => x.Id == needleId).ToListAsync();
+        var gamesShouldBeDeleted = await ctx.CustomGames.Where(x => x.Id == needleId).ToListAsync();
         Assert.Empty(gamesShouldBeDeleted);
+    }
+    
+
+    [Fact]
+    public async Task Deleting_a_link_between_a_user_and_a_bgg_game_works()
+    {
+        // arrange
+        const int gameId = 321016;
+        var request = new DeleteGame.Request { Id = gameId, IsCustomGame = false };
+
+        // act
+        var (responseAdd, _) = await Client.POSTAsync<AddBggGame.Endpoint, RequestToIdentifiableObject, Ok>(request);
+        var (response, result) = await Client.DELETEAsync<DeleteGame.Endpoint, DeleteGame.Request, Ok>(request);
+
+        // assert
+        responseAdd.EnsureSuccessStatusCode();
+        response.EnsureSuccessStatusCode();
+
+        // Checks whether the deleted game is in fact correctly deleted
+        using var scope = Factory.Services.CreateScope();
+        var ctx = scope.Resolve<GameSyncContext>();
+        var gameExists = await ctx.UserBoardGameGeekGames.AnyAsync(x => x.BoardGameGeekGameId == gameId && x.UserId == UserId);
+        Assert.False(gameExists);
     }
 
 }

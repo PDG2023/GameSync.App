@@ -1,11 +1,13 @@
 ﻿using Bogus.DataSets;
 using FakeItEasy;
 using FastEndpoints;
+using GameSync.Api.AuthMailServices;
 using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
+using GameSync.Api.Extensions;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
+using GameSync.Api.Persistence.Entities.Games;
 using GameSync.Api.Tests.Identity;
-using GameSync.Business.Auth;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -43,9 +45,9 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
 
 
-    public async Task<Game> CreateTestGame(string userId)
+    public async Task<CustomGame> CreateTestGame(string userId)
     {
-        var game = new Game
+        var game = new CustomGame
         {
             MaxPlayer = 10,
             MinPlayer = 5,
@@ -59,16 +61,19 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
         using var scope = Services.CreateScope();
         var ctx = scope.Resolve<GameSyncContext>();
-        await ctx.Games.AddAsync(game);
-        await ctx.SaveChangesAsync();
+        await ctx.CustomGames.AddAsync(game);
+        var n = await ctx.SaveChangesAsync();
         return game;
     }
 
-    public async Task<PartyGame> CreateFullPartyGameAsync(List<Vote>? votes = null)
+    public async Task<PartyGame> CreatePartyGameWithDependency(List<Vote>? votes = null, string? invitationToken = null)
     {
-        var party = await CreatePartyOfAnotherUser();
+        var party = await CreatePartyOfAnotherUser(invitationToken);
         var game = await CreateTestGame(party.UserId);
         await CreatePartyGame(party.Id, game.Id, votes);
+
+
+
         return new PartyGame { GameId = game.Id, PartyId = party.Id };
     }
 
@@ -106,21 +111,22 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         return party;
     }
 
-    public async Task<Party> CreatePartyOfAnotherUser()
+    public async Task<Party> CreatePartyOfAnotherUser(string? invitationToken = null)
     {
         var userId = await CreateConfirmedUser(
             new Internet().Email(), 
             new Internet().UserName(), 
             "MuCkT*sgb2TB4!4P^r7cwRx");
-        return await CreateDefaultParty(userId);
+        return await CreateDefaultParty(userId, invitationToken);
     }
 
-    public async Task<Party> CreateDefaultParty(string userId) => await CreateParty(new Party
+    public async Task<Party> CreateDefaultParty(string userId, string? invitationToken = null) => await CreateParty(new Party
     {
         DateTime = DateTime.Now.AddDays(1),
         Location = "...",
         Name = "...",
-        UserId = userId
+        UserId = userId,
+        InvitationToken = invitationToken
     });
 
     public async Task CreatePartyGame(int partyId, int gameId, List<Vote>? votes = null)
@@ -170,17 +176,17 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         services.RemoveService<IConfirmationEmailSender>();
         services.AddSingleton<IConfirmationEmailSender>(new MockMailService(false));
 
-        services.RemoveService<IPasswordResetMailSenderAsync>();
-        services.AddSingleton<IPasswordResetMailSenderAsync>(new MockMailService(false));
+        services.RemoveService<IPasswordResetMailSender>();
+        services.AddSingleton<IPasswordResetMailSender>(new MockMailService(false));
     }
 
     private static void SetupFakeConfiguration(IServiceCollection services)
     {
         // Create a mock config which returns a temp password signing key for the jwt token
-        const string mockKey = "yD2%#M3meB@nB6Q$%bFbL4naAEjpHdWSQXyUexgJimSkQrc6PMppoTN%";
         var fakeConfig = A.Fake<IConfiguration>();
-        A.CallTo(() => fakeConfig["Jwt:SignKey"]).Returns(mockKey);
+        A.CallTo(() => fakeConfig["Jwt:SignKey"]).Returns("yD2%#M3meB@nB6Q$%bFbL4naAEjpHdWSQXyUexgJimSkQrc6PMppoTN%");
         A.CallTo(() => fakeConfig["Jwt:Issuer"]).Returns("https://localhost");
+        A.CallTo(() => fakeConfig["FrontPathToInvitedParty"]).Returns("{InvitationToken}");
         services.RemoveService<IConfiguration>();
         services.AddSingleton(fakeConfig);
     }

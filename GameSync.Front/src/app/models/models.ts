@@ -1,7 +1,7 @@
 export interface User {
   email: string;
   userName?: string;
-  password: string ;
+  password: string;
   token?: string;
 }
 
@@ -40,8 +40,13 @@ export interface GameDetail extends Game {
   durationMinute?: number;
 }
 
-export interface GameCollection extends GameDetail {
-  userId: string;
+export interface GameCollectionItem extends Game {
+  isCustom?: boolean;
+}
+
+export interface GameDetailResult {
+  game: GameDetail;
+  inCollection: boolean;
 }
 
 export interface BaseParty {

@@ -1,6 +1,5 @@
-﻿using Castle.Core.Logging;
-using FakeItEasy;
-using GameSync.Business.Mailing;
+﻿using FakeItEasy;
+using GameSync.Api.MailSender;
 using Microsoft.Extensions.Logging;
 using Xunit;
 

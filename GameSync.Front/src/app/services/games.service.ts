@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {GameCollection, GameDetail, GameSearchRequest, GameSearchResult} from "../models/models";
+import {GameDetailResult, GameCollectionItem, GameDetail, GameSearchRequest, GameSearchResult} from "../models/models";
 import {environment} from "../../environments/environment";
 
 @Injectable({
@@ -14,8 +14,8 @@ export class GamesService {
   ) {
  }
 
-  getGameDetail(gameId: string): Observable<GameDetail> {
-    return this.httpClient.get<GameDetail>(`${environment.apiUrl}/games/${gameId}`);
+  getGameDetail(gameId: string): Observable<GameDetailResult> {
+    return this.httpClient.get<GameDetailResult>(`${environment.apiUrl}/games/${gameId}`);
   }
 
   getCustomGameDetail(gameId: number | string): Observable<GameDetail> {
@@ -40,11 +40,11 @@ export class GamesService {
     return this.httpClient.post(`${environment.apiUrl}/users/me/games/from-bgg/${id}`, {id});
   }
 
-  deleteGameFromCollection(id: number) {
-    return this.httpClient.delete(`${environment.apiUrl}/users/me/games/${id}`);
+  deleteGameFromCollection(id: number, isCustomGame: boolean) {
+    return this.httpClient.delete(`${environment.apiUrl}/users/me/games/${id}?isCustomGame=${isCustomGame}`);
   }
 
-  getMyGames(): Observable<GameCollection[]> {
-    return this.httpClient.get<GameCollection[]>(`${environment.apiUrl}/users/me/games`);
+  getMyGames(): Observable<GameCollectionItem[]> {
+    return this.httpClient.get<GameCollectionItem[]>(`${environment.apiUrl}/users/me/games`);
   }
 }

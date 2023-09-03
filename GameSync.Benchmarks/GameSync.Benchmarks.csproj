@@ -21,7 +21,6 @@
   <ItemGroup>
     <ProjectReference Include="..\GameSync.Api.Tests\GameSync.Api.Tests.csproj" />
     <ProjectReference Include="..\GameSync.Api\GameSync.Api.csproj" />
-    <ProjectReference Include="..\GameSync.Business\GameSync.Business.csproj" />
   </ItemGroup>
 
 </Project>

@@ -41,6 +41,8 @@ import {GameDetailComponent} from './features/game-detail/game-detail.component'
 import {SearchResultComponent} from './features/search-result/search-result.component';
 import {LoadingInterceptor} from "./helpers/loading.interceptor";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import {AddEditCustomGameComponent} from "./components/add-custom-game/add-edit-custom-game.component";
+import {CollectionGameItemComponent} from './components/collection-game-item/collection-game-item.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import {AddEditCustomGameComponent} from "./components/add-custom-game/add-edit-custom-game.component";
@@ -67,8 +69,9 @@ import {CollectionGameItemComponent} from './components/collection-game-item/col
     GameDetailComponent,
     SearchResultComponent,
     AddEditCustomGameComponent,
-    AddPartyComponent,
     CollectionGameItemComponent,
+    AddEditCustomGameComponent,
+    AddPartyComponent,
   ],
   imports: [
     BrowserModule,

@@ -13,8 +13,7 @@ public static class AddGames
 
     public class Request
     {
-
-        public required int PartyId { get; init; }
+        public int PartyId { get; init; }
 
         public IEnumerable<PartyGameInfo> Games { get; init; } = Array.Empty<PartyGameInfo>();
 
@@ -48,6 +47,8 @@ public static class AddGames
         {
             Post("{PartyId}/games");
             Group<PartiesGroup>();
+            DontAutoTag();
+            Options(builder => builder.WithTags("Party's games"));
         }
 
         public override async Task<Results<NotFound, Ok, BadRequestWhateverError>> ExecuteAsync(Request req, CancellationToken ct)

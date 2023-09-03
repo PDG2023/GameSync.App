@@ -7,7 +7,6 @@ using GameSync.Api.Extensions;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Api.Persistence.Entities.Games;
-using GameSync.Api.Tests.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -16,10 +15,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
+using Tests.Mocks;
 using Xunit;
 
 
-namespace GameSync.Api.Tests;
+namespace Tests;
 
 [CollectionDefinition("FullApp")]
 public class GameSyncAppFactoryFixture : ICollectionFixture<GameSyncAppFactory> { }
@@ -32,15 +32,15 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
     public GameSyncAppFactory()
     {
 
-         _postgreSqlContainer = new PostgreSqlBuilder()
-        .WithImage("postgres:15-alpine")
-        .WithDatabase("db")
-        .WithUsername("postgres")
-        .WithPassword("postgres")
-        .WithCleanUp(true)
-        .WithAutoRemove(true)
-        .Build();
-        
+        _postgreSqlContainer = new PostgreSqlBuilder()
+       .WithImage("postgres:15-alpine")
+       .WithDatabase("db")
+       .WithUsername("postgres")
+       .WithPassword("postgres")
+       .WithCleanUp(true)
+       .WithAutoRemove(true)
+       .Build();
+
     }
 
 
@@ -114,8 +114,8 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
     public async Task<Party> CreatePartyOfAnotherUser(string? invitationToken = null)
     {
         var userId = await CreateConfirmedUser(
-            new Internet().Email(), 
-            new Internet().UserName(), 
+            new Internet().Email(),
+            new Internet().UserName(),
             "MuCkT*sgb2TB4!4P^r7cwRx");
         return await CreateDefaultParty(userId, invitationToken);
     }

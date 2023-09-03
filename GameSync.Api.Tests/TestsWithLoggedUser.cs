@@ -4,7 +4,7 @@ using GameSync.Api.Endpoints.Users;
 using IdentityModel.Client;
 using Xunit;
 
-namespace GameSync.Api.Tests;
+namespace Tests;
 
 public class TestsWithLoggedUser : IAsyncLifetime
 {
@@ -12,7 +12,7 @@ public class TestsWithLoggedUser : IAsyncLifetime
     protected string Mail { get; } = new Bogus.DataSets.Internet().Email();
     protected string Password { get; } = "uPY994@euuK9&TPny#wSv5b";
     protected string UserId { get; private set; }
-    protected HttpClient Client { get; } 
+    protected HttpClient Client { get; }
     protected GameSyncAppFactory Factory { get; }
 
     public TestsWithLoggedUser(GameSyncAppFactory factory)
@@ -28,7 +28,7 @@ public class TestsWithLoggedUser : IAsyncLifetime
     public virtual async Task InitializeAsync()
     {
         UserId = await Factory.CreateConfirmedUser(Mail, Mail, Password);
-        var (_, result) = await Client.POSTAsync<SignIn.Endpoint, RequestWithCredentials, SignIn.Response>(new RequestWithCredentials { Email = Mail, Password = Password});
+        var (_, result) = await Client.POSTAsync<SignIn.Endpoint, RequestWithCredentials, SignIn.Response>(new RequestWithCredentials { Email = Mail, Password = Password });
         Client.SetBearerToken(result!.Token);
     }
 }

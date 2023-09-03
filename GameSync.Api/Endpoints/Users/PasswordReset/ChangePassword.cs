@@ -7,6 +7,7 @@ using GameSync.Api.Extensions;
 using GameSync.Api.Resources;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
+using System.Text.Unicode;
 
 namespace GameSync.Api.Endpoints.Users.PasswordReset;
 
@@ -57,8 +58,18 @@ public static class ChangePassword
             {
                 return TypedResults.NotFound();
             }
+            string decodedToken;
 
-            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(req.Token));
+            try
+            {
+                decodedToken =  Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(req.Token));
+            }
+            catch
+            {
+                AddError("Jeton invalide.");
+                return new BadRequestWhateverError(ValidationFailures);
+            }
+
             var changePasswordResult = await _manager.ResetPasswordAsync(user, decodedToken, req.Password);
 
             if (!changePasswordResult.Succeeded)

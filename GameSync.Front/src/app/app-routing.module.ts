@@ -13,10 +13,12 @@ import {PartyGameVoteIdentifyComponent} from "./features/party-game-vote-identif
 import {GameDetailComponent} from "./features/game-detail/game-detail.component";
 import {SearchResultComponent} from "./features/search-result/search-result.component";
 import {AddEditCustomGameComponent} from "./components/add-custom-game/add-edit-custom-game.component";
+import { ConfirmMailComponent } from './features/confirm-mail/confirm-mail.component';
 
 const anonymousOnlyRoutes: Routes = [
   {path: 'login', component: LoginComponent},
-  {path: 'register', component: RegisterComponent}
+  {path: 'register', component: RegisterComponent},
+  {path: 'confirm-mail', component: ConfirmMailComponent}
 ]
 
 const authOnlyRoutes: Routes = [

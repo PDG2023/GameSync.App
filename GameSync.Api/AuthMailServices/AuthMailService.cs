@@ -1,35 +1,38 @@
 ﻿using GameSync.Api.MailSender;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
+using System.Text;
 
 namespace GameSync.Api.AuthMailServices
 {
     public class AuthMailService : IConfirmationEmailSender, IPasswordResetMailSender
     {
         private readonly IMailSender _sender;
-        private readonly ConfirmationMailLinkProvider _emailLinkProvider;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _contextAccessor;
 
         public AuthMailService(
             IMailSender sender,
-            ConfirmationMailLinkProvider emailLinkProvider,
             IConfiguration configuration,
             IHttpContextAccessor contextAccessor)
         {
             _sender = sender;
-            _emailLinkProvider = emailLinkProvider;
             _configuration = configuration;
             _contextAccessor = contextAccessor;
         }
 
         public async Task<bool> SendEmailConfirmationAsync(string recipient, string mailConfirmationToken)
         {
-            var currentRequest = _contextAccessor.HttpContext.Request;
-            var url = _emailLinkProvider.GetConfirmationMailLink(recipient, mailConfirmationToken, currentRequest.Scheme, currentRequest.Host.ToString());
+            var req = _contextAccessor.HttpContext.Request;
+            var path = _configuration["FrontPathToMailConfirmatiom"];
+
+            string b64UrlToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(mailConfirmationToken));
+            var link =  $"{req.Scheme}://{req.Host}/{path}?confirmationToken={b64UrlToken}&email={recipient}";
+
             return await _sender.SendMailAsync(
                 "GameSync - Confirmez votre nouveau compte",
-                $"<a href=\"{url}\">Cliquez ici pour confirmer votre compte</a>",
+                $"<a href=\"{link}\">Cliquez ici pour confirmer votre compte</a>",
                 recipient);
         }
 

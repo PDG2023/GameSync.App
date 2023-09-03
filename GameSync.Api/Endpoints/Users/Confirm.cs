@@ -14,10 +14,8 @@ public static class Confirm
 
     public class Request
     {
-        [QueryParam]
         public required string ConfirmationToken { get; init; }
 
-        [QueryParam]
         public required string Email { get; init; }
     }
 
@@ -41,9 +39,8 @@ public static class Confirm
 
         public override void Configure()
         {
-
             AllowAnonymous();
-            Get("confirm");
+            Post("confirm");
             Group<UsersGroup>();
         }
 

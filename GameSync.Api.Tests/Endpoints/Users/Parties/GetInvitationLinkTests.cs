@@ -25,7 +25,7 @@ public class GetInvitationLinkTests : TestsWithLoggedUser
     public async Task Retrieving_invitation_link_of_party_without_one_creates_it()
     {
         // arrange
-        var party = await Factory.CreateDefaultParty(UserId);
+        var party = await Factory.CreateDefaultPartyAsync(UserId);
 
         // act
         var (response, result) = await DoReq(party.Id);
@@ -47,7 +47,7 @@ public class GetInvitationLinkTests : TestsWithLoggedUser
 
         // arrange
         const string expectedToken = "expected";
-        var party = await Factory.CreateParty(new Party
+        var party = await Factory.CreatePartyAsync(new Party
         {
             DateTime = DateTime.Now.AddDays(2),
             Name = "...",

@@ -42,7 +42,7 @@ public class SignUpMailSendingTest
         Assert.NotNull(result);
         Assert.Equal((int)HttpStatusCode.ServiceUnavailable, result.StatusCode);
 
-        // check that the user has been correctly deleted
+        // check that the user has not been created
         Assert.Null(await userManager.FindByEmailAsync(req.Email));
     }
 

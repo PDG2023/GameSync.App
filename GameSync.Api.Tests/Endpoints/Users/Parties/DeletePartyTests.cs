@@ -32,7 +32,7 @@ public class DeletePartyTests : TestsWithLoggedUser
     public async Task Deletion_of_party_of_another_user_produces_not_found()
     {
         // arrange : create another user and retrieve its id
-        var otherUserParty = await Factory.CreatePartyOfAnotherUser();
+        var otherUserParty = await Factory.CreatePartyOfAnotherUserAsync();
 
         var request = new RequestToIdentifiableObject { Id = otherUserParty.Id };
 
@@ -48,7 +48,7 @@ public class DeletePartyTests : TestsWithLoggedUser
     public async Task Deletion_of_existing_party_deletes_it_from_storage()
     {
         // arrange
-        var party = await Factory.CreateDefaultParty(UserId);
+        var party = await Factory.CreateDefaultPartyAsync(UserId);
         var request = new RequestToIdentifiableObject { Id = party.Id };
 
         //act

@@ -40,7 +40,7 @@ public class ChangePasswordTests
             Token = token
         };
         // act
-        var (response, result) = await _client.POSTAsync<ChangePassword.Endpoint, ChangePassword.Request, NotFound>(request);
+        var (response, _) = await _client.POSTAsync<ChangePassword.Endpoint, ChangePassword.Request, NotFound>(request);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -52,7 +52,7 @@ public class ChangePasswordTests
         // arrange 
         var mail = new Internet().Email();
         const string password = "sQ$94ju%HGxS@YhueL8cy!W";
-        await _factory.CreateConfirmedUser(mail, mail, "sQ$94ju%HGxS@YhueL8cy!W");
+        await _factory.CreateConfirmedUserAsync(mail, mail, "sQ$94ju%HGxS@YhueL8cy!W");
 
         var request = new ChangePassword.Request
         {
@@ -75,7 +75,7 @@ public class ChangePasswordTests
         // arrange
         var mail = new Internet().Email();
         const string password = "!xXC%5m%eFeE!E^u&!LDTV5";
-        await _factory.CreateConfirmedUser(mail, mail, password);
+        await _factory.CreateConfirmedUserAsync(mail, mail, password);
 
         string token;
 

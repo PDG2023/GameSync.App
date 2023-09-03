@@ -30,28 +30,13 @@ public class SignUpTests
 
 
     [Fact]
-    public async Task Secure_password_produces_no_error()
-    {
-        // arrange
-        var testRequest = GetNewAccountRequest("$UX#%A!qaphEL2");
-
-        // act
-        var (response, result) = await _client.POSTAsync<SignUp.Endpoint, SignUp.Request, SignUp.Response>(testRequest);
-
-        // assert
-        response.EnsureSuccessStatusCode();
-        Assert.NotNull(result);
-        Assert.Equal(testRequest.Email, result.Email);
-    }
-
-    [Fact]
     public async Task Newly_created_account_is_not_confirmed()
     {
         // arrange
         var newAccountRequest = GetNewAccountRequest("Ws%uf^n7iB9nK#e&b");
 
         // act
-        var (response, result) = await _client.POSTAsync<SignUp.Endpoint, SignUp.Request, BadRequestWhateverError>(newAccountRequest);
+        var (response, _) = await _client.POSTAsync<SignUp.Endpoint, SignUp.Request, BadRequestWhateverError>(newAccountRequest);
 
         // assert
         response.EnsureSuccessStatusCode();
@@ -78,7 +63,6 @@ public class SignUpTests
         // assert
         AssertProduceError(expectedError, testResult);
     }
-
 
 
     [Fact]
@@ -125,7 +109,7 @@ public class SignUpTests
         UserName = new Name().FirstName(),
     };
 
-    private void AssertProduceError(string errorCode, TestResult<BadRequestWhateverError>? testResult)
+    private static void AssertProduceError(string errorCode, TestResult<BadRequestWhateverError>? testResult)
     {
         Assert.NotNull(testResult);
 

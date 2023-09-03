@@ -33,7 +33,7 @@ public class UpdatePartyTests : TestsWithLoggedUser
     public async Task Updating_party_of_another_user_produces_not_found()
     {
         // arrange
-        var party = await Factory.CreatePartyOfAnotherUser();
+        var party = await Factory.CreatePartyOfAnotherUserAsync();
         var request = new UpdateParty.Request
         {
             Id = party.Id,
@@ -54,7 +54,7 @@ public class UpdatePartyTests : TestsWithLoggedUser
     public async Task Updating_party_of_user_changes_it()
     {
         // arrange
-        var party = await Factory.CreateDefaultParty(UserId);
+        var party = await Factory.CreateDefaultPartyAsync(UserId);
         var expectedDate = new DateTime(2025, 02, 04, 18, 0, 0);
         var request = new UpdateParty.Request
         {

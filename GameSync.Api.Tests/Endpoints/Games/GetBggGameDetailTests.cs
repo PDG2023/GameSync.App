@@ -22,10 +22,13 @@ public class GetBggGameDetailTests : TestsWithLoggedUser
     [Fact]
     public async Task Retrieving_details_of_non_existing_game_produces_not_found()
     {
+        // arrange
         var detailGameRequest = new RequestToIdentifiableObject { Id = 5644415 };
 
+        //act
         var (response, _) = await Client.GETAsync<GetBggGameDetail.Endpoint, RequestToIdentifiableObject, NotFound>(detailGameRequest);
 
+        // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -50,10 +53,13 @@ public class GetBggGameDetailTests : TestsWithLoggedUser
     [Fact]
     public async Task Retrieving_details_of_existing_game_not_in_collection_should_return_it()
     {
+        // arrange
         var detailGameRequest = new RequestToIdentifiableObject { Id = 1087 };
 
+        // act
         var (response, result) = await Client.GETAsync<GetBggGameDetail.Endpoint, RequestToIdentifiableObject, GetBggGameDetail.Response>(detailGameRequest);
 
+        // assert
         response.EnsureSuccessStatusCode();
 
         var expectedResponse = new GetBggGameDetail.Response

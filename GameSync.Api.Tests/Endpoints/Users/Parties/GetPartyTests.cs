@@ -25,7 +25,7 @@ public class GetPartyAsAnonymousTests
     public async Task Getting_details_of_party_without_invitation_with_empty_token_in_requests_produces_not_found()
     {
         // arrange
-        var party = await _factory.CreatePartyOfAnotherUser();
+        var party = await _factory.CreatePartyOfAnotherUserAsync();
 
         // act
         var (response, _) = await DoReq(party.Id, null);
@@ -38,7 +38,7 @@ public class GetPartyAsAnonymousTests
     public async Task Getting_details_of_party_with_invitation_with_inequal_token_produces_not_found()
     {
         // arrange
-        var party = await _factory.CreatePartyOfAnotherUser("t1");
+        var party = await _factory.CreatePartyOfAnotherUserAsync("t1");
 
         // act
         var (response, _) = await DoReq(party.Id, "t2");
@@ -54,7 +54,7 @@ public class GetPartyAsAnonymousTests
         const string _token = "letsparty";
 
         // arrange
-        var party = await _factory.CreatePartyOfAnotherUser(_token);
+        var party = await _factory.CreatePartyOfAnotherUserAsync(_token);
 
         // act
         var (response, _) = await DoReq(party.Id, _token);
@@ -90,8 +90,8 @@ public class GetPartyTests : TestsWithLoggedUser
     public async Task Getting_details_of_party_works()
     {
         // arrange
-        var originalGame = await Factory.CreateTestGame(UserId);
-        var party = await Factory.CreateParty(new Party
+        var originalGame = await Factory.CreateTestGameAsync(UserId);
+        var party = await Factory.CreatePartyAsync(new Party
         {
             DateTime = new DateTime(2025, 3, 3, 19, 0, 0),
             Name = "Party",
@@ -121,7 +121,7 @@ public class GetPartyTests : TestsWithLoggedUser
         };
 
 
-        await Factory.CreatePartyGame(party.Id, originalGame.Id, votes1);
+        await Factory.CreatePartyGameAsync(party.Id, originalGame.Id, votes1);
 
         // act
         var (response, result) = await DoReq<GetParty.Response>(party.Id);

@@ -25,7 +25,7 @@ public class AddGameToPartyTests : TestsWithLoggedUser
     public async Task Add_non_existing_game_of_user_collection_produces_not_found()
     {
         // arrange
-        var party = await Factory.CreateDefaultParty(UserId);
+        var party = await Factory.CreateDefaultPartyAsync(UserId);
         var request = new PartyGameRequest { GameId = 918528, PartyId = party.Id };
 
         // act
@@ -45,7 +45,7 @@ public class AddGameToPartyTests : TestsWithLoggedUser
     public async Task Add_existing_game_to_party_stores_it()
     {
         // arrange
-        var request = await Factory.GetRequestToNonExistingPartyGame(UserId);
+        var request = await Factory.GetRequestToNonExistingPartyGameAsync(UserId);
 
         // act
         var (response, _)
@@ -61,7 +61,7 @@ public class AddGameToPartyTests : TestsWithLoggedUser
     public async Task Adding_twice_same_game_in_party_produces_bad_request()
     {
         // arrange
-        var request = await Factory.GetRequestToNonExistingPartyGame(UserId);
+        var request = await Factory.GetRequestToNonExistingPartyGameAsync(UserId);
 
         // act
         await Client.PUTAsync<AddGame.Endpoint, PartyGameRequest, Ok>(request);

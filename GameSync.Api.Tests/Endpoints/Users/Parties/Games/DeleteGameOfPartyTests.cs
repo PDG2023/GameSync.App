@@ -19,9 +19,9 @@ public class DeleteGameOfPartyTests : TestsWithLoggedUser
     public async Task Deleting_existing_game_works()
     {
         // arrange
-        var party = await Factory.CreateDefaultParty(UserId);
-        var game = await Factory.CreateTestGame(UserId);
-        await Factory.CreatePartyGame(party.Id, game.Id);
+        var party = await Factory.CreateDefaultPartyAsync(UserId);
+        var game = await Factory.CreateTestGameAsync(UserId);
+        await Factory.CreatePartyGameAsync(party.Id, game.Id);
 
         // act
         var (response, _) = await DoDelete<Ok>(game.Id, party.Id);
@@ -37,9 +37,9 @@ public class DeleteGameOfPartyTests : TestsWithLoggedUser
     public async Task Deleting_other_user_party_game_produces_not_found()
     {
         // arrange
-        var otherParty = await Factory.CreatePartyOfAnotherUser();
-        var game = await Factory.CreateTestGame(otherParty.UserId);
-        await Factory.CreatePartyGame(otherParty.Id, game.Id);
+        var otherParty = await Factory.CreatePartyOfAnotherUserAsync();
+        var game = await Factory.CreateTestGameAsync(otherParty.UserId);
+        await Factory.CreatePartyGameAsync(otherParty.Id, game.Id);
 
         // act
         var (response, _) = await DoDelete<NotFound>(game.Id, otherParty.Id);
@@ -55,7 +55,7 @@ public class DeleteGameOfPartyTests : TestsWithLoggedUser
     public async Task Deleting_game_of_non_existing_party_produces_not_found()
     {
         // arrange
-        var party = await Factory.CreateDefaultParty(UserId);
+        var party = await Factory.CreateDefaultPartyAsync(UserId);
 
         // act
         var (response, _) = await DoDelete<NotFound>(2095, 2409);

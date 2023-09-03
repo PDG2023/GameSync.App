@@ -25,7 +25,7 @@ public class ForgotPasswordEmailSendingTests
     {
         // arrange
         var mail = new Bogus.DataSets.Internet().Email();
-        await _factory.CreateConfirmedUser(mail, mail, "Q9d&h@T6jtQBWwaivWq4@JM");
+        await _factory.CreateConfirmedUserAsync(mail, mail, "Q9d&h@T6jtQBWwaivWq4@JM");
 
         var request = new RequestToUser { Email = mail };
 
@@ -48,7 +48,7 @@ public class ForgotPasswordEmailSendingTests
     {
         // arrange
         var mail = new Bogus.DataSets.Internet().Email();
-        await _factory.CreateConfirmedUser(mail, mail, "Q9d&h@T6jtQBWwaivWq4@JM");
+        await _factory.CreateConfirmedUserAsync(mail, mail, "Q9d&h@T6jtQBWwaivWq4@JM");
 
         var request = new RequestToUser { Email = mail };
 

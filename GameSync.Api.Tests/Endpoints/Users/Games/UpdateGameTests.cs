@@ -37,7 +37,7 @@ public class UpdateGameTests : TestsWithLoggedUser
     public async Task Malformed_properties_should_produce_errors()
     {
         // arrange
-        var game = await Factory.CreateTestGame(UserId);
+        var game = await Factory.CreateTestGameAsync(UserId);
 
         var requestsToTests = GetMalformedRequests(game);
 
@@ -57,7 +57,7 @@ public class UpdateGameTests : TestsWithLoggedUser
     public async Task Html_is_escaped_and_all_inputs_are_taken()
     {
         // arrange
-        var game = await Factory.CreateTestGame(UserId);
+        var game = await Factory.CreateTestGameAsync(UserId);
         var request = new UpdateGame.Request
         {
             Id = game.Id,

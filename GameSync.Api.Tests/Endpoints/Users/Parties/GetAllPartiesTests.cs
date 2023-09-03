@@ -25,8 +25,8 @@ public class GetAllPartiesTests : TestsWithLoggedUser
 
         var date = DateTime.Now.AddDays(1);
 
-        var game = await Factory.CreateTestGame(UserId);
-        var otherGame = await Factory.CreateTestGame(UserId);
+        var game = await Factory.CreateTestGameAsync(UserId);
+        var otherGame = await Factory.CreateTestGameAsync(UserId);
 
         var expectedFirstParty = new Party
         {
@@ -47,12 +47,12 @@ public class GetAllPartiesTests : TestsWithLoggedUser
         };
 
         var parties = await Task.WhenAll(
-            Factory.CreateParty(expectedFirstParty),
-            Factory.CreateParty(expectedSecondParty)
+            Factory.CreatePartyAsync(expectedFirstParty),
+            Factory.CreatePartyAsync(expectedSecondParty)
         );
 
-        await Factory.CreatePartyGame(parties[1].Id, game.Id);
-        await Factory.CreatePartyGame(parties[1].Id, otherGame.Id);
+        await Factory.CreatePartyGameAsync(parties[1].Id, game.Id);
+        await Factory.CreatePartyGameAsync(parties[1].Id, otherGame.Id);
 
 
         // act

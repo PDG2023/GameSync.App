@@ -21,7 +21,7 @@ public class LoggedInVotesTests : TestsWithLoggedUser
     public async Task Put_new_vote_creates_it_with_user_id()
     {
         // arrange
-        var pg = await Factory.CreatePartyGameWithDependency();
+        var pg = await Factory.CreatePartyGameWithDependencyAsync();
 
         // act
         var (response, _) = await DoReq<Ok>(pg.PartyId, pg.GameId, true);
@@ -41,7 +41,7 @@ public class LoggedInVotesTests : TestsWithLoggedUser
     {
         // arrange
         var vote = new Vote { UserId = UserId, VoteYes = true };
-        var pg = await Factory.CreatePartyGameWithDependency(new List<Vote> { vote });
+        var pg = await Factory.CreatePartyGameWithDependencyAsync(new List<Vote> { vote });
 
         // act
         var (response, _) = await DoReq<Ok>(pg.PartyId, pg.GameId, false); ;
@@ -61,7 +61,7 @@ public class LoggedInVotesTests : TestsWithLoggedUser
         // arrange
         const string otherUsername = "Hello";
         var vote = new Vote { UserName = otherUsername, VoteYes = true };
-        var existingPartyGame = await Factory.CreatePartyGameWithDependency(new List<Vote> { vote });
+        var existingPartyGame = await Factory.CreatePartyGameWithDependencyAsync(new List<Vote> { vote });
 
         // act
         var (response, _) = await DoReq<Ok>(existingPartyGame.PartyId, existingPartyGame.GameId, false);

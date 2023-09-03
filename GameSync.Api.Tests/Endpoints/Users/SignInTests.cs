@@ -62,7 +62,7 @@ public class SignInTests
         // arrange
         const string pwd = "%C$iS2z*gUZR3Hud7";
         var mail = new Internet().Email();
-        await _factory.CreateUnconfirmedUser(mail, mail, pwd);
+        await _factory.CreateUnconfirmedUserAsync(mail, mail, pwd);
 
         var req = new RequestWithCredentials { Email = mail, Password = pwd };
 
@@ -85,7 +85,7 @@ public class SignInTests
         // arrange : create an account and validate it directly
         const string password = "$UX#%A!qaphEL2";
         var mail = new Internet().Email();
-        await _factory.CreateConfirmedUser(mail, mail, password);
+        await _factory.CreateConfirmedUserAsync(mail, mail, password);
         var signInRequest = new RequestWithCredentials
         {
             Email = mail,

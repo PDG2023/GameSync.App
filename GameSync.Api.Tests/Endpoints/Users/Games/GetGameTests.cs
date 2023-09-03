@@ -18,7 +18,7 @@ public class GetGameTests : TestsWithLoggedUser
     [Fact]
     public async Task Get_existing_game_returns_it()
     {
-        var expectedGame = await Factory.CreateTestGame(UserId);
+        var expectedGame = await Factory.CreateTestGameAsync(UserId);
 
         var (response, result) = await Client.GETAsync<GetGame.Endpoint, RequestToIdentifiableObject, GameDetail>(new RequestToIdentifiableObject { Id = expectedGame.Id });
 

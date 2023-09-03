@@ -41,9 +41,9 @@ public class DeletesGameTests : TestsWithLoggedUser
         // arrange
 
         var games = await Task.WhenAll(
-            Factory.CreateTestGame(UserId),
-            Factory.CreateTestGame(UserId),
-            Factory.CreateTestGame(UserId)
+            Factory.CreateTestGameAsync(UserId),
+            Factory.CreateTestGameAsync(UserId),
+            Factory.CreateTestGameAsync(UserId)
         );
         var needleId = games[0].Id;
         var request = new DeleteGame.Request { Id = needleId, IsCustomGame = true };

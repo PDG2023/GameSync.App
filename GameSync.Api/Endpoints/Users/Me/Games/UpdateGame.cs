@@ -1,7 +1,6 @@
 ﻿using GameSync.Api.CommonRequests;
-using GameSync.Api.Endpoints.Users.Me.Games.Validator;
 using GameSync.Api.Persistence;
-using GameSync.Api.Persistence.Entities;
+using GameSync.Api.Persistence.Entities.Games;
 using GameSync.Api.Resources;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -26,12 +25,12 @@ public static class UpdateGame
     {
         public Validator()
         {
-            Include(new GameValidator());
+            Include(new GameRequestValidator());
             Include(new RequestToIdentifiableObjectValidator());
         }
     }
 
-    public class Endpoint : Endpoint<Request, Results<NotFound, Ok<Game>, BadRequestWhateverError>>
+    public class Endpoint : Endpoint<Request, Results<NotFound, Ok<CustomGame>, BadRequestWhateverError>>
     {
         private readonly GameSyncContext _context;
 
@@ -46,12 +45,12 @@ public static class UpdateGame
             Group<CollectionGroup>();
         }
 
-        public override async Task<Results<NotFound, Ok<Game>, BadRequestWhateverError>> ExecuteAsync(Request req, CancellationToken ct)
+        public override async Task<Results<NotFound, Ok<CustomGame>, BadRequestWhateverError>> ExecuteAsync(Request req, CancellationToken ct)
         {
 
             var userId = User.ClaimValue(ClaimsTypes.UserId);
 
-            var game = await _context.Games.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == req.Id);
+            var game = await _context.CustomGames.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == req.Id);
             if (game is null)
             {
                 return TypedResults.NotFound();
@@ -60,14 +59,14 @@ public static class UpdateGame
             UpdateProperties(game, req);
             ThrowIfAnyErrors();
 
-            _context.Games.Update(game);
+            _context.CustomGames.Update(game);
             await _context.SaveChangesAsync();
 
             return TypedResults.Ok(game);
 
         }
 
-        private void UpdateProperties(Game game, Request req)
+        private void UpdateProperties(CustomGame game, Request req)
         {
 
             if (req.MinPlayer is not null)

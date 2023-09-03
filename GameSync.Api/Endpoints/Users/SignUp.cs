@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 using GameSync.Api.Persistence.Entities;
-using GameSync.Business.Auth;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using System.Net;
 using GameSync.Api.CommonRequests;
+using GameSync.Api.AuthMailServices;
 
 namespace GameSync.Api.Endpoints.Users;
 

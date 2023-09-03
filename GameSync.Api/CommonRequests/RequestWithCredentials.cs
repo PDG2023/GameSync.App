@@ -18,26 +18,27 @@ public class RequestWithCredentialsValidator : Validator<RequestWithCredentials>
 
         Include(new RequestToUserValidator());
 
-        RuleFor(x => x.Password).CustomAsync(async (password, validatorContext, ct) =>
-        {
-
-            using var scope = CreateScope();
-            var identityValidator = scope.Resolve<IPasswordValidator<User>>();
-            var manager = scope.Resolve<UserManager<User>>();
-
-            var failures = await identityValidator.ValidateAsync(manager, null!, password);
-
-            if (!failures.Succeeded)
+        RuleFor(x => x.Password)
+            .CustomAsync(async (password, validatorContext, ct) =>
             {
-                foreach (var failure in failures.Errors)
+
+                using var scope = CreateScope();
+                var identityValidator = scope.Resolve<IPasswordValidator<User>>();
+                var manager = scope.Resolve<UserManager<User>>();
+
+                var failures = await identityValidator.ValidateAsync(manager, null!, password);
+
+                if (!failures.Succeeded)
                 {
-                    validatorContext.AddFailure(new ValidationFailure
+                    foreach (var failure in failures.Errors)
                     {
-                        ErrorCode = failure.Code,
-                        ErrorMessage = failure.Description
-                    });
+                        validatorContext.AddFailure(new ValidationFailure
+                        {
+                            ErrorCode = failure.Code,
+                            ErrorMessage = failure.Description
+                        });
+                    }
                 }
-            }
-        });
+            });
     }
 }

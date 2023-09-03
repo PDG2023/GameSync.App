@@ -4,7 +4,7 @@ import {CollectionComponent} from './collection.component';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
-import {CollectionItemComponent} from "../../components/collection-item/collection-item.component";
+import {GameItemComponent} from "../../components/game-item/game-item.component";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatCardModule} from "@angular/material/card";
@@ -15,7 +15,7 @@ describe('CollectionComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CollectionComponent, CollectionItemComponent],
+      declarations: [CollectionComponent, GameItemComponent],
       imports: [
         HttpClientTestingModule,
         MatMenuModule,

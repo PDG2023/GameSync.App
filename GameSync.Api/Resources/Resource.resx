@@ -120,19 +120,52 @@
   <data name="DateTimeMustBeAfterNow" xml:space="preserve">
     <value>La date et l'heure doivent être dans le futur</value>
   </data>
+  <data name="DescriptionTooBig" xml:space="preserve">
+    <value>La description ne peut pas dépasser 500 caractères</value>
+  </data>
+  <data name="EmailMustBeConfirmed" xml:space="preserve">
+    <value>L'email n'est pas confirmé</value>
+  </data>
   <data name="GameAlreadyAdded" xml:space="preserve">
     <value>Le jeu a déjà été ajouté</value>
   </data>
   <data name="GamesNotFound" xml:space="preserve">
     <value>Le(s) jeu(x) suivant(s) n'existe(nt) pas :</value>
   </data>
+  <data name="InvalidDuration" xml:space="preserve">
+    <value>La durée en minutes est invalide</value>
+  </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Le format de l'adresse mail est incorrect.</value>
   </data>
+  <data name="InvalidMinAge" xml:space="preserve">
+    <value>L'âge min. est invalide</value>
+  </data>
+  <data name="InvalidMinPlayer" xml:space="preserve">
+    <value>Le nombre de joueur min. est invalide.</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Le nom est invalide</value>
+  </data>
+  <data name="InvalidToken" xml:space="preserve">
+    <value>Le jeton ne peut pas être vide</value>
+  </data>
+  <data name="InvalidUsername" xml:space="preserve">
+    <value>Le nom de compte est invalide</value>
+  </data>
   <data name="MaxPlayerLowerThanMinPlayer" xml:space="preserve">
-    <value>Le nombre de joueur maximum ne peut pas être supérieur au nombre de joueur minimum.</value>
+    <value>Le nombre de joueur maximum ne peut pas être inférieur au nombre de joueur minimum.</value>
+  </data>
+  <data name="NumberIsNegative" xml:space="preserve">
+    <value>Le nombre indiqué nul ou négatif</value>
+  </data>
+  <data name="ObjectDoesNotExist" xml:space="preserve">
+    <value>L'objet recherché n'existe pas.</value>
   </data>
   <data name="PasswordDontMatch" xml:space="preserve">
     <value>Les mots de passe ne correspondent pas</value>
+  </data>
+  <data name="UnknownUser" xml:space="preserve">
+    <value>L'utilisateur n'est pas reconnu</value>
   </data>
 </root>

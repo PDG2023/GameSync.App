@@ -4,9 +4,8 @@ using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Diagnostics.Windows;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
-using GameSync.Business.BoardGameGeek;
-using GameSync.Business.BoardGameGeek.Model;
-using GameSync.Business.BoardGamesGeek;
+using GameSync.Api.BoardGameGeek;
+using GameSync.Api.CommonResponses;
 using Microsoft.Extensions.Caching.Memory;
 
 
@@ -21,26 +20,26 @@ public class BggClient
 
 
     [Benchmark]
-    public async Task<List<BoardGameGeekGameDetail>> GetDetailsNoCache()
+    public async Task<List<GameDetail>> GetDetailsNoCache()
     {
         return (await _noCacheClient.GetBoardGamesDetailAsync(ids)).ToList();
     }
 
     [Benchmark]
-    public async Task<List<BoardGameGeekGameDetail>> GetDetailsCached()
+    public async Task<List<GameDetail>> GetDetailsCached()
     {
         return (await _cachedClient.GetBoardGamesDetailAsync(ids)).ToList();
     }
     
 
     [Benchmark]
-    public async Task<List<BoardGameSearchResult>> SearchCluedoNoCache()
+    public async Task<List<GamePreview>> SearchCluedoNoCache()
     {
         return (await _noCacheClient.SearchBoardGamesAsync("Clu")).ToList();
     }
 
     [Benchmark]
-    public async Task<List<BoardGameSearchResult>> SearchCluedoCache()
+    public async Task<List<GamePreview>> SearchCluedoCache()
     {
         return (await _cachedClient.SearchBoardGamesAsync("Clu")).ToList();
     }

@@ -1,9 +1,11 @@
-﻿using GameSync.Api.CommonRequests;
+﻿using GameSync.Api.AuthMailServices;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Persistence.Entities;
-using GameSync.Business.Auth;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using System.Net;
+using System.Text;
 
 namespace GameSync.Api.Endpoints.Users.PasswordReset;
 
@@ -12,11 +14,11 @@ public static class ForgotPassword
     public class Endpoint : Endpoint<RequestToUser, Results<Ok, StatusCodeHttpResult, BadRequestWhateverError>>
     {
         private readonly UserManager<User> _manager;
-        private readonly IPasswordResetMailSenderAsync _sender;
+        private readonly IPasswordResetMailSender _sender;
 
         public Endpoint(
             UserManager<User> manager,
-            IPasswordResetMailSenderAsync sender)
+            IPasswordResetMailSender sender)
         {
             _manager = manager;
             _sender = sender;
@@ -37,9 +39,9 @@ public static class ForgotPassword
                 return TypedResults.Ok();
             }
 
-            var token = await _manager.GeneratePasswordResetTokenAsync(user);
+            var encodedToken = await _manager.GeneratePasswordResetTokenAsync(user);
 
-            if (!await _sender.SendEmailPasswordResetAsync(req.Email, token))
+            if (!await _sender.SendEmailPasswordResetAsync(req.Email, encodedToken))
             {
                 return TypedResults.StatusCode((int)HttpStatusCode.ServiceUnavailable);
             }

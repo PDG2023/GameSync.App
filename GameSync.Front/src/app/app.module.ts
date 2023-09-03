@@ -27,7 +27,7 @@ import {HttpErrorInterceptor} from "./helpers/http-error.interceptor";
 import {SecurityLayoutComponent} from './common/security-layout/security-layout.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {AuthInterceptor} from "./helpers/auth-interceptor.interceptor";
-import {LocationStrategy, PathLocationStrategy} from "@angular/common";
+import {LocationStrategy, NgOptimizedImage, PathLocationStrategy} from "@angular/common";
 import {PartyItemComponent} from "./components/party-item/party-item.component";
 import {PartyDetailComponent} from './features/party-detail/party-detail.component';
 import {PartyGameItemComponent} from './components/party-game-item/party-game-item.component';
@@ -44,6 +44,8 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import {AddEditCustomGameComponent} from "./components/add-custom-game/add-edit-custom-game.component";
 import {CollectionGameItemComponent} from './components/collection-game-item/collection-game-item.component';
 import { ConfirmMailComponent } from './features/confirm-mail/confirm-mail.component';
+import { ChangePasswordComponent } from './features/change-password/change-password.component';
+import { ForgotPasswordComponent } from './features/forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +69,8 @@ import { ConfirmMailComponent } from './features/confirm-mail/confirm-mail.compo
     AddEditCustomGameComponent,
     CollectionGameItemComponent,
     ConfirmMailComponent,
+    ChangePasswordComponent,
+    ForgotPasswordComponent,
   ],
   imports: [
     BrowserModule,
@@ -89,6 +93,7 @@ import { ConfirmMailComponent } from './features/confirm-mail/confirm-mail.compo
     MatMenuModule,
     MatDialogModule,
     MatPaginatorModule,
+    NgOptimizedImage,
   ],
   providers: [
     {

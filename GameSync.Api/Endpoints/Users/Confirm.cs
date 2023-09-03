@@ -57,8 +57,18 @@ public static class Confirm
             {
                 return TypedResults.NotFound();
             }
+            string decoded;
 
-            var decoded = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(req.ConfirmationToken));
+            try
+            {
+
+                decoded = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(req.ConfirmationToken));
+            } 
+            catch
+            {
+                AddError("Jeton invalide.");
+                return new BadRequestWhateverError(ValidationFailures);
+            }
 
             var identityResult = await userManager.ConfirmEmailAsync(user, decoded);
 

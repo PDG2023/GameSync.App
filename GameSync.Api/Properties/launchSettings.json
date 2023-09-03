@@ -1,5 +1,19 @@
 {
   "profiles": {
+
+
+    "http-local": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ConnectionStrings__Default": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=gamesync;"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost"
+    },
+
     "http": {
       "commandName": "Project",
       "launchBrowser": true,

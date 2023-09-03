@@ -1,54 +1,58 @@
-<ng-container *ngIf="game$ | async as game else gameNotFound">
-  <div class="row mb-4">
-    <div class="col-sm-4">
-      <ng-container *ngIf="game.imageUrl else placeholder">
-        <img [src]="game.imageUrl">
-      </ng-container>
-      <ng-template #placeholder>
-        <img src="https://placehold.co/400">
-      </ng-template>
+<ng-container *ngIf="gameResult$ | async as gameResult else gameNotFound">
+    <div class="row mb-4">
+      <div class="col-sm-4">
+        <ng-container *ngIf="gameResult.game.imageUrl else placeholder">
+          <img [src]="gameResult.game.imageUrl">
+        </ng-container>
+        <ng-template #placeholder>
+          <img src="https://placehold.co/400">
+        </ng-template>
+      </div>
+      <div class="col-sm-8">
+        <h1>{{ gameResult.game.name }}</h1>
+        <table class="game-attributes">
+          <tr *ngIf="gameResult.game.minPlayer">
+            <td class="attribute-title">Nombre minimum de joueurs:</td>
+            <td>{{ gameResult.game.minPlayer }} joueur(s)</td>
+          </tr>
+          <tr *ngIf="gameResult.game.maxPlayer">
+            <td class="attribute-title">Nombre maximum de joueurs:</td>
+            <td>{{ gameResult.game.maxPlayer }} joueur(s)</td>
+          </tr>
+          <tr *ngIf="gameResult.game.minAge">
+            <td class="attribute-title">Age:</td>
+            <td>dès {{ gameResult.game.minAge }} an(s)</td>
+          </tr>
+          <tr *ngIf="gameResult.game.durationMinute">
+            <td class="attribute-title">Durée:</td>
+            <td>environ {{ gameResult.game.durationMinute }} mn</td>
+          </tr>
+        </table>
+        <ng-container *ngIf="!isCustom">
+          <button color="primary" mat-flat-button (click)="addToCollection()"
+                  [disabled]="(loadingService.isLoading$ | async)!"
+                  *ngIf="!gameResult.inCollection"
+                  >
+            <mat-icon>favorite_outline</mat-icon>
+            Ajouter à la collection
+          </button>
+          <button color="primary" mat-flat-button (click)="removeFromCollection()"
+                  [disabled]="(loadingService.isLoading$ | async)!"
+                  *ngIf="gameResult.inCollection"
+                  >
+            <mat-icon>favorite</mat-icon>
+            Retirer de la collection
+          </button>
+        </ng-container>
+      </div>
     </div>
-    <div class="col-sm-8">
-      <h1>{{ game.name }}</h1>
-      <table class="game-attributes">
-        <tr *ngIf="game.minPlayer">
-          <td class="attribute-title">Nombre minimum de joueurs:</td>
-          <td>{{ game.minPlayer }} joueur(s)</td>
-        </tr>
-        <tr *ngIf="game.maxPlayer">
-          <td class="attribute-title">Nombre maximum de joueurs:</td>
-          <td>{{ game.maxPlayer }} joueur(s)</td>
-        </tr>
-        <tr *ngIf="game.minAge">
-          <td class="attribute-title">Age:</td>
-          <td>dès {{ game.minAge }} an(s)</td>
-        </tr>
-        <tr *ngIf="game.durationMinute">
-          <td class="attribute-title">Durée:</td>
-          <td>environ {{ game.durationMinute }} mn</td>
-        </tr>
-      </table>
-      <ng-container *ngIf="!isCustom">
-        <button color="primary" mat-flat-button (click)="addToCollection()"
-                [disabled]="(loadingService.isLoading$ | async)!">
-          <mat-icon>favorite_outline</mat-icon>
-          Ajouter à la collection
-        </button>
-        <button color="primary" mat-flat-button (click)="removeFromCollection()"
-                [disabled]="(loadingService.isLoading$ | async)!">
-          <mat-icon>favorite</mat-icon>
-          Retirer de la collection
-        </button>
-      </ng-container>
+    <div class="row">
+      <div class="col-sm-12 description-wrapper">
+        <h1>Description</h1>
+        {{ formatDescription(gameResult.game.description) | async }}
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-12 description-wrapper">
-      <h1>Description</h1>
-      {{ formatDescription(game.description) | async }}
-    </div>
-  </div>
-</ng-container>
+    </ng-container>
 <ng-template #gameNotFound>
   <div class="game-not-existing" *ngIf="!(loadingService.isLoading$ | async)">
     <h1>

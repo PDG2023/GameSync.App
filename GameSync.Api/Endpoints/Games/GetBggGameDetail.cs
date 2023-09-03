@@ -12,7 +12,7 @@ public static class GetBggGameDetail
 {
     public class Response
     {
-        public required GameDetail GameDetail { get; init; }
+        public required GameDetail Game { get; init; }
         public required bool InCollection { get; init; }
     }
 
@@ -46,7 +46,7 @@ public static class GetBggGameDetail
 
             return TypedResults.Ok(new Response
             {
-                GameDetail = game,
+                Game = game,
                 InCollection = userId is null || await _context.UserBoardGameGeekGames.AnyAsync(bgg => bgg.BoardGameGeekGameId == req.Id && bgg.UserId == userId)
             });
         }

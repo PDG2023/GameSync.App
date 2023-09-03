@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {Observable, of, switchMap} from 'rxjs';
-import {GameDetail} from "../../models/models";
+import {Observable, of, switchMap, map} from 'rxjs';
+import {GameDetail, GameDetailResult} from "../../models/models";
 import {GamesService} from "../../services/games.service";
 import {ActivatedRoute} from "@angular/router";
 import {LoadingService} from "../../services/loading.service";
@@ -15,7 +15,7 @@ import {MessagesService} from "../../services/messages.service";
 export class GameDetailComponent implements OnInit {
 
   isCustom: boolean = false;
-  game$: Observable<GameDetail> = of();
+  gameResult$: Observable<GameDetailResult> = of();
 
   constructor(
     private gamesService: GamesService,
@@ -26,27 +26,37 @@ export class GameDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.game$ = this.route.url.pipe(
+    this.gameResult$ = this.route.url.pipe(
       switchMap(params => {
         this.isCustom = params[0].path === 'custom';
-        return this.isCustom ?
-          this.gamesService.getCustomGameDetail(params[1].path)
-          : this.gamesService.getGameDetail(params[0].path)
-      })
-    );
+        if (this.isCustom) {
+          return this.gamesService
+            .getCustomGameDetail(params[1].path)
+            .pipe(map(this.wrapToResult));
+        }
+
+      return this.gamesService.getGameDetail(params[0].path);
+    }));
+  }
+
+  wrapToResult(game: GameDetail): GameDetailResult {
+    return {
+      inCollection: false,
+      game
+    }
   }
 
   addToCollection() {
-    this.game$.subscribe(res => {
-      this.gamesService.addGameToCollection(res.id).subscribe(() => {
+    this.gameResult$.subscribe(res => {
+      this.gamesService.addGameToCollection(res.game.id).subscribe(() => {
         this.messagesService.success('Jeu ajouté à la collection.');
       })
     })
   }
 
   removeFromCollection() {
-    this.game$.subscribe(res => {
-      this.gamesService.deleteGameFromCollection(res.id, this.isCustom).subscribe(() => {
+    this.gameResult$.subscribe(res => {
+      this.gamesService.deleteGameFromCollection(res.game.id, this.isCustom).subscribe(() => {
         this.messagesService.success('Jeu retiré de la collection.');
       })
     })

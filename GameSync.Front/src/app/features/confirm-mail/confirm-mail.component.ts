@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {map, switchMap} from 'rxjs';
-import { MailConfirmationService } from 'src/app/services/mail-confirmation.service';
+import { MailConfirmationService } from '../../services/mail-confirmation.service';
 import {MessagesService} from "../../services/messages.service";
 
 @Component({

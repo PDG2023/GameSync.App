@@ -70,6 +70,24 @@ namespace GameSync.Api.Resources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à La description ne peut pas dépasser 500 caractères.
+        /// </summary>
+        public static string DescriptionTooBig {
+            get {
+                return ResourceManager.GetString("DescriptionTooBig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à L&apos;email n&apos;est pas confirmé.
+        /// </summary>
+        public static string EmailMustBeConfirmed {
+            get {
+                return ResourceManager.GetString("EmailMustBeConfirmed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Le jeu a déjà été ajouté.
         /// </summary>
         public static string GameAlreadyAdded {
@@ -88,11 +106,65 @@ namespace GameSync.Api.Resources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à La durée en minutes est invalide.
+        /// </summary>
+        public static string InvalidDuration {
+            get {
+                return ResourceManager.GetString("InvalidDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Le format de l&apos;adresse mail est incorrect..
         /// </summary>
         public static string InvalidEmail {
             get {
                 return ResourceManager.GetString("InvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à L&apos;âge min. est invalide.
+        /// </summary>
+        public static string InvalidMinAge {
+            get {
+                return ResourceManager.GetString("InvalidMinAge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Le nombre de joueur min. est invalide..
+        /// </summary>
+        public static string InvalidMinPlayer {
+            get {
+                return ResourceManager.GetString("InvalidMinPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Le nom est invalide.
+        /// </summary>
+        public static string InvalidName {
+            get {
+                return ResourceManager.GetString("InvalidName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Le jeton ne peut pas être vide.
+        /// </summary>
+        public static string InvalidToken {
+            get {
+                return ResourceManager.GetString("InvalidToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Le nom de compte est invalide.
+        /// </summary>
+        public static string InvalidUsername {
+            get {
+                return ResourceManager.GetString("InvalidUsername", resourceCulture);
             }
         }
         
@@ -106,11 +178,29 @@ namespace GameSync.Api.Resources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à L&apos;objet recherché n&apos;existe pas..
+        /// </summary>
+        public static string ObjectDoesNotExist {
+            get {
+                return ResourceManager.GetString("ObjectDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Les mots de passe ne correspondent pas.
         /// </summary>
         public static string PasswordDontMatch {
             get {
                 return ResourceManager.GetString("PasswordDontMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à L&apos;utilisateur n&apos;est pas reconnu.
+        /// </summary>
+        public static string UnknownUser {
+            get {
+                return ResourceManager.GetString("UnknownUser", resourceCulture);
             }
         }
     }

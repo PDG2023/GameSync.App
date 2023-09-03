@@ -1,7 +1,10 @@
 ﻿using FluentValidation;
 using GameSync.Api.CommonRequests;
+using GameSync.Api.Extensions;
 using GameSync.Api.Persistence;
+using GameSync.Api.Persistence.Entities;
 using GameSync.Api.Persistence.Entities.Games;
+using GameSync.Api.Resources;
 using System.Net;
 using System.Text.Json.Serialization;
 
@@ -34,7 +37,10 @@ public static class CreateGame
     {
         public Validator()
         {
-            RuleFor(r => r.Name).NotEmpty();
+            RuleFor(r => r.Name)
+                .NotEmpty()
+                .WithResourceError(() => Resource.InvalidName);
+
             Include(new GameRequestValidator());
         }
     }

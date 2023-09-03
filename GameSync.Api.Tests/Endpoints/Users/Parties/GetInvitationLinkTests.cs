@@ -11,7 +11,7 @@ using Xunit.Abstractions;
 
 namespace Tests.Endpoints.Users.Parties;
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class GetInvitationLinkTests : TestsWithLoggedUser
 {
     private readonly ITestOutputHelper _output;

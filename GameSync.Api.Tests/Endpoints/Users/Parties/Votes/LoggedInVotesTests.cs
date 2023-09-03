@@ -10,7 +10,7 @@ using Tests;
 
 namespace Tests.Endpoints.Users.Parties.Votes;
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class LoggedInVotesTests : TestsWithLoggedUser
 {
     public LoggedInVotesTests(GameSyncAppFactory factory) : base(factory)

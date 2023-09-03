@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Tests.Endpoints.Users.Games;
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class UpdateGameTests : TestsWithLoggedUser
 {
 

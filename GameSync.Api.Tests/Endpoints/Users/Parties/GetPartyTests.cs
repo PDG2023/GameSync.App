@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Tests.Endpoints.Users.Parties;
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class GetPartyAsAnonymousTests
 {
     private readonly GameSyncAppFactory _factory;
@@ -70,7 +70,7 @@ public class GetPartyAsAnonymousTests
     }
 }
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class GetPartyTests : TestsWithLoggedUser
 {
     public GetPartyTests(GameSyncAppFactory factory) : base(factory)

@@ -10,7 +10,7 @@ using Xunit.Abstractions;
 namespace Tests.Endpoints.Users.Games;
 
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class CreateGameTests : TestsWithLoggedUser
 {
 

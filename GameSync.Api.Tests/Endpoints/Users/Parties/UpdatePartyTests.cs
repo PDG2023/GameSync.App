@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Tests.Endpoints.Users.Parties;
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class UpdatePartyTests : TestsWithLoggedUser
 {
     public UpdatePartyTests(GameSyncAppFactory factory) : base(factory)

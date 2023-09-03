@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Tests.Endpoints.Users.Parties.Votes;
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class AnonymousVotesTests
 {
     private readonly GameSyncAppFactory _factory;

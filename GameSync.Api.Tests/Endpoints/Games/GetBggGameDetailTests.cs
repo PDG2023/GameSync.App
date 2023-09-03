@@ -11,7 +11,7 @@ using Xunit;
 namespace Tests.Endpoints.Games;
 
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class GetBggGameDetailTests : TestsWithLoggedUser
 {
 

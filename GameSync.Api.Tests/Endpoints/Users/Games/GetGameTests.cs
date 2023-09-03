@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Tests.Endpoints.Users.Games;
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class GetGameTests : TestsWithLoggedUser
 {
     public GetGameTests(GameSyncAppFactory factory) : base(factory)

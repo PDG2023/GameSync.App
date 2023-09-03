@@ -13,7 +13,7 @@ using Xunit.Abstractions;
 namespace Tests.Endpoints.Users.Games;
 
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class AddGameFromBggTests : TestsWithLoggedUser
 {
     private readonly ITestOutputHelper _output;

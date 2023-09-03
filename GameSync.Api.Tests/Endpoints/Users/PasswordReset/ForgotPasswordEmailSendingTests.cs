@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Tests.Endpoints.Users.PasswordReset;
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class ForgotPasswordEmailSendingTests
 {
     private readonly GameSyncAppFactory _factory;

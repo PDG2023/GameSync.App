@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Tests.Endpoints.Users.PasswordReset;
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class ChangePasswordTests
 {
     private readonly GameSyncAppFactory _factory;

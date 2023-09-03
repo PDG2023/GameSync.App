@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Tests.Endpoints.Users.Games;
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class DeletesGameTests : TestsWithLoggedUser
 {
     public DeletesGameTests(GameSyncAppFactory factory) : base(factory)

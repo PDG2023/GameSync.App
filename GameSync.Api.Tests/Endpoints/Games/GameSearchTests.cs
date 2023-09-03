@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 namespace Tests.Endpoints.Games;
 
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class GameSearchTests
 {
     private readonly GameSyncAppFactory _factory;

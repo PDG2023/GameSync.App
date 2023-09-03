@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Tests.Endpoints.Users.Parties.Games;
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class DeleteGameOfPartyTests : TestsWithLoggedUser
 {
     public DeleteGameOfPartyTests(GameSyncAppFactory factory) : base(factory) { }

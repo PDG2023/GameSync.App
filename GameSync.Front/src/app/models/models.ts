@@ -40,6 +40,10 @@ export interface GameDetail extends Game {
   durationMinute?: number;
 }
 
+export interface GameCollectionItem extends Game {
+  isCustom?: boolean;
+}
+
 export interface BaseParty {
   location: string;
   name: string;

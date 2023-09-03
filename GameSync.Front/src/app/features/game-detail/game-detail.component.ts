@@ -46,7 +46,7 @@ export class GameDetailComponent implements OnInit {
 
   removeFromCollection() {
     this.game$.subscribe(res => {
-      this.gamesService.deleteGameFromCollection(res.id).subscribe(() => {
+      this.gamesService.deleteGameFromCollection(res.id, false).subscribe(() => {
         this.messagesService.success('Jeu retiré de la collection.');
       })
     })

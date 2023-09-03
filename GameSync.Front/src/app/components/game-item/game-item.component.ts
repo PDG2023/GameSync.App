@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Router} from '@angular/router';
-import {Game} from "../../models/models";
+import {GameCollectionItem} from "../../models/models";
 import {MessagesService} from "../../services/messages.service";
 import {ConfirmationDialogService} from "../../services/confirmation-dialog.service";
 import {GamesService} from "../../services/games.service";
@@ -12,7 +12,7 @@ import {GamesService} from "../../services/games.service";
 })
 export class GameItemComponent {
 
-  @Input() game?: Game;
+  @Input() game?: GameCollectionItem;
   @Input() isReadOnly: boolean = true;
 
   @Output() itemDeleted = new EventEmitter();
@@ -35,7 +35,7 @@ export class GameItemComponent {
       .askConfirmation('Voulez-vous supprimer ce jeu de votre collection ?')
       .subscribe(res => {
         if (res) {
-          this.gamesService.deleteGameFromCollection(this.game!.id).subscribe(() => {
+          this.gamesService.deleteGameFromCollection(this.game!.id, this.game!.isCustom ?? true).subscribe(() => {
             this.itemDeleted.next(null);
             this.messagesService.success('Jeu personnalisé supprimé.');
           });

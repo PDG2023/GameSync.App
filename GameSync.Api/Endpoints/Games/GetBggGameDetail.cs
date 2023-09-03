@@ -1,8 +1,7 @@
-﻿using FluentValidation;
-using GameSync.Api.CommonRequests;
+﻿using GameSync.Api.CommonRequests;
+using GameSync.Business.BoardGameGeek.Model;
 using GameSync.Business.BoardGamesGeek;
 using Microsoft.AspNetCore.Http.HttpResults;
-using BoardGameGeekGameDetail = GameSync.Business.BoardGameGeek.Model.BoardGameGeekGameDetail;
 
 namespace GameSync.Api.Endpoints.Games;
 

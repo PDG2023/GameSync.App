@@ -1,6 +1,7 @@
 ﻿using GameSync.Api.CommonRequests;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
+using GameSync.Api.Persistence.Entities.Games;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
@@ -69,25 +70,18 @@ public static class GetParty
 
             var partyDetails = _ctx.Parties
                 .Where(p => p.Id == req.Id && (p.UserId == userId || p.InvitationToken == req.InvitationToken))
-                .Select(p => new Party
+                .Select(p => new Response
                 {
                     DateTime = p.DateTime,
                     Location = p.Location,
                     Name = p.Name,
-                    Games = p.Games == null ? null : p.Games.Select(g => new PartyGame
+                    GamesVoteInfo = p.Games == null ? null : p.Games.Select(g => new Response.GameVoteInfo
                     {
-                        Game = new Game
-                        {
-                            ImageUrl = g.Game.ImageUrl,
-                            Name = g.Game.Name
-                        },
 
-                        Votes = g.Votes == null ? null : g.Votes.Select(x => new Vote
-                        {
-                            UserName = x.UserId == null ? x.UserName : x.User.UserName,
-                            VoteYes = x.VoteYes
-                        }).ToArray()
-
+                        GameImageUrl = g.Game is UserBoardGameGeekGame ? ((UserBoardGameGeekGame)g.Game).BoardGameGeekGame.ImageUrl : ((CustomGame)g.Game).ImageUrl,
+                        GameName = g.Game is UserBoardGameGeekGame ? ((UserBoardGameGeekGame)g.Game).BoardGameGeekGame.Name : ((CustomGame)g.Game).Name,
+                        WhoVotedNo = g.Votes == null ? null : g.Votes.Where(g => g.VoteYes == false).Select(v => v.UserId == null ? v.UserName : v.User.UserName).ToArray(),
+                        WhoVotedYes = g.Votes == null ? null : g.Votes.Where(g => g.VoteYes == true).Select(v => v.UserId == null ? v.UserName : v.User.UserName).ToArray(),
                     }).ToArray()
                 });
 
@@ -97,21 +91,7 @@ public static class GetParty
                 return TypedResults.NotFound();
             }
 
-            var result = new Response
-            {
-                DateTime = res.DateTime,
-                Name = res.Name,
-                Location = res.Location,
-                GamesVoteInfo = res.Games?.Select(pg => new Response.GameVoteInfo
-                {
-                    GameImageUrl = pg.Game.ImageUrl,
-                    GameName = pg.Game.Name,
-                    WhoVotedNo = pg.Votes?.Where(v => v.VoteYes is false).Select(v => v.UserName!),
-                    WhoVotedYes = pg.Votes?.Where(v => v.VoteYes is true).Select(v => v.UserName!)
-                })
-            };
-
-            return TypedResults.Ok(result);
+            return TypedResults.Ok(res);
         }
     }
 }

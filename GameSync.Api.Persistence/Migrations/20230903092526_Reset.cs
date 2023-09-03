@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GameSync.Api.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityScaffold : Migration
+    public partial class Reset : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -49,6 +49,28 @@ namespace GameSync.Api.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BoardGameGeekGames",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    MinPlayer = table.Column<int>(type: "integer", nullable: false),
+                    MaxPlayer = table.Column<int>(type: "integer", nullable: false),
+                    MinAge = table.Column<int>(type: "integer", nullable: false),
+                    DurationMinute = table.Column<int>(type: "integer", nullable: true),
+                    ImageUrl = table.Column<string>(type: "text", nullable: true),
+                    ThumbnailUrl = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    IsExpansion = table.Column<bool>(type: "boolean", nullable: false),
+                    YearPublished = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BoardGameGeekGames", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -157,6 +179,118 @@ namespace GameSync.Api.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Parties",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Location = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    DateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    InvitationToken = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Parties", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Parties_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Games",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    Discriminator = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    MinPlayer = table.Column<int>(type: "integer", nullable: true),
+                    MaxPlayer = table.Column<int>(type: "integer", nullable: true),
+                    MinAge = table.Column<int>(type: "integer", nullable: true),
+                    DurationMinute = table.Column<int>(type: "integer", nullable: true),
+                    ImageUrl = table.Column<string>(type: "text", nullable: true),
+                    ThumbnailUrl = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    IsExpansion = table.Column<bool>(type: "boolean", nullable: true),
+                    YearPublished = table.Column<int>(type: "integer", nullable: true),
+                    BoardGameGeekGameId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Games", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Games_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Games_BoardGameGeekGames_BoardGameGeekGameId",
+                        column: x => x.BoardGameGeekGameId,
+                        principalTable: "BoardGameGeekGames",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PartiesGames",
+                columns: table => new
+                {
+                    GameId = table.Column<int>(type: "integer", nullable: false),
+                    PartyId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PartiesGames", x => new { x.GameId, x.PartyId });
+                    table.ForeignKey(
+                        name: "FK_PartiesGames_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PartiesGames_Parties_PartyId",
+                        column: x => x.PartyId,
+                        principalTable: "Parties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Vote",
+                columns: table => new
+                {
+                    PartyGameGameId = table.Column<int>(type: "integer", nullable: false),
+                    PartyGamePartyId = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    VoteYes = table.Column<bool>(type: "boolean", nullable: true),
+                    UserName = table.Column<string>(type: "text", nullable: true),
+                    UserId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vote", x => new { x.PartyGameGameId, x.PartyGamePartyId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_Vote_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Vote_PartiesGames_PartyGameGameId_PartyGamePartyId",
+                        columns: x => new { x.PartyGameGameId, x.PartyGamePartyId },
+                        principalTable: "PartiesGames",
+                        principalColumns: new[] { "GameId", "PartyId" },
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -188,10 +322,31 @@ namespace GameSync.Api.Persistence.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
 
+
             migrationBuilder.CreateIndex(
-                name: "UserNameIndex",
-                table: "AspNetUsers",
-                column: "NormalizedUserName",
+                name: "IX_Games_BoardGameGeekGameId",
+                table: "Games",
+                column: "BoardGameGeekGameId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Games_UserId",
+                table: "Games",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Parties_UserId",
+                table: "Parties",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PartiesGames_PartyId",
+                table: "PartiesGames",
+                column: "PartyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vote_UserId",
+                table: "Vote",
+                column: "UserId",
                 unique: true);
         }
 
@@ -214,7 +369,22 @@ namespace GameSync.Api.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Vote");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "PartiesGames");
+
+            migrationBuilder.DropTable(
+                name: "Games");
+
+            migrationBuilder.DropTable(
+                name: "Parties");
+
+            migrationBuilder.DropTable(
+                name: "BoardGameGeekGames");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

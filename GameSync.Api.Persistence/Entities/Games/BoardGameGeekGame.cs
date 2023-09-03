@@ -1,12 +1,13 @@
-﻿
-namespace GameSync.Api.Persistence.Entities;
+﻿using Microsoft.EntityFrameworkCore;
 
-public class Game
+namespace GameSync.Api.Persistence.Entities.Games;
+
+public class BoardGameGeekGame : IGameEntity
 {
-    public int Id { get; set; }
+    public required int Id { get; set; }
     public string Name { get; set; }
 
-    public  int MinPlayer { get; set; }
+    public int MinPlayer { get; set; }
     public int MaxPlayer { get; set; }
     public int MinAge { get; set; }
 
@@ -17,5 +18,6 @@ public class Game
     public string? Description { get; set; }
     public bool IsExpansion { get; set; }
     public int YearPublished { get; set; }
-    public string UserId { get; init; }
+
+
 }

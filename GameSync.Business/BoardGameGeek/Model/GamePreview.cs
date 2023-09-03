@@ -9,3 +9,8 @@ public class GamePreview
     public required string? ThumbnailUrl { get; init; }
     public required string? ImageUrl { get; init; }
 }
+
+public class GameCollectionItem : GamePreview
+{
+    public bool IsCustom { get; init;}
+}

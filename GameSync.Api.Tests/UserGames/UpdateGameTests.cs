@@ -1,6 +1,6 @@
 ﻿using FastEndpoints;
 using GameSync.Api.Endpoints.Users.Me.Games;
-using GameSync.Api.Persistence.Entities;
+using GameSync.Api.Persistence.Entities.Games;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Net;
 using Xunit;
@@ -68,7 +68,7 @@ public class UpdateGameTests : TestsWithLoggedUser
         };
 
         // act
-        var (response, result) = await Client.PATCHAsync<UpdateGame.Endpoint, UpdateGame.Request, Game>(request);
+        var (response, result) = await Client.PATCHAsync<UpdateGame.Endpoint, UpdateGame.Request, CustomGame>(request);
 
         // assert
         response.EnsureSuccessStatusCode();
@@ -83,41 +83,41 @@ public class UpdateGameTests : TestsWithLoggedUser
     }
 
 
-    private static IEnumerable<(UpdateGame.Request req, string expectedErrorCode)> GetMalformedRequests(Game originalGame)
+    private static IEnumerable<(UpdateGame.Request req, string expectedErrorCode)> GetMalformedRequests(CustomGame originalGame)
     {
 
         return new List<(UpdateGame.Request req, string expectedErrorCode)>
         {
             (
                 new UpdateGame.Request { Id = originalGame.Id, MinPlayer = originalGame.MaxPlayer + 1 },
-                nameof(Game.MinPlayer)
+                nameof(CustomGame.MinPlayer)
             ),
 
             (
                 new UpdateGame.Request { Id = originalGame.Id, MaxPlayer = originalGame.MinPlayer - 1 },
-                nameof(Game.MaxPlayer)
+                nameof(CustomGame.MaxPlayer)
             ),
 
 
             (
                 new UpdateGame.Request { Id = originalGame.Id, Description = string.Concat(Enumerable.Repeat('a', 1000)) },
-                nameof(Game.Description)
+                nameof(CustomGame.Description)
             ),
 
             (
                 new UpdateGame.Request { Id = originalGame.Id, DurationMinute = -10 },
-                nameof(Game.DurationMinute)
+                nameof(CustomGame.DurationMinute)
             ),
 
             
             (
                 new UpdateGame.Request { Id = originalGame.Id, MinAge = -10 },
-                nameof(Game.MinAge)
+                nameof(CustomGame.MinAge)
             ),
 
             (
                 new UpdateGame.Request { Id = originalGame.Id, Name = " " },
-                nameof(Game.Name)
+                nameof(CustomGame.Name)
             )
         };
     }

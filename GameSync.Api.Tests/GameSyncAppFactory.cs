@@ -4,6 +4,7 @@ using FastEndpoints;
 using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
+using GameSync.Api.Persistence.Entities.Games;
 using GameSync.Api.Tests.Identity;
 using GameSync.Business.Auth;
 using Microsoft.AspNetCore.Hosting;
@@ -43,9 +44,9 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
 
 
-    public async Task<Game> CreateTestGame(string userId)
+    public async Task<CustomGame> CreateTestGame(string userId)
     {
-        var game = new Game
+        var game = new CustomGame
         {
             MaxPlayer = 10,
             MinPlayer = 5,
@@ -59,7 +60,7 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
         using var scope = Services.CreateScope();
         var ctx = scope.Resolve<GameSyncContext>();
-        await ctx.Games.AddAsync(game);
+        await ctx.CustomGames.AddAsync(game);
         await ctx.SaveChangesAsync();
         return game;
     }

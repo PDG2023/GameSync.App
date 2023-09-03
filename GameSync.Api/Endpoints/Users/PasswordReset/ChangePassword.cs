@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using GameSync.Api.CommonRequests;
 using GameSync.Api.Extensions;
 using GameSync.Api.Resources;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
 
 namespace GameSync.Api.Endpoints.Users.PasswordReset;
 
@@ -56,7 +58,8 @@ public static class ChangePassword
                 return TypedResults.NotFound();
             }
 
-            var changePasswordResult = await _manager.ResetPasswordAsync(user, req.Token, req.Password);
+            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(req.Token));
+            var changePasswordResult = await _manager.ResetPasswordAsync(user, decodedToken, req.Password);
 
             if (!changePasswordResult.Succeeded)
             {

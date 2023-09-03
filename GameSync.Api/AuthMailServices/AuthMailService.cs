@@ -1,4 +1,5 @@
 ﻿using GameSync.Api.MailSender;
+using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
@@ -40,7 +41,8 @@ namespace GameSync.Api.AuthMailServices
         {
             var currentRequest = _contextAccessor.HttpContext.Request;
             var forgotPasswordPath = _configuration["ForgotPasswordEmailPath"];
-            var url = $"{currentRequest.Scheme}://{currentRequest.Host}/{forgotPasswordPath}?forgotPasswordToken={passwordChangeToken}&email={recipient}";
+            var b64Token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(passwordChangeToken));
+            var url = $"{currentRequest.Scheme}://{currentRequest.Host}/{forgotPasswordPath}?forgotPasswordToken={b64Token}&email={recipient}";
 
             return await _sender.SendMailAsync(
                 "GameSync - Demande de changement de mot de passe",

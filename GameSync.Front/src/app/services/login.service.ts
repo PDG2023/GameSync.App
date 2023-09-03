@@ -20,5 +20,12 @@ export class LoginService {
     return this.http.post<User>(`${environment.apiUrl}/users/sign-in`, user);
   }
 
-  
+  changePassword(email: string, token: string, password: string, passwordRepetition: string) : Observable<never> {
+    return this.http.post<never>(`${environment.apiUrl}/users/change-password`, {email, token, password, passwordRepetition});
+  }
+
+  sendForgotPasswordRequest(email: string): Observable<never> {
+    return this.http.post<never>(`${environment.apiUrl}/users/forgot-password`, {email});
+  }
+
 }

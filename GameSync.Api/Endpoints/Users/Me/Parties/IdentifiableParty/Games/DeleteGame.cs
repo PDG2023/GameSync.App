@@ -18,8 +18,10 @@ public static class DeleteGame
 
         public override void Configure()
         {
-            Delete(string.Empty);
-            Group<PartyGameGroup>();
+            Delete("{PartyId}/games/{PartyGameId}");
+            DontAutoTag();
+            Options(builder => builder.WithTags("Party's games"));
+            Group<PartiesGroup>();
         }
 
         public override async Task<Results<Ok, NotFound>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)

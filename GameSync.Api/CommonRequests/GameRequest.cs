@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using GameSync.Api.Extensions;
 using GameSync.Api.Resources;
 
 namespace GameSync.Api.CommonRequests;
@@ -21,30 +22,36 @@ public class GameRequestValidator : AbstractValidator<IGameRequest>
     {
         RuleFor(x => x.Name)
             .Matches(@"^\S(.*\S)?$") // no whitespace at the beggining
-            .When(x => x is not null);
+            .When(x => x is not null)
+            .WithResourceError(() => Resource.InvalidName);
 
         RuleFor(x => x.MinPlayer)
-            .GreaterThan(0);
+            .GreaterThan(0)
+            .WithResourceError(() => Resource.MaxPlayerLowerThanMinPlayer);
 
         RuleFor(x => x.MaxPlayer)
             .GreaterThan(0)
-            .When(x => x.MaxPlayer is not null);
+            .When(x => x.MaxPlayer is not null)
+            .WithResourceError(() => Resource.InvalidMinPlayer);
 
         RuleFor(x => x.MaxPlayer)
             .Must((req, maxPlayer) => maxPlayer >= req.MinPlayer)
-            .WithMessage(Resource.MaxPlayerLowerThanMinPlayer)
+            .WithResourceError(() => Resource.MaxPlayerLowerThanMinPlayer)
             .When(x => x.MaxPlayer is not null && x.MinPlayer is not null);
 
         RuleFor(x => x.MinAge)
             .GreaterThan(0)
-            .LessThan(120);
+            .LessThan(120)
+            .WithResourceError(() => Resource.InvalidMinAge);
 
         RuleFor(x => x.DurationMinute)
-            .GreaterThan(0);
+            .GreaterThan(0)
+            .WithResourceError(() => Resource.InvalidDuration);
 
         RuleFor(x => x.Description)
             .MaximumLength(500)
-            .When(x => x.Description is not null);
+            .When(x => x.Description is not null)
+            .WithResourceError(() => Resource.DescriptionTooBig);
     }
 }
 

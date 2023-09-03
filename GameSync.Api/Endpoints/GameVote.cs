@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
+using GameSync.Api.Extensions;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -26,8 +27,14 @@ public static class GameVote
     {
         public Validator()
         {
-            RuleFor(r => r.GameId).GreaterThan(0);
-            RuleFor(r => r.PartyId).GreaterThan(0).When(r => r.PartyId is not null);
+            RuleFor(r => r.GameId)
+                .GreaterThan(0)
+                .WithObjectDoesNotExistError();
+
+            RuleFor(r => r.PartyId)
+                .GreaterThan(0)
+                .When(r => r.PartyId is not null)
+                .WithObjectDoesNotExistError();
         }
     }
 

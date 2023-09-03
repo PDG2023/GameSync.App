@@ -1,4 +1,4 @@
-﻿namespace GameSync.Api;
+﻿namespace GameSync.Api.Extensions;
 
 public static class IServiceCollectionExtensions
 {

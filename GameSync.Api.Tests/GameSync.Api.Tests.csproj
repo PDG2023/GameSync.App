@@ -7,15 +7,15 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Bogus" Version="34.0.2" />
     <PackageReference Include="FakeItEasy" Version="7.4.0" />
-    <PackageReference Include="FastEndpoints" Version="5.15.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.9" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
     <PackageReference Include="coverlet.collector" Version="3.2.0" />
     <PackageReference Include="Testcontainers" Version="3.3.0" />

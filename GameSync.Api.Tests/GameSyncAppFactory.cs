@@ -7,7 +7,6 @@ using GameSync.Api.Extensions;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Api.Persistence.Entities.Games;
-using GameSync.Api.Tests.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -16,13 +15,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
+using Tests.Mocks;
 using Xunit;
 
 
-namespace GameSync.Api.Tests;
+namespace Tests;
 
-[CollectionDefinition("FullApp")]
-public class GameSyncAppFactoryFixture : ICollectionFixture<GameSyncAppFactory> { }
+[CollectionDefinition(Name)]
+public class GameSyncAppFactoryFixture : ICollectionFixture<GameSyncAppFactory> 
+{
+    public const string Name = "FullApp";
+}
 
 public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
@@ -32,20 +35,20 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
     public GameSyncAppFactory()
     {
 
-         _postgreSqlContainer = new PostgreSqlBuilder()
-        .WithImage("postgres:15-alpine")
-        .WithDatabase("db")
-        .WithUsername("postgres")
-        .WithPassword("postgres")
-        .WithCleanUp(true)
-        .WithAutoRemove(true)
-        .Build();
-        
+        _postgreSqlContainer = new PostgreSqlBuilder()
+       .WithImage("postgres:15-alpine")
+       .WithDatabase("db")
+       .WithUsername("postgres")
+       .WithPassword("postgres")
+       .WithCleanUp(true)
+       .WithAutoRemove(true)
+       .Build();
+
     }
 
 
 
-    public async Task<CustomGame> CreateTestGame(string userId)
+    public async Task<CustomGame> CreateTestGameAsync(string userId)
     {
         var game = new CustomGame
         {
@@ -66,18 +69,18 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         return game;
     }
 
-    public async Task<PartyGame> CreatePartyGameWithDependency(List<Vote>? votes = null, string? invitationToken = null)
+    public async Task<PartyGame> CreatePartyGameWithDependencyAsync(List<Vote>? votes = null, string? invitationToken = null)
     {
-        var party = await CreatePartyOfAnotherUser(invitationToken);
-        var game = await CreateTestGame(party.UserId);
-        await CreatePartyGame(party.Id, game.Id, votes);
+        var party = await CreatePartyOfAnotherUserAsync(invitationToken);
+        var game = await CreateTestGameAsync(party.UserId);
+        await CreatePartyGameAsync(party.Id, game.Id, votes);
 
 
 
         return new PartyGame { GameId = game.Id, PartyId = party.Id };
     }
 
-    public async Task CreateUnconfirmedUser(string mail, string username, string password)
+    public async Task CreateUnconfirmedUserAsync(string mail, string username, string password)
     {
         var user = new User
         {
@@ -90,9 +93,9 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         await manager.CreateAsync(user, password);
     }
 
-    public async Task<string> CreateConfirmedUser(string mail, string username, string password)
+    public async Task<string> CreateConfirmedUserAsync(string mail, string username, string password)
     {
-        await CreateUnconfirmedUser(mail, username, password);
+        await CreateUnconfirmedUserAsync(mail, username, password);
         using var scope = Services.CreateScope();
         var manager = scope.Resolve<UserManager<User>>();
         var user = await manager.FindByEmailAsync(mail);
@@ -102,7 +105,7 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
     }
 
-    public async Task<Party> CreateParty(Party party)
+    public async Task<Party> CreatePartyAsync(Party party)
     {
         using var scope = Services.CreateScope();
         var manager = scope.Resolve<GameSyncContext>();
@@ -111,16 +114,16 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         return party;
     }
 
-    public async Task<Party> CreatePartyOfAnotherUser(string? invitationToken = null)
+    public async Task<Party> CreatePartyOfAnotherUserAsync(string? invitationToken = null)
     {
-        var userId = await CreateConfirmedUser(
-            new Internet().Email(), 
-            new Internet().UserName(), 
+        var userId = await CreateConfirmedUserAsync(
+            new Internet().Email(),
+            new Internet().UserName(),
             "MuCkT*sgb2TB4!4P^r7cwRx");
-        return await CreateDefaultParty(userId, invitationToken);
+        return await CreateDefaultPartyAsync(userId, invitationToken);
     }
 
-    public async Task<Party> CreateDefaultParty(string userId, string? invitationToken = null) => await CreateParty(new Party
+    public async Task<Party> CreateDefaultPartyAsync(string userId, string? invitationToken = null) => await CreatePartyAsync(new Party
     {
         DateTime = DateTime.Now.AddDays(1),
         Location = "...",
@@ -129,7 +132,7 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         InvitationToken = invitationToken
     });
 
-    public async Task CreatePartyGame(int partyId, int gameId, List<Vote>? votes = null)
+    public async Task CreatePartyGameAsync(int partyId, int gameId, List<Vote>? votes = null)
     {
         using var scope = Services.CreateScope();
         var ctx = scope.Resolve<GameSyncContext>();
@@ -143,10 +146,10 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
     }
 
 
-    public async Task<PartyGameRequest> GetRequestToNonExistingPartyGame(string userId)
+    public async Task<PartyGameRequest> GetRequestToNonExistingPartyGameAsync(string userId)
     {
-        var party = await CreateDefaultParty(userId);
-        var game = await CreateTestGame(userId);
+        var party = await CreateDefaultPartyAsync(userId);
+        var game = await CreateTestGameAsync(userId);
         return new PartyGameRequest
         {
             GameId = game.Id,

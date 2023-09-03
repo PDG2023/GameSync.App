@@ -52,7 +52,7 @@ export class ChangePasswordComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.token = params["forgotPasswordToken"];
-      this.email = params["email"][1];
+      this.email = params["email"];
       if (!this.token || !this.email) {
         this.messagesService.error("Le token ou le mail sont manquants");
       }

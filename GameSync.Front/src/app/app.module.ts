@@ -43,6 +43,7 @@ import {LoadingInterceptor} from "./helpers/loading.interceptor";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {AddEditCustomGameComponent} from "./components/add-custom-game/add-edit-custom-game.component";
 import {CollectionGameItemComponent} from './components/collection-game-item/collection-game-item.component';
+import { ConfirmMailComponent } from './features/confirm-mail/confirm-mail.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import {CollectionGameItemComponent} from './components/collection-game-item/col
     SearchResultComponent,
     AddEditCustomGameComponent,
     CollectionGameItemComponent,
+    ConfirmMailComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,5 @@
 ﻿using GameSync.Api.CommonRequests;
+using GameSync.Api.CommonResponses;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities.Games;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -9,7 +10,7 @@ namespace GameSync.Api.Endpoints.Users.Me.Games;
 public static class GetGame
 {
 
-    public class Endpoint : Endpoint<RequestToIdentifiableObject, Results<Ok<CustomGame>, NotFound>>
+    public class Endpoint : Endpoint<RequestToIdentifiableObject, Results<Ok<GameDetail>, NotFound>>
     {
         private readonly GameSyncContext _context;
 
@@ -24,7 +25,7 @@ public static class GetGame
             Group<CollectionGroup>();
         }
 
-        public override async Task<Results<Ok<CustomGame>, NotFound>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
+        public override async Task<Results<Ok<GameDetail>, NotFound>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
         {
 
             var userId = User.ClaimValue(ClaimsTypes.UserId);
@@ -37,7 +38,22 @@ public static class GetGame
                 return TypedResults.NotFound();
             }
 
-            return TypedResults.Ok(game);
+            var response = new GameDetail 
+            { 
+                Id = req.Id,
+                ImageUrl = game.ImageUrl,
+                Name = game.Name,
+                ThumbnailUrl = game.ThumbnailUrl,
+                YearPublished = game.YearPublished,
+                Description = game.Description,
+                DurationMinute = game.DurationMinute,
+                IsExpansion = game.IsExpansion,
+                MaxPlayer  = game.MaxPlayer,
+                MinAge = game.MinAge,
+                MinPlayer = game.MinPlayer
+            };
+
+            return TypedResults.Ok(response);
         }
     }
 

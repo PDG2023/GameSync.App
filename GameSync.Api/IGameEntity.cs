@@ -1,6 +1,6 @@
-﻿namespace GameSync.Api.Persistence.Entities.Games;
+﻿namespace GameSync.Api;
 
-internal interface IGameEntity
+public interface IGameEntity
 {
     public string Name { get; set; }
 

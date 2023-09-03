@@ -1,9 +1,7 @@
-﻿using GameSync.Business.BoardGameGeek.Model;
-using GameSync.Business.BoardGamesGeek;
-using GameSync.Business.BoardGamesGeek.Schemas.Thing;
+﻿using GameSync.Api.BoardGameGeek.Schemas.Search;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace GameSync.Business.BoardGameGeek;
+namespace GameSync.Api.BoardGameGeek;
 
 public class CachedBoardGameGeekClient : BoardGameGeekClient
 {

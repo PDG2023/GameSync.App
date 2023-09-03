@@ -1,8 +1,8 @@
-﻿using GameSync.Business.BoardGameGeek.Model;
-using GameSync.Business.BoardGamesGeek;
+﻿using GameSync.Api.BoardGameGeek;
+using GameSync.Api.CommonResponses;
 using Xunit;
 
-namespace GameSync.Api.Tests.BoardGameGeek;
+namespace GameSync.Api.Tests;
 
 public class BoardGameGeekClientTests
 {

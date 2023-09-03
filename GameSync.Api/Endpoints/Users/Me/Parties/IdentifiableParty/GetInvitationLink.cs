@@ -2,7 +2,6 @@
 using GameSync.Api.Endpoints.Games;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
-using GameSync.Business.BoardGameGeek.Model;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

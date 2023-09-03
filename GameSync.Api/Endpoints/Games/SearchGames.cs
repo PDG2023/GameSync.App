@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
-using GameSync.Business.BoardGameGeek.Model;
-using GameSync.Business.BoardGamesGeek;
+using GameSync.Api.BoardGameGeek;
+using GameSync.Api.CommonResponses;
 using System.Web;
 
 namespace GameSync.Api.Endpoints.Games;

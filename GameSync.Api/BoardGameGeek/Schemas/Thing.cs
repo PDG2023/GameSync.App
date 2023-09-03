@@ -14,7 +14,7 @@ using Common;
 using System.Collections.ObjectModel;
 using System.Xml.Serialization;
 
-namespace GameSync.Business.BoardGamesGeek.Schemas.Thing
+namespace GameSync.Api.BoardGameGeek.Schemas.Search
 {
 
 

@@ -2,7 +2,7 @@
 using Azure.Communication.Email;
 using Microsoft.Extensions.Logging;
 
-namespace GameSync.Business.Mailing;
+namespace GameSync.Api.MailSender;
 
 public class AzureMailSender : IMailSender
 {

@@ -1,4 +1,4 @@
-﻿namespace GameSync.Business.Mailing
+﻿namespace GameSync.Api.MailSender
 {
     public interface IMailSender
     {

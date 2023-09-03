@@ -1,11 +1,6 @@
-﻿using GameSync.Business.Auth;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Net.Mail;
+﻿using System.Net.Mail;
 
-namespace GameSync.Business.Mailing
+namespace GameSync.Api.MailSender
 {
     public class SmtpMailSender : IMailSender
     {

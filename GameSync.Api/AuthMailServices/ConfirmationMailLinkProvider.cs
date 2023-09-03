@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 
-namespace GameSync.Business.Auth;
+namespace GameSync.Api.AuthMailServices;
 
 public class ConfirmationMailLinkProvider
 {

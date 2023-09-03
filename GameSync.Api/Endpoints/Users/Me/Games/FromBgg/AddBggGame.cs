@@ -1,7 +1,7 @@
-﻿using GameSync.Api.CommonRequests;
+﻿using GameSync.Api.BoardGameGeek;
+using GameSync.Api.CommonRequests;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities.Games;
-using GameSync.Business.BoardGamesGeek;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
@@ -57,14 +57,14 @@ public static class AddBggGame
                 {
                     Id = req.Id,
                     Description = game.Description,
-                    MaxPlayer = game.MaxPlayer.GetValueOrDefault(),
-                    Name = game.Name ?? string.Empty,
-                    MinAge = game.MinAge.GetValueOrDefault(),
-                    MinPlayer = game.MinPlayer.GetValueOrDefault(),
+                    MaxPlayer = game.MaxPlayer,
+                    Name = game.Name,
+                    MinAge = game.MinAge,
+                    MinPlayer = game.MinPlayer,
                     DurationMinute = game.DurationMinute,
                     ImageUrl = game.ImageUrl,
                     ThumbnailUrl = game.ThumbnailUrl,
-                    YearPublished = game.YearPublished ?? 0,
+                    YearPublished = game.YearPublished,
                     IsExpansion = game.IsExpansion,
                 };
                 await _context.BoardGameGeekGames.AddAsync(entityGame);

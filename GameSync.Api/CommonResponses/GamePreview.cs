@@ -1,4 +1,4 @@
-﻿namespace GameSync.Business.BoardGameGeek.Model;
+﻿namespace GameSync.Api.CommonResponses;
 
 public class GamePreview
 {
@@ -8,9 +8,4 @@ public class GamePreview
     public required int Id { get; init; }
     public required string? ThumbnailUrl { get; init; }
     public required string? ImageUrl { get; init; }
-}
-
-public class GameCollectionItem : GamePreview
-{
-    public bool IsCustom { get; init;}
 }

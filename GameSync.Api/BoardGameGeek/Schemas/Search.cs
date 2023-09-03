@@ -12,7 +12,7 @@
 // XmlSchemaClassGenerator.Console .\v2\search.xsd
 using System.Xml.Serialization;
 
-namespace GameSync.Business.BoardGamesGeek.Schemas.Search
+namespace GameSync.Api.BoardGameGeek.Schemas
 {
     
     

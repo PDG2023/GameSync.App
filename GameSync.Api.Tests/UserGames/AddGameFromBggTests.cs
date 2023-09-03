@@ -3,7 +3,6 @@ using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users.Me.Games;
 using GameSync.Api.Endpoints.Users.Me.Games.FromBgg;
 using GameSync.Api.Persistence.Entities.Games;
-using GameSync.Business.BoardGameGeek.Model;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Net;
 using Xunit;

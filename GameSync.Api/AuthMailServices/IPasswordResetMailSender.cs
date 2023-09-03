@@ -1,6 +1,6 @@
-﻿namespace GameSync.Business.Auth;
+﻿namespace GameSync.Api.AuthMailServices;
 
-public interface IPasswordResetMailSenderAsync
+public interface IPasswordResetMailSender
 {
     Task<bool> SendEmailPasswordResetAsync(string recipient, string passwordChangeToken);
 }

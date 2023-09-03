@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿namespace GameSync.Api.Persistence.Entities.Games;
 
-namespace GameSync.Api.Persistence.Entities.Games;
-
-public class BoardGameGeekGame : IGameEntity
+public class BoardGameGeekGame
 {
     public required int Id { get; set; }
     public string Name { get; set; }

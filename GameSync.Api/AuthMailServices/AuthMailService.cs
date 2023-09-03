@@ -1,10 +1,10 @@
-﻿using GameSync.Business.Mailing;
+﻿using GameSync.Api.MailSender;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
-namespace GameSync.Business.Auth
+namespace GameSync.Api.AuthMailServices
 {
-    public class AuthMailService : IConfirmationEmailSender, IPasswordResetMailSenderAsync
+    public class AuthMailService : IConfirmationEmailSender, IPasswordResetMailSender
     {
         private readonly IMailSender _sender;
         private readonly ConfirmationMailLinkProvider _emailLinkProvider;
@@ -12,7 +12,7 @@ namespace GameSync.Business.Auth
         private readonly IHttpContextAccessor _contextAccessor;
 
         public AuthMailService(
-            IMailSender sender, 
+            IMailSender sender,
             ConfirmationMailLinkProvider emailLinkProvider,
             IConfiguration configuration,
             IHttpContextAccessor contextAccessor)
@@ -28,8 +28,8 @@ namespace GameSync.Business.Auth
             var currentRequest = _contextAccessor.HttpContext.Request;
             var url = _emailLinkProvider.GetConfirmationMailLink(recipient, mailConfirmationToken, currentRequest.Scheme, currentRequest.Host.ToString());
             return await _sender.SendMailAsync(
-                "GameSync - Confirmez votre nouveau compte", 
-                $"<a href=\"{url}\">Cliquez ici pour confirmer votre compte</a>", 
+                "GameSync - Confirmez votre nouveau compte",
+                $"<a href=\"{url}\">Cliquez ici pour confirmer votre compte</a>",
                 recipient);
         }
 
@@ -40,7 +40,7 @@ namespace GameSync.Business.Auth
             var url = $"{currentRequest.Scheme}://{currentRequest.Host}/{forgotPasswordPath}?forgotPasswordToken={passwordChangeToken}&email={recipient}";
 
             return await _sender.SendMailAsync(
-                "GameSync - Demande de changement de mot de passe", 
+                "GameSync - Demande de changement de mot de passe",
                 $"<a href=\"{url}\">Cliquez ici pour changer votre mot de passe</a>",
                 recipient);
         }

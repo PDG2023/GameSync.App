@@ -1,7 +1,7 @@
-﻿using GameSync.Api.Persistence;
+﻿using GameSync.Api.CommonResponses;
+using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Api.Persistence.Entities.Games;
-using GameSync.Business.BoardGameGeek.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameSync.Api.Endpoints.Users.Me.Games;

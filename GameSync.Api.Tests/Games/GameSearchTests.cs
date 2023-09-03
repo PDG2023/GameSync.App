@@ -1,4 +1,4 @@
-using GameSync.Business.BoardGameGeek.Model;
+using GameSync.Api.CommonResponses;
 using System.Net.Http.Json;
 using Xunit;
 using Xunit.Abstractions;

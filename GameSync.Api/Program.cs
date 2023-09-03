@@ -6,12 +6,11 @@ global using FastEndpoints.Security;
 
 using FastEndpoints.Swagger;
 using GameSync.Api;
+using GameSync.Api.AuthMailServices;
+using GameSync.Api.BoardGameGeek;
+using GameSync.Api.MailSender;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
-using GameSync.Business.Auth;
-using GameSync.Business.BoardGameGeek;
-using GameSync.Business.BoardGamesGeek;
-using GameSync.Business.Mailing;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -77,7 +76,7 @@ else
 }
 
 builder.Services.AddSingleton<IConfirmationEmailSender, AuthMailService>();
-builder.Services.AddSingleton<IPasswordResetMailSenderAsync, AuthMailService>();
+builder.Services.AddSingleton<IPasswordResetMailSender, AuthMailService>();
 
 builder.Services.AddSingleton<ConfirmationMailLinkProvider>();
 builder.Services.AddHttpContextAccessor();

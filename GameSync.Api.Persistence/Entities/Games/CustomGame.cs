@@ -2,7 +2,7 @@
 
 namespace GameSync.Api.Persistence.Entities.Games;
 
-public class CustomGame : Game, IGameEntity
+public class CustomGame : Game
 {
     public string Name { get; set; }
 

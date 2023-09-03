@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using GameSync.Api.Extensions;
 
 namespace GameSync.Api.CommonRequests;
 
@@ -10,6 +11,8 @@ public class RequestToIdentifiableObjectValidator : Validator<RequestToIdentifia
 {
     public RequestToIdentifiableObjectValidator()
     {
-        RuleFor(x => x.Id).GreaterThan(0);
+        RuleFor(x => x.Id)
+            .GreaterThan(0)
+            .WithObjectDoesNotExistError();
     }
 }

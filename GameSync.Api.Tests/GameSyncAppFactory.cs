@@ -2,9 +2,9 @@
 using FakeItEasy;
 using FastEndpoints;
 using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
+using GameSync.Api.Extensions;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
-using GameSync.Api.Tests.Identity;
 using GameSync.Business.Auth;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;

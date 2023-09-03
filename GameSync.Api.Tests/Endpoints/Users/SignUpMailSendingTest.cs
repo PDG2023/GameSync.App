@@ -11,7 +11,7 @@ namespace Tests.Endpoints.Users;
 
 
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class SignUpMailSendingTest
 {
 

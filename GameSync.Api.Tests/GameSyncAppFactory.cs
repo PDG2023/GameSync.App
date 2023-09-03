@@ -21,8 +21,11 @@ using Xunit;
 
 namespace Tests;
 
-[CollectionDefinition("FullApp")]
-public class GameSyncAppFactoryFixture : ICollectionFixture<GameSyncAppFactory> { }
+[CollectionDefinition(Name)]
+public class GameSyncAppFactoryFixture : ICollectionFixture<GameSyncAppFactory> 
+{
+    public const string Name = "FullApp";
+}
 
 public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {

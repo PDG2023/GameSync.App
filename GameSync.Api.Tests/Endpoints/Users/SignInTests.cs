@@ -16,7 +16,7 @@ using Xunit.Abstractions;
 
 namespace Tests.Endpoints.Users;
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class SignInTests
 {
     private readonly GameSyncAppFactory _factory;

@@ -10,7 +10,7 @@ using Xunit.Abstractions;
 namespace Tests.Endpoints.Users.PasswordReset;
 
 
-[Collection("FullApp")]
+[Collection(GameSyncAppFactoryFixture.Name)]
 public class ConfirmMailTest
 {
     private readonly GameSyncAppFactory _factory;

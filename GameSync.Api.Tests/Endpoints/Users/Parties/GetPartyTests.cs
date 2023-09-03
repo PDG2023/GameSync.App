@@ -128,7 +128,7 @@ public class GetPartyTests : TestsWithLoggedUser
         };
 
 
-        await Factory.CreatePartyGameAsync(party.Id, originalGame.Id, votes1);
+        var pg = await Factory.CreatePartyGameAsync(party.Id, originalGame.Id, votes1);
 
         // act
         var (response, result) = await DoReq<GetParty.Response>(party.Id);
@@ -145,6 +145,7 @@ public class GetPartyTests : TestsWithLoggedUser
             {
                 new
                 {
+                    pg.Id,
                     GameImageUrl = originalGame.ImageUrl,
                     GameName = originalGame.Name,
                     WhoVotedNo = new [] { "a2" },

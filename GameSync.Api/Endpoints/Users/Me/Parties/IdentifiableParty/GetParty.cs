@@ -24,9 +24,9 @@ public static class GetParty
         public required DateTime DateTime { get; init; }
         public string? Location { get; init; }
 
-        public IEnumerable<GameVoteInfo>? GamesVoteInfo { get; init; }
+        public IEnumerable<PartyGameInfo>? GamesVoteInfo { get; init; }
 
-        public class GameVoteInfo
+        public class PartyGameInfo
         {
             public required int Id { get; set; }
             public string? GameImageUrl { get; init; }
@@ -77,15 +77,15 @@ public static class GetParty
                     DateTime = p.DateTime,
                     Location = p.Location,
                     Name = p.Name,
-                    GamesVoteInfo = p.Games == null ? null : p.Games.Select(pg => new Response.GameVoteInfo
+                    GamesVoteInfo = p.Games == null ? null : p.Games.Select(pg => new Response.PartyGameInfo
                     {
                         Id = pg.Id,
-                        GameImageUrl = pg is PartyBoardGameGeekGame ? BggGame(pg).ImageUrl : CustomGame(pg).ImageUrl,
-                        GameName = pg is PartyCustomGame ? BggGame(pg).Name : CustomGame(pg).Name,
+                        GameImageUrl = pg is PartyBoardGameGeekGame ? ((PartyBoardGameGeekGame)pg).BoardGameGeekGame.ImageUrl : ((PartyCustomGame)pg).Game.ImageUrl,
+                        GameName = pg is PartyBoardGameGeekGame ? ((PartyBoardGameGeekGame)pg).BoardGameGeekGame.Name : ((PartyCustomGame)pg).Game.Name,
                         WhoVotedNo = pg.Votes == null ? null : pg.Votes.Where(g => g.VoteYes == false).Select(v => v.UserId == null ? v.UserName : v.User.UserName).ToArray(),
                         WhoVotedYes = pg.Votes == null ? null : pg.Votes.Where(g => g.VoteYes == true).Select(v => v.UserId == null ? v.UserName : v.User.UserName).ToArray(),
                     }).ToArray()
-                });
+                }).AsSplitQuery();
 
             var res = await partyDetails.FirstOrDefaultAsync();
             if (res is null)

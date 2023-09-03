@@ -23,17 +23,6 @@
           "Castle.Core": "4.3.1"
         }
       },
-      "FastEndpoints": {
-        "type": "Direct",
-        "requested": "[5.15.0, )",
-        "resolved": "5.15.0",
-        "contentHash": "q6/XjhxpGWOeF+cs9ep4vqGZsQo0+mvXyVH7L9fgoN0HHp3GKgqA4BDP85ugn32EKPm9mVuT1Z1avSYH9Q9aQg==",
-        "dependencies": {
-          "FastEndpoints.Attributes": "5.15.0",
-          "FastEndpoints.Messaging.Core": "5.15.0",
-          "FluentValidation": "11.6.0"
-        }
-      },
       "Microsoft.AspNetCore.Mvc.Testing": {
         "type": "Direct",
         "requested": "[7.0.9, )",
@@ -52,16 +41,6 @@
         "contentHash": "I8Vv9Qj8WVetEh2xfNZRMaCliHQT2fScepvDHTV4lgEs4GKqvBhBKv45RvSdfjSHvg7GI48JQbSeWz0IblAxSQ==",
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "7.0.9"
-        }
-      },
-      "Microsoft.Extensions.Configuration.EnvironmentVariables": {
-        "type": "Direct",
-        "requested": "[7.0.0, )",
-        "resolved": "7.0.0",
-        "contentHash": "RIkfqCkvrAogirjsqSrG1E1FxgrLsOZU2nhRbl07lrajnxzSU2isj2lwQah0CtCbLWo/pOIukQzM1GfneBUnxA==",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration": "7.0.0",
-          "Microsoft.Extensions.Configuration.Abstractions": "7.0.0"
         }
       },
       "Microsoft.NET.Test.Sdk": {
@@ -215,6 +194,16 @@
         "dependencies": {
           "IdentityModel": "6.0.0",
           "Microsoft.AspNetCore.DataProtection.Abstractions": "6.0.0"
+        }
+      },
+      "FastEndpoints": {
+        "type": "Transitive",
+        "resolved": "5.15.0",
+        "contentHash": "q6/XjhxpGWOeF+cs9ep4vqGZsQo0+mvXyVH7L9fgoN0HHp3GKgqA4BDP85ugn32EKPm9mVuT1Z1avSYH9Q9aQg==",
+        "dependencies": {
+          "FastEndpoints.Attributes": "5.15.0",
+          "FastEndpoints.Messaging.Core": "5.15.0",
+          "FluentValidation": "11.6.0"
         }
       },
       "FastEndpoints.Attributes": {
@@ -507,6 +496,15 @@
         "type": "Transitive",
         "resolved": "7.0.0",
         "contentHash": "a8Iq8SCw5m8W5pZJcPCgBpBO4E89+NaObPng+ApIhrGSv9X4JPrcFAaGM4sDgR0X83uhLgsNJq8VnGP/wqhr8A==",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "7.0.0",
+          "Microsoft.Extensions.Configuration.Abstractions": "7.0.0"
+        }
+      },
+      "Microsoft.Extensions.Configuration.EnvironmentVariables": {
+        "type": "Transitive",
+        "resolved": "7.0.0",
+        "contentHash": "RIkfqCkvrAogirjsqSrG1E1FxgrLsOZU2nhRbl07lrajnxzSU2isj2lwQah0CtCbLWo/pOIukQzM1GfneBUnxA==",
         "dependencies": {
           "Microsoft.Extensions.Configuration": "7.0.0",
           "Microsoft.Extensions.Configuration.Abstractions": "7.0.0"

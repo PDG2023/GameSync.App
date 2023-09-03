@@ -26,6 +26,10 @@ export class GameDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.refresh();
+  }
+
+  refresh() {
     this.gameResult$ = this.route.url.pipe(
       switchMap(params => {
         this.isCustom = params[0].path === 'custom';
@@ -50,6 +54,7 @@ export class GameDetailComponent implements OnInit {
     this.gameResult$.subscribe(res => {
       this.gamesService.addGameToCollection(res.game.id).subscribe(() => {
         this.messagesService.success('Jeu ajouté à la collection.');
+        this.refresh();
       })
     })
   }
@@ -58,6 +63,7 @@ export class GameDetailComponent implements OnInit {
     this.gameResult$.subscribe(res => {
       this.gamesService.deleteGameFromCollection(res.game.id, this.isCustom).subscribe(() => {
         this.messagesService.success('Jeu retiré de la collection.');
+        this.refresh();
       })
     })
   }

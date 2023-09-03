@@ -1,8 +1,8 @@
-﻿using GameSync.Business.BoardGameGeek.Model;
-using GameSync.Business.BoardGamesGeek;
+﻿using GameSync.Api.BoardGameGeek;
+using GameSync.Api.CommonResponses;
 using Xunit;
 
-namespace GameSync.Api.Tests.BoardGameGeek;
+namespace GameSync.Api.Tests;
 
 public class BoardGameGeekClientTests
 {
@@ -14,7 +14,7 @@ public class BoardGameGeekClientTests
 
         var result = await _client.SearchBoardGamesAsync("Vimto Cluedo");
 
-        var expected = new BoardGameSearchResult
+        var expected = new GamePreview
         {
             Id = 72917,
             Name = "Vimto Cluedo",

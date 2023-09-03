@@ -1,6 +1,7 @@
 import {ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
 import {MediaMatcher} from "@angular/cdk/layout";
 import {AuthService} from "../../services/auth.service";
+import {LoadingService} from "../../services/loading.service";
 
 @Component({
   selector: 'app-side-nav',
@@ -14,6 +15,7 @@ export class SideNavComponent implements OnDestroy {
 
   constructor(
     protected authService: AuthService,
+    protected loadingService: LoadingService,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
   ) {

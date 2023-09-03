@@ -1,8 +1,7 @@
 ﻿using Bogus.DataSets;
 using FastEndpoints;
-using GameSync.Api.Endpoints.Users;
+using GameSync.Api.AuthMailServices;
 using GameSync.Api.Persistence.Entities;
-using GameSync.Business.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;

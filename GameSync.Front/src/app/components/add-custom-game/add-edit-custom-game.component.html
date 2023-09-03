@@ -1,0 +1,57 @@
+<form [formGroup]="gameForm">
+  <h1>{{ addMode ? 'Ajouter ' : 'Modifier '}} un jeu personnalisé</h1>
+  <div class="row">
+    <div class="col-sm-12">
+      <mat-form-field>
+        <mat-label>Titre</mat-label>
+        <input matInput formControlName="name">
+        <mat-error>Ce champs est obligatoire</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <mat-form-field>
+        <mat-label>Nb joueurs min.</mat-label>
+        <input matInput type="number" formControlName="minPlayer">
+        <mat-error>Ce champs est obligatoire</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-3">
+      <mat-form-field>
+        <mat-label>Nb joueurs max.</mat-label>
+        <input matInput type="number" formControlName="maxPlayer">
+        <mat-error>Ce champs est obligatoire</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-3">
+      <mat-form-field>
+        <mat-label>Age minimum</mat-label>
+        <input matInput type="number" formControlName="minAge">
+        <mat-error>Ce champs est obligatoire</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-3">
+      <mat-form-field>
+        <mat-label>Durée</mat-label>
+        <input matInput type="number" formControlName="durationMinute">
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <mat-form-field>
+        <mat-label>Description</mat-label>
+        <textarea matInput rows="5" formControlName="description">
+    </textarea>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button mat-flat-button color="primary" (click)="submit()" [disabled]="(loadingService.isLoading$ | async)!">
+      Sauver
+    </button>
+  </div>
+
+</form>

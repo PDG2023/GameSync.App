@@ -1,6 +1,6 @@
 ﻿using FastEndpoints;
 using GameSync.Api.Endpoints.Users.Me.Games;
-using GameSync.Api.Persistence.Entities;
+using GameSync.Api.Persistence.Entities.Games;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -53,7 +53,7 @@ public class CreateGameTests : TestsWithLoggedUser
         };
 
         // act
-        var (response, result) = await Client.POSTAsync<CreateGame.Endpoint, CreateGame.Request, Game>(newGameRequest);
+        var (response, result) = await Client.POSTAsync<CreateGame.Endpoint, CreateGame.Request, CustomGame>(newGameRequest);
 
         // assert
         await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);

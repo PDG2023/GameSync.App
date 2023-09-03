@@ -12,7 +12,6 @@ COPY GameSync.*/*.csproj ./
 # reproduce the directory hierarchy according to the source folder
 COPY ./GameSync.Api/GameSync.Api.csproj ./GameSync.Api/GameSync.Api.csproj
 COPY ./GameSync.Api.Persistence/GameSync.Api.Persistence.csproj ./GameSync.Api.Persistence/GameSync.Api.Persistence.csproj
-COPY ./GameSync.Business/GameSync.Business.csproj ./GameSync.Business/GameSync.Business.csproj
 
 # Restore csprojs
 RUN for file in $(ls **/*.csproj); do dotnet restore ${file}; done
@@ -20,7 +19,6 @@ RUN for file in $(ls **/*.csproj); do dotnet restore ${file}; done
 # All except GameSync.Front
 COPY ./GameSync.Api/ ./GameSync.Api/
 COPY ./GameSync.Api.Persistence/ ./GameSync.Api.Persistence/
-COPY ./GameSync.Business/ ./GameSync.Business/
 
 RUN dotnet build ./GameSync.Api/GameSync.Api.csproj -c Release --no-restore
 

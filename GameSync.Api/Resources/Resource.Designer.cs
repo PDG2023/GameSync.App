@@ -169,11 +169,20 @@ namespace GameSync.Api.Resources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Le nombre de joueur maximum ne peut pas être supérieur au nombre de joueur minimum..
+        ///   Recherche une chaîne localisée semblable à Le nombre de joueur maximum ne peut pas être inférieur au nombre de joueur minimum..
         /// </summary>
         public static string MaxPlayerLowerThanMinPlayer {
             get {
                 return ResourceManager.GetString("MaxPlayerLowerThanMinPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Le nombre indiqué nul ou négatif.
+        /// </summary>
+        public static string NumberIsNegative {
+            get {
+                return ResourceManager.GetString("NumberIsNegative", resourceCulture);
             }
         }
         

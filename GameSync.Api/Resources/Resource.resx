@@ -154,7 +154,10 @@
     <value>Le nom de compte est invalide</value>
   </data>
   <data name="MaxPlayerLowerThanMinPlayer" xml:space="preserve">
-    <value>Le nombre de joueur maximum ne peut pas être supérieur au nombre de joueur minimum.</value>
+    <value>Le nombre de joueur maximum ne peut pas être inférieur au nombre de joueur minimum.</value>
+  </data>
+  <data name="NumberIsNegative" xml:space="preserve">
+    <value>Le nombre indiqué nul ou négatif</value>
   </data>
   <data name="ObjectDoesNotExist" xml:space="preserve">
     <value>L'objet recherché n'existe pas.</value>

@@ -27,7 +27,7 @@ public class GameRequestValidator : AbstractValidator<IGameRequest>
 
         RuleFor(x => x.MinPlayer)
             .GreaterThan(0)
-            .WithResourceError(() => Resource.MaxPlayerLowerThanMinPlayer);
+            .WithResourceError(() => Resource.NumberIsNegative);
 
         RuleFor(x => x.MaxPlayer)
             .GreaterThan(0)

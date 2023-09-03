@@ -1,11 +1,13 @@
 ﻿using Bogus.DataSets;
 using FakeItEasy;
 using FastEndpoints;
+using GameSync.Api.AuthMailServices;
 using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
 using GameSync.Api.Extensions;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
-using GameSync.Business.Auth;
+using GameSync.Api.Persistence.Entities.Games;
+using GameSync.Api.Tests.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -43,9 +45,9 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
 
 
-    public async Task<Game> CreateTestGame(string userId)
+    public async Task<CustomGame> CreateTestGame(string userId)
     {
-        var game = new Game
+        var game = new CustomGame
         {
             MaxPlayer = 10,
             MinPlayer = 5,
@@ -59,8 +61,8 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
         using var scope = Services.CreateScope();
         var ctx = scope.Resolve<GameSyncContext>();
-        await ctx.Games.AddAsync(game);
-        await ctx.SaveChangesAsync();
+        await ctx.CustomGames.AddAsync(game);
+        var n = await ctx.SaveChangesAsync();
         return game;
     }
 
@@ -174,8 +176,8 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         services.RemoveService<IConfirmationEmailSender>();
         services.AddSingleton<IConfirmationEmailSender>(new MockMailService(false));
 
-        services.RemoveService<IPasswordResetMailSenderAsync>();
-        services.AddSingleton<IPasswordResetMailSenderAsync>(new MockMailService(false));
+        services.RemoveService<IPasswordResetMailSender>();
+        services.AddSingleton<IPasswordResetMailSender>(new MockMailService(false));
     }
 
     private static void SetupFakeConfiguration(IServiceCollection services)

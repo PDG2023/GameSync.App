@@ -28,7 +28,7 @@ public static class AddGame
         {
             var userId = User.ClaimValue(ClaimsTypes.UserId);
 
-            var userGame = await _context.Games
+            var userGame = await _context.CustomGames
                 .FirstOrDefaultAsync(g => g.Id == req.GameId && g.UserId == userId);
 
             if (userGame is null)

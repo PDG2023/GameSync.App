@@ -21,7 +21,7 @@
         <button mat-icon-button>
           <mat-icon>thumb_down</mat-icon>
         </button>
-        <button *ngIf="!readonly" mat-icon-button>
+        <button *ngIf="!readonly" mat-icon-button (click)="deleteMe()">
           <mat-icon color="warn">delete</mat-icon>
         </button>
       </div>

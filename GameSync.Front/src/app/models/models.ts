@@ -50,6 +50,7 @@ export interface GameDetailResult {
 }
 
 export interface GameVoteInfo {
+  id: number;
   gameImageUrl: string;
   gameName: string;
   whoVotedYes: string[];
@@ -70,6 +71,7 @@ export interface Party extends BaseParty {
 }
 
 export interface PartyDetail extends BaseParty {
+  isOwner: boolean;
   gamesVoteInfo: GameVoteInfo[];
 }
 

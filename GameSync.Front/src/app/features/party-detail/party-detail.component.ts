@@ -8,6 +8,7 @@ import {MessagesService} from "../../services/messages.service";
 import {MatDialog} from "@angular/material/dialog";
 import {AddGameToPartyDialogComponent} from "../add-game-to-party-dialog/add-game-to-party-dialog.component";
 import {Clipboard} from "@angular/cdk/clipboard";
+import {ConfirmationDialogService} from "../../services/confirmation-dialog.service";
 
 @Component({
   selector: 'app-party-detail',
@@ -32,19 +33,23 @@ export class PartyDetailComponent implements OnInit {
     private fb: FormBuilder,
     private messagesService: MessagesService,
     private clipboard: Clipboard,
+    private confirmationDialogService: ConfirmationDialogService,
     public dialog: MatDialog
   ) {
   }
 
   ngOnInit(): void {
     this.partyDetail$ = this.partiesService.getPartyDetail({
-      id: this.idParty,
-      invitationToken: this.route.snapshot.queryParams['']
+      id: this.idParty ?? '',
+      invitationToken: this.route.snapshot.params['token']
     }).pipe(
       tap(partyDetail => {
         this.partyDetailForm.patchValue({
           ...partyDetail
-        })
+        });
+        if (!partyDetail.isOwner) {
+          this.partyDetailForm.disable();
+        }
       })
     );
   }
@@ -80,5 +85,17 @@ export class PartyDetailComponent implements OnInit {
       id: item.id,
       isCustom: item.isCustom
     }
+  }
+
+  deleteMe(idGame: number) {
+    this.confirmationDialogService
+      .askConfirmation('Voulez-vous supprimer ce jeu de la soirée ?')
+      .subscribe(res => {
+        if (res) {
+          this.partiesService.deleteGameFromParty(this.idParty, idGame).subscribe(() => {
+            this.messagesService.success('Jeu supprimé de la soirée.');
+          });
+        }
+      });
   }
 }

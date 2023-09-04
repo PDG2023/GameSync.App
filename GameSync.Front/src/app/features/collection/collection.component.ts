@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {GamesService} from "../../services/games.service";
-import { GameCollectionItem} from "../../models/models";
+import {GameCollectionItem} from "../../models/models";
 import {Router} from "@angular/router";
 
 @Component({
@@ -54,6 +54,5 @@ export class CollectionComponent implements OnInit {
       const index = this.gamesSelected.findIndex(gameSelected => gameSelected.id === game.id);
       this.gamesSelected.splice(index, 1);
     }
-    console.table(this.gamesSelected);
   }
 }

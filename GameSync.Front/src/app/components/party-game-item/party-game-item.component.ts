@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GameVoteInfo} from "../../models/models";
 
 @Component({
@@ -10,6 +10,8 @@ import {GameVoteInfo} from "../../models/models";
 export class PartyGameItemComponent implements OnInit {
   @Input() gameVoteInfo?: GameVoteInfo;
   @Input() readonly = false;
+
+  @Output() gameRemovedFromParty = new EventEmitter();
 
   totalVote: number = 0;
   voteRatio: number = 0;
@@ -24,5 +26,9 @@ export class PartyGameItemComponent implements OnInit {
         this.voteRatio = 0 :
         this.voteRatio = Math.round(this.gameVoteInfo.countVotedYes / this.totalVote);
     }
+  }
+
+  deleteMe() {
+    this.gameRemovedFromParty.emit();
   }
 }

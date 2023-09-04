@@ -19,8 +19,8 @@ export class PartiesService {
   }
 
   getPartyDetail(req: PartyDetailRequest): Observable<PartyDetail> {
-    const queryParams = req.invitationToken ? '?InvitaionToken=' + req.invitationToken : '';
-    return this.httpClient.get<PartyDetail>(`${environment.apiUrl}/users/me/parties/${req.id}${queryParams}`);
+    const url = req.invitationToken ? `/parties/${req.invitationToken}?Id=${req.id}` : `/users/me/parties/${req.id}`;
+    return this.httpClient.get<PartyDetail>(`${environment.apiUrl}${url}`);
   }
 
   addParty(req: BaseParty) {
@@ -36,9 +36,11 @@ export class PartiesService {
   }
 
   addGameToParty(idParty: number, model: PartyGameRequest): Observable<PartyGameRequest> {
-    console.log("idparty",idParty)
-    console.log("model", model)
     return this.httpClient.post<PartyGameRequest>(`${environment.apiUrl}/users/me/parties/${idParty}/games`, model);
+  }
+
+  deleteGameFromParty(idParty: number, idPartyGame: number) {
+    return this.httpClient.delete(`${environment.apiUrl}/users/me/parties/${idParty}/games/${idPartyGame}`);
   }
 
   getInvitationToken(idParty: number): Observable<string> {

@@ -4,6 +4,9 @@
     Retour à la liste des soirées
   </button>
 </div>
+<ng-container>
+
+</ng-container>
 <form [formGroup]="partyDetailForm" *ngIf="partyDetail$ | async as partyDetail">
   <div class="row mb-5 align-items-center">
     <div class="col-sm-3">
@@ -24,7 +27,7 @@
         <input matInput placeholder="Lieu" formControlName="location">
       </mat-form-field>
     </div>
-    <div *ngIf="!readonly" class="col-sm-3 share-wrapper">
+    <div *ngIf="partyDetail.isOwner" class="col-sm-3 share-wrapper">
       <button mat-flat-button color="primary" (click)="editParty()">
         <mat-icon>save</mat-icon>
         Enregistrer
@@ -36,11 +39,12 @@
     </div>
   </div>
   <div *ngFor="let gameVoteInfo of partyDetail.gamesVoteInfo" class="party-games">
-    <app-party-game-item [readonly]="readonly" [gameVoteInfo]="gameVoteInfo"></app-party-game-item>
+    <app-party-game-item [readonly]="!partyDetail.isOwner" [gameVoteInfo]="gameVoteInfo"
+                         (gameRemovedFromParty)="deleteMe(gameVoteInfo.id)"></app-party-game-item>
   </div>
 </form>
 <div class="party-games-actions">
-  <button *ngIf="!readonly" mat-flat-button color="primary" (click)="openAddGameToPartyDialog()">
+  <button mat-flat-button color="primary" (click)="openAddGameToPartyDialog()">
     <mat-icon>add</mat-icon>
     Ajouter un jeu
   </button>

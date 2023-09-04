@@ -18,7 +18,7 @@ public static class DeleteGame
 
         public override void Configure()
         {
-            Delete("{PartyId}/games/{PartyGameId}");
+            Delete("{PartyId}/games/{Id}");
             DontAutoTag();
             Options(builder => builder.WithTags("Party's games"));
             Group<PartiesGroup>();

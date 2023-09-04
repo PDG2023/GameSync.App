@@ -23,6 +23,7 @@ public static class GetParty
         public required string Name { get; init; }
         public required DateTime DateTime { get; init; }
         public string? Location { get; init; }
+        public required bool IsOwner { get; init; }
 
         public IEnumerable<PartyGameInfo>? GamesVoteInfo { get; init; }
 
@@ -77,6 +78,7 @@ public static class GetParty
                     DateTime = p.DateTime,
                     Location = p.Location,
                     Name = p.Name,
+                    IsOwner = userId != null && p.UserId == userId,
                     GamesVoteInfo = p.Games == null ? null : p.Games.Select(pg => new Response.PartyGameInfo
                     {
                         Id = pg.Id,

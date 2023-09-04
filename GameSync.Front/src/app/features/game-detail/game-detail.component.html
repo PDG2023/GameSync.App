@@ -29,7 +29,7 @@
             <td>environ {{ game.durationMinute }} mn</td>
           </tr>
         </table>
-        <ng-container *ngIf="!isCustom">
+        <ng-container *ngIf="!isCustom && (authService.connectedUserSubject$ | async)">
           <button color="primary" mat-flat-button (click)="addToCollection()"
                   [disabled]="(loadingService.isLoading$ | async)!"
                   *ngIf="!gameResult.inCollection"

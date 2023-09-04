@@ -3,9 +3,9 @@ using GameSync.Api.MailSender;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
-namespace GameSync.Api.Tests.Azure
+namespace Tests.Azure
 {
-    public class MailSendingTests 
+    public class MailSendingTests
     {
         [Fact]
         public async Task Sending_mail_with_azure_communication_service_should_work()

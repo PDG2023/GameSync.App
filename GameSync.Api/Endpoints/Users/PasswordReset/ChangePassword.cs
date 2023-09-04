@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Identity;
 using GameSync.Api.CommonRequests;
 using GameSync.Api.Extensions;
 using GameSync.Api.Resources;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
+using System.Text.Unicode;
 
 namespace GameSync.Api.Endpoints.Users.PasswordReset;
 
@@ -12,7 +15,7 @@ public static class ChangePassword
 {
     public class Request : RequestWithCredentials
     {
-        public required string PasswordRepetition { get; init; }
+        public required string ConfirmPassword { get; init; }
         public required string Token { get; init; }
     }
 
@@ -25,7 +28,7 @@ public static class ChangePassword
                 .NotEmpty()
                 .WithResourceError(() => Resource.InvalidToken);
 
-            RuleFor(x => x.PasswordRepetition)
+            RuleFor(x => x.ConfirmPassword)
                 .NotEmpty()
                 .Must((req, x) => req.Password == x)
                 .WithResourceError(() => Resource.PasswordDontMatch);
@@ -55,8 +58,19 @@ public static class ChangePassword
             {
                 return TypedResults.NotFound();
             }
+            string decodedToken;
 
-            var changePasswordResult = await _manager.ResetPasswordAsync(user, req.Token, req.Password);
+            try
+            {
+                decodedToken =  Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(req.Token));
+            }
+            catch
+            {
+                AddError("Jeton invalide.");
+                return new BadRequestWhateverError(ValidationFailures);
+            }
+
+            var changePasswordResult = await _manager.ResetPasswordAsync(user, decodedToken, req.Password);
 
             if (!changePasswordResult.Succeeded)
             {

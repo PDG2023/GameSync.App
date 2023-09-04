@@ -33,7 +33,8 @@ public static class GetAllParties
                     Name = party.Name,
                     NumberOfGames = party.Games == null ? 0 : party.Games.Count(),
                     DateTime = party.DateTime,
-                    Location = party.Location
+                    Location = party.Location,
+                    
                 })
                 .ToListAsync(ct);
 

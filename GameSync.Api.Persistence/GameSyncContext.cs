@@ -11,6 +11,8 @@ public class GameSyncContext : IdentityDbContext<User>
     public DbSet<UserBoardGameGeekGame> UserBoardGameGeekGames { get; set; }
     public DbSet<Party> Parties { get; set; }
     public DbSet<PartyGame> PartiesGames { get; set; }
+    public DbSet<PartyBoardGameGeekGame> PartyBoardGameGeekGames { get; set; }
+    public DbSet<PartyCustomGame> PartyCustomGames { get; set; }
     public DbSet<Game> Games { get; set; }  
 
 

@@ -130,17 +130,28 @@ namespace GameSync.Api.Persistence.Migrations
 
             modelBuilder.Entity("GameSync.Api.Persistence.Entities.PartyGame", b =>
                 {
-                    b.Property<int>("GameId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("PartyId")
                         .HasColumnType("integer");
 
-                    b.HasKey("GameId", "PartyId");
+                    b.HasKey("Id");
 
                     b.HasIndex("PartyId");
 
                     b.ToTable("PartiesGames");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("PartyGame");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("GameSync.Api.Persistence.Entities.User", b =>
@@ -199,9 +210,6 @@ namespace GameSync.Api.Persistence.Migrations
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique();
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -388,6 +396,36 @@ namespace GameSync.Api.Persistence.Migrations
                     b.HasDiscriminator().HasValue("UserBoardGameGeekGame");
                 });
 
+            modelBuilder.Entity("GameSync.Api.Persistence.Entities.PartyBoardGameGeekGame", b =>
+                {
+                    b.HasBaseType("GameSync.Api.Persistence.Entities.PartyGame");
+
+                    b.Property<int>("BoardGameGeekId")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("BoardGameGeekId");
+
+                    b.HasIndex("PartyId", "BoardGameGeekId")
+                        .IsUnique();
+
+                    b.HasDiscriminator().HasValue("PartyBoardGameGeekGame");
+                });
+
+            modelBuilder.Entity("GameSync.Api.Persistence.Entities.PartyCustomGame", b =>
+                {
+                    b.HasBaseType("GameSync.Api.Persistence.Entities.PartyGame");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("PartyId", "GameId")
+                        .IsUnique();
+
+                    b.HasDiscriminator().HasValue("PartyCustomGame");
+                });
+
             modelBuilder.Entity("GameSync.Api.Persistence.Entities.Games.Game", b =>
                 {
                     b.HasOne("GameSync.Api.Persistence.Entities.User", "User")
@@ -410,12 +448,6 @@ namespace GameSync.Api.Persistence.Migrations
 
             modelBuilder.Entity("GameSync.Api.Persistence.Entities.PartyGame", b =>
                 {
-                    b.HasOne("GameSync.Api.Persistence.Entities.Games.Game", "Game")
-                        .WithMany()
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("GameSync.Api.Persistence.Entities.Party", "Party")
                         .WithMany("Games")
                         .HasForeignKey("PartyId")
@@ -424,10 +456,7 @@ namespace GameSync.Api.Persistence.Migrations
 
                     b.OwnsMany("GameSync.Api.Persistence.Entities.Vote", "Votes", b1 =>
                         {
-                            b1.Property<int>("PartyGameGameId")
-                                .HasColumnType("integer");
-
-                            b1.Property<int>("PartyGamePartyId")
+                            b1.Property<int>("PartyGameId")
                                 .HasColumnType("integer");
 
                             b1.Property<int>("Id")
@@ -445,24 +474,22 @@ namespace GameSync.Api.Persistence.Migrations
                             b1.Property<bool?>("VoteYes")
                                 .HasColumnType("boolean");
 
-                            b1.HasKey("PartyGameGameId", "PartyGamePartyId", "Id");
+                            b1.HasKey("PartyGameId", "Id");
 
                             b1.HasIndex("UserId")
                                 .IsUnique();
 
                             b1.ToTable("Vote");
 
+                            b1.WithOwner()
+                                .HasForeignKey("PartyGameId");
+
                             b1.HasOne("GameSync.Api.Persistence.Entities.User", "User")
                                 .WithMany()
                                 .HasForeignKey("UserId");
 
-                            b1.WithOwner()
-                                .HasForeignKey("PartyGameGameId", "PartyGamePartyId");
-
                             b1.Navigation("User");
                         });
-
-                    b.Navigation("Game");
 
                     b.Navigation("Party");
 
@@ -529,6 +556,28 @@ namespace GameSync.Api.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("BoardGameGeekGame");
+                });
+
+            modelBuilder.Entity("GameSync.Api.Persistence.Entities.PartyBoardGameGeekGame", b =>
+                {
+                    b.HasOne("GameSync.Api.Persistence.Entities.Games.BoardGameGeekGame", "BoardGameGeekGame")
+                        .WithMany()
+                        .HasForeignKey("BoardGameGeekId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BoardGameGeekGame");
+                });
+
+            modelBuilder.Entity("GameSync.Api.Persistence.Entities.PartyCustomGame", b =>
+                {
+                    b.HasOne("GameSync.Api.Persistence.Entities.Games.CustomGame", "Game")
+                        .WithMany()
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Game");
                 });
 
             modelBuilder.Entity("GameSync.Api.Persistence.Entities.Party", b =>

@@ -27,7 +27,7 @@ import {HttpErrorInterceptor} from "./helpers/http-error.interceptor";
 import {SecurityLayoutComponent} from './common/security-layout/security-layout.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {AuthInterceptor} from "./helpers/auth-interceptor.interceptor";
-import {LocationStrategy, PathLocationStrategy} from "@angular/common";
+import {LocationStrategy, NgOptimizedImage, PathLocationStrategy} from "@angular/common";
 import {PartyItemComponent} from "./components/party-item/party-item.component";
 import {PartyDetailComponent} from './features/party-detail/party-detail.component';
 import {PartyGameItemComponent} from './components/party-game-item/party-game-item.component';
@@ -41,11 +41,12 @@ import {GameDetailComponent} from './features/game-detail/game-detail.component'
 import {SearchResultComponent} from './features/search-result/search-result.component';
 import {LoadingInterceptor} from "./helpers/loading.interceptor";
 import {MatPaginatorModule} from "@angular/material/paginator";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatNativeDateModule} from "@angular/material/core";
 import {AddEditCustomGameComponent} from "./components/add-custom-game/add-edit-custom-game.component";
 import {AddPartyComponent} from "./features/add-party/add-party.component";
 import {CollectionGameItemComponent} from './components/collection-game-item/collection-game-item.component';
+import { ConfirmMailComponent } from './features/confirm-mail/confirm-mail.component';
+import { ChangePasswordComponent } from './features/change-password/change-password.component';
+import { ForgotPasswordComponent } from './features/forgot-password/forgot-password.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import { AddGameToPartyDialogComponent } from './features/add-game-to-party-dialog/add-game-to-party-dialog.component';
 
@@ -73,6 +74,9 @@ import { AddGameToPartyDialogComponent } from './features/add-game-to-party-dial
     AddEditCustomGameComponent,
     AddPartyComponent,
     AddGameToPartyDialogComponent,
+    ConfirmMailComponent,
+    ChangePasswordComponent,
+    ForgotPasswordComponent,
   ],
   imports: [
     BrowserModule,
@@ -95,9 +99,8 @@ import { AddGameToPartyDialogComponent } from './features/add-game-to-party-dial
     MatMenuModule,
     MatDialogModule,
     MatPaginatorModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
     MatCheckboxModule,
+    NgOptimizedImage,
   ],
   providers: [
 

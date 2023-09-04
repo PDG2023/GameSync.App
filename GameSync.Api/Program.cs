@@ -78,7 +78,6 @@ else
 builder.Services.AddSingleton<IConfirmationEmailSender, AuthMailService>();
 builder.Services.AddSingleton<IPasswordResetMailSender, AuthMailService>();
 
-builder.Services.AddSingleton<ConfirmationMailLinkProvider>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.Configure<JsonOptions>(o =>

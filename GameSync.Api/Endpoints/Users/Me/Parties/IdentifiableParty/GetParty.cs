@@ -1,4 +1,5 @@
 ﻿using GameSync.Api.CommonRequests;
+using GameSync.Api.Endpoints.Games;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Api.Persistence.Entities.Games;
@@ -23,10 +24,11 @@ public static class GetParty
         public required DateTime DateTime { get; init; }
         public string? Location { get; init; }
 
-        public IEnumerable<GameVoteInfo>? GamesVoteInfo { get; init; }
+        public IEnumerable<PartyGameInfo>? GamesVoteInfo { get; init; }
 
-        public class GameVoteInfo
+        public class PartyGameInfo
         {
+            public required int Id { get; set; }
             public string? GameImageUrl { get; init; }
             public string? GameName { get; init; }
             public IEnumerable<string>? WhoVotedYes { get; init; }
@@ -75,15 +77,15 @@ public static class GetParty
                     DateTime = p.DateTime,
                     Location = p.Location,
                     Name = p.Name,
-                    GamesVoteInfo = p.Games == null ? null : p.Games.Select(g => new Response.GameVoteInfo
+                    GamesVoteInfo = p.Games == null ? null : p.Games.Select(pg => new Response.PartyGameInfo
                     {
-
-                        GameImageUrl = g.Game is UserBoardGameGeekGame ? ((UserBoardGameGeekGame)g.Game).BoardGameGeekGame.ImageUrl : ((CustomGame)g.Game).ImageUrl,
-                        GameName = g.Game is UserBoardGameGeekGame ? ((UserBoardGameGeekGame)g.Game).BoardGameGeekGame.Name : ((CustomGame)g.Game).Name,
-                        WhoVotedNo = g.Votes == null ? null : g.Votes.Where(g => g.VoteYes == false).Select(v => v.UserId == null ? v.UserName : v.User.UserName).ToArray(),
-                        WhoVotedYes = g.Votes == null ? null : g.Votes.Where(g => g.VoteYes == true).Select(v => v.UserId == null ? v.UserName : v.User.UserName).ToArray(),
+                        Id = pg.Id,
+                        GameImageUrl = pg is PartyBoardGameGeekGame ? ((PartyBoardGameGeekGame)pg).BoardGameGeekGame.ImageUrl : ((PartyCustomGame)pg).Game.ImageUrl,
+                        GameName = pg is PartyBoardGameGeekGame ? ((PartyBoardGameGeekGame)pg).BoardGameGeekGame.Name : ((PartyCustomGame)pg).Game.Name,
+                        WhoVotedNo = pg.Votes == null ? null : pg.Votes.Where(g => g.VoteYes == false).Select(v => v.UserId == null ? v.UserName : v.User.UserName).ToArray(),
+                        WhoVotedYes = pg.Votes == null ? null : pg.Votes.Where(g => g.VoteYes == true).Select(v => v.UserId == null ? v.UserName : v.User.UserName).ToArray(),
                     }).ToArray()
-                });
+                }).AsSplitQuery();
 
             var res = await partyDetails.FirstOrDefaultAsync();
             if (res is null)
@@ -93,5 +95,16 @@ public static class GetParty
 
             return TypedResults.Ok(res);
         }
+
+        private static BoardGameGeekGame BggGame(PartyGame pg)
+        {
+            return ((PartyBoardGameGeekGame)pg).BoardGameGeekGame;
+        }
+
+        private static CustomGame CustomGame(PartyGame pg)
+        {
+            return ((PartyCustomGame)pg).Game;
+        }
+
     }
 }

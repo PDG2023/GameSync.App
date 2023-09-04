@@ -3,8 +3,6 @@ import {PartiesService} from "../../services/parties.service";
 import {Observable, of} from "rxjs";
 import {Party} from "../../models/models";
 import {Router} from "@angular/router";
-import {ConfirmationDialogService} from "../../services/confirmation-dialog.service";
-import {MessagesService} from "../../services/messages.service";
 
 @Component({
   selector: 'app-parties',

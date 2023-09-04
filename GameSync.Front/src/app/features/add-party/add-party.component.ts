@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {LoadingService} from "../../services/loading.service";
 import {PartiesService} from "../../services/parties.service";
 import {Router} from "@angular/router";
 import {MessagesService} from "../../services/messages.service";
@@ -15,7 +14,6 @@ export class AddPartyComponent {
 
   constructor(
     fb: FormBuilder,
-    private loadingService: LoadingService,
     private partiesService: PartiesService,
     private messagesService: MessagesService,
     private router: Router
@@ -32,7 +30,7 @@ export class AddPartyComponent {
     this.partiesService.addParty({
       ...this.partyForm.value
     }).subscribe(res => {
-      this.messagesService.success('BRAVO');
+      this.messagesService.success('Soirée ajoutée');
       this.router.navigateByUrl('/parties');
     })
   }

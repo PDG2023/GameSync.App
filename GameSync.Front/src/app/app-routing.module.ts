@@ -30,7 +30,6 @@ const authOnlyRoutes: Routes = [
       {path: 'edit-game/:id', component: AddEditCustomGameComponent}
     ]
   },
-  // {path: 'add-game', component: AddCustomGameComponent},
   {path: 'add-party', component: AddPartyComponent},
   {path: 'parties/:id', component: PartyDetailComponent},
   {path: 'parties/:id/vote-guest', component: PartyGameVoteIdentifyComponent},

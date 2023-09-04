@@ -24,11 +24,11 @@ export class PartyItemComponent {
 
 
   removeParty() {
-    this.confirmationService.askConfirmation('Voulez-vous supprimer la rée-soi ?').subscribe(res => {
+    this.confirmationService.askConfirmation('Voulez-vous supprimer cette soirée ?').subscribe(res => {
       if(res) {
         this.partiesService.deleteParty(this.party!.id).subscribe(() => {
           this.partyRemoved.next(null);
-          this.messagesService.success('Rée-soi supprimée, BRAVO');
+          this.messagesService.success('Soirée supprimée');
         })
       }
     });

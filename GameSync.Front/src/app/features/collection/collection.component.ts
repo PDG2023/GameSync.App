@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {GamesService} from "../../services/games.service";
 import { GameCollectionItem} from "../../models/models";
@@ -10,6 +10,10 @@ import {Router} from "@angular/router";
   styleUrls: ['./collection.component.scss']
 })
 export class CollectionComponent implements OnInit {
+  @Input() addToPartyMode: boolean = false;
+
+  //Only used in addToPartyMode
+  gamesSelected: GameCollectionItem[] = [];
   myGames$: Observable<GameCollectionItem[]> = of();
 
 
@@ -41,5 +45,15 @@ export class CollectionComponent implements OnInit {
         }
       }
     );
+  }
+
+  toggleInArray(toggled: boolean, game: GameCollectionItem) {
+    if (toggled) {
+      this.gamesSelected.push(game);
+    } else {
+      const index = this.gamesSelected.findIndex(gameSelected => gameSelected.id === game.id);
+      this.gamesSelected.splice(index, 1);
+    }
+    console.table(this.gamesSelected);
   }
 }

@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
 import {MediaMatcher} from "@angular/cdk/layout";
 import {AuthService} from "../../services/auth.service";
 import {LoadingService} from "../../services/loading.service";
@@ -6,7 +6,7 @@ import {LoadingService} from "../../services/loading.service";
 @Component({
   selector: 'app-side-nav',
   templateUrl: './side-nav.component.html',
-  styleUrls: ['./side-nav.component.scss']
+  styleUrls: ['./side-nav.component.scss'],
 })
 export class SideNavComponent implements OnDestroy {
   mobileQuery: MediaQueryList;

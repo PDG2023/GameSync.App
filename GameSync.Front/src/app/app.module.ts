@@ -41,13 +41,13 @@ import {GameDetailComponent} from './features/game-detail/game-detail.component'
 import {SearchResultComponent} from './features/search-result/search-result.component';
 import {LoadingInterceptor} from "./helpers/loading.interceptor";
 import {MatPaginatorModule} from "@angular/material/paginator";
-import {AddEditCustomGameComponent} from "./components/add-custom-game/add-edit-custom-game.component";
-import {CollectionGameItemComponent} from './components/collection-game-item/collection-game-item.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import {AddEditCustomGameComponent} from "./components/add-custom-game/add-edit-custom-game.component";
 import {AddPartyComponent} from "./features/add-party/add-party.component";
 import {CollectionGameItemComponent} from './components/collection-game-item/collection-game-item.component';
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import { AddGameToPartyDialogComponent } from './features/add-game-to-party-dialog/add-game-to-party-dialog.component';
 
 @NgModule({
   declarations: [
@@ -72,6 +72,7 @@ import {CollectionGameItemComponent} from './components/collection-game-item/col
     CollectionGameItemComponent,
     AddEditCustomGameComponent,
     AddPartyComponent,
+    AddGameToPartyDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -95,7 +96,8 @@ import {CollectionGameItemComponent} from './components/collection-game-item/col
     MatDialogModule,
     MatPaginatorModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatCheckboxModule,
   ],
   providers: [
 

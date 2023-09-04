@@ -1,5 +1,5 @@
 <ng-container *ngIf="myGames$ | async as myGames">
-  <div class="actions">
+  <div *ngIf="!addToPartyMode" class="actions">
     <button mat-flat-button color="primary" [matMenuTriggerFor]="menu">
       <mat-icon>add</mat-icon>
       Ajouter un jeu
@@ -17,7 +17,7 @@
   </div>
   <div class="row">
     <app-collection-game-item class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex align-items-stretch"
-                              *ngFor="let game of myGames" [game]="game" [isReadOnly]="false" (itemDeleted)="refresh()">
+                              *ngFor="let game of myGames" [addToPartyMode]="addToPartyMode" [game]="game" [isReadOnly]="false" (itemDeleted)="refresh()" (itemSelected)="toggleInArray($event, game)">
     </app-collection-game-item>
   </div>
 </ng-container>

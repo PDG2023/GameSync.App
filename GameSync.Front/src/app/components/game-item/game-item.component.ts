@@ -4,6 +4,7 @@ import {GameCollectionItem} from "../../models/models";
 import {MessagesService} from "../../services/messages.service";
 import {ConfirmationDialogService} from "../../services/confirmation-dialog.service";
 import {GamesService} from "../../services/games.service";
+import {MatCheckboxChange} from "@angular/material/checkbox";
 
 @Component({
   selector: 'app-game-item',
@@ -14,8 +15,10 @@ export class GameItemComponent {
 
   @Input() game?: GameCollectionItem;
   @Input() isReadOnly: boolean = true;
+  @Input() addToPartyMode: boolean = false;
 
   @Output() itemDeleted = new EventEmitter();
+  @Output() itemSelected= new EventEmitter();
 
   constructor(
     private confirmationDialogService: ConfirmationDialogService,
@@ -39,7 +42,6 @@ export class GameItemComponent {
             this.itemDeleted.next(null);
             this.messagesService.success('Jeu personnalisé supprimé.');
           });
-
         }
       });
   }
@@ -47,5 +49,9 @@ export class GameItemComponent {
 
   editMe() {
     this.router.navigate(['collection/edit-game/', this.game?.id])
+  }
+
+  toggleItem(event: MatCheckboxChange) {
+    this.itemSelected.emit(event.checked);
   }
 }

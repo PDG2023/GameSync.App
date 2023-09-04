@@ -1,0 +1,3 @@
+# GameSync
+
+Toutes les informations se situent dans l'onglet Wiki du projet. S'y trouve notamment l'architecture des différents environnement, les instructions de lancement en local, etc ...

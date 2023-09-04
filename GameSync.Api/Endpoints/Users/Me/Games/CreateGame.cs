@@ -7,6 +7,7 @@ using GameSync.Api.Persistence.Entities.Games;
 using GameSync.Api.Resources;
 using System.Net;
 using System.Text.Json.Serialization;
+using System.Web;
 
 namespace GameSync.Api.Endpoints.Users.Me.Games;
 
@@ -72,10 +73,10 @@ public static class CreateGame
             {
                 MaxPlayer = r.MaxPlayer,
                 MinPlayer = r.MinPlayer,
-                Name = WebUtility.HtmlEncode(r.Name),
+                Name = HttpUtility.HtmlEncode(r.Name),
                 MinAge = r.MinAge,
                 UserId = User.ClaimValue(ClaimsTypes.UserId)!,
-                Description = WebUtility.HtmlEncode(r.Description),
+                Description = HttpUtility.HtmlEncode(r.Description),
                 DurationMinute = r.DurationMinute
             };
         }

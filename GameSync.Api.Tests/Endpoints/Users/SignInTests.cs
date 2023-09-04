@@ -108,9 +108,13 @@ public class SignInTests
         _client.SetToken(JwtBearerDefaults.AuthenticationScheme, token);
 
         // Try accessing an authorized endpoint
-        var (meResponse, _) = await _client.GETAsync<Me.Endpoint, NoContent>();
+        var (meResponse, meResult) = await _client.GETAsync<Me.Endpoint, Me.Response>();
 
-        meResponse.EnsureSuccessStatusCode();
+        await meResponse.EnsureSuccessAndDumpBodyIfNotAsync(_output);
+        Assert.NotNull(meResult);
+        Assert.Equal(result.Email, meResult.Email);
+        Assert.Equal(result.UserName, meResult.UserName);
+
 
     }
 

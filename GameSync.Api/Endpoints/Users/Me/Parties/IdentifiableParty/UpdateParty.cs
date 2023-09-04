@@ -7,6 +7,7 @@ using GameSync.Api.Resources;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Web;
 
 namespace GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty;
 
@@ -85,12 +86,12 @@ public static class UpdateParty
         {
             if (req.Location is not null)
             {
-                party.Location = WebUtility.HtmlEncode(req.Location);
+                party.Location = HttpUtility.HtmlEncode(req.Location);
             }
 
             if (req.Name is not null)
             {
-                party.Name = WebUtility.HtmlEncode(req.Name);
+                party.Name = HttpUtility.HtmlEncode(req.Name);
             }
 
             if (req.DateTime is not null)

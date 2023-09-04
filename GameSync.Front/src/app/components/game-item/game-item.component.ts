@@ -40,7 +40,7 @@ export class GameItemComponent {
         if (res) {
           this.gamesService.deleteGameFromCollection(this.game!.id, this.game!.isCustom ?? true).subscribe(() => {
             this.itemDeleted.next(null);
-            this.messagesService.success('Jeu personnalisé supprimé.');
+            this.messagesService.success('Jeu supprimé de la collection.');
           });
         }
       });

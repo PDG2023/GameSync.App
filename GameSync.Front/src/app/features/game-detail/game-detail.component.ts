@@ -5,6 +5,7 @@ import {GamesService} from "../../services/games.service";
 import {ActivatedRoute} from "@angular/router";
 import {LoadingService} from "../../services/loading.service";
 import {MessagesService} from "../../services/messages.service";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,11 +18,13 @@ export class GameDetailComponent implements OnInit {
   isCustom: boolean = false;
   gameResult$: Observable<GameDetailResult> = of();
 
+
   constructor(
     private gamesService: GamesService,
     private route: ActivatedRoute,
     protected loadingService: LoadingService,
-    private messagesService: MessagesService
+    private messagesService: MessagesService,
+    protected authService: AuthService
   ) {
   }
 

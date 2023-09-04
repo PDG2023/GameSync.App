@@ -5,6 +5,7 @@ using GameSync.Api.Resources;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Web;
 
 namespace GameSync.Api.Endpoints.Users.Me.Games;
 
@@ -96,12 +97,12 @@ public static class UpdateGame
 
             if (req.Name is not null)
             {
-                game.Name = WebUtility.HtmlEncode(req.Name);
+                game.Name = HttpUtility.HtmlEncode(req.Name);
             }
 
             if (req.Description is not null)
             {
-                game.Description = WebUtility.HtmlEncode(req.Description);
+                game.Description = HttpUtility.HtmlEncode(req.Description);
             }
 
             if (req.DurationMinute is not null)

@@ -15,9 +15,16 @@
       </button>
     </mat-menu>
   </div>
-  <div class="row">
-    <app-collection-game-item class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex align-items-stretch"
-                              *ngFor="let game of myGames" [addToPartyMode]="addToPartyMode" [game]="game" [isReadOnly]="false" (itemDeleted)="refresh()" (itemSelected)="toggleInArray($event, game)">
-    </app-collection-game-item>
-  </div>
+  <ng-container *ngIf="myGames.length > 0 else noGames">
+    <div class="row">
+      <app-collection-game-item class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex align-items-stretch"
+                                *ngFor="let game of myGames" [addToPartyMode]="addToPartyMode" [game]="game"
+                                [isReadOnly]="false" (itemDeleted)="refresh()"
+                                (itemSelected)="toggleInArray($event, game)">
+      </app-collection-game-item>
+    </div>
+  </ng-container>
 </ng-container>
+<ng-template #noGames>
+  <h1>Que c'est triste ! Vous n'avez pas encore de jeu dans votre collection...</h1>
+</ng-template>

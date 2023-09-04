@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {BaseParty, Party, PartyDetail, PartyDetailRequest} from '../models/models';
+import {BaseParty, Party, PartyDetail, PartyDetailRequest, PartyGameRequest} from '../models/models';
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
 
@@ -35,9 +35,13 @@ export class PartiesService {
     return this.httpClient.delete(`${environment.apiUrl}/users/me/parties/${id}`);
   }
 
-  addGameToParty(idParty: number, idGame: number) {
+  addGameToParty(idParty: number, model: PartyGameRequest): Observable<PartyGameRequest> {
     console.log("idparty",idParty)
-    console.log("idgame",idGame)
-    return this.httpClient.put(`${environment.apiUrl}/users/me/parties/${idParty}/games/${idGame}`, null);
+    console.log("model", model)
+    return this.httpClient.post<PartyGameRequest>(`${environment.apiUrl}/users/me/parties/${idParty}/games`, model);
+  }
+
+  getInvitationToken(idParty: number): Observable<string> {
+    return this.httpClient.get<string>(`${environment.apiUrl}/users/me/parties/${idParty}/invitation-token`);
   }
 }

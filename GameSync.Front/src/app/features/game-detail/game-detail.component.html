@@ -30,14 +30,14 @@
           </tr>
         </table>
         <ng-container *ngIf="!isCustom">
-          <button color="primary" mat-flat-button (click)="addToCollection()"
+          <button color="primary" mat-flat-button (click)="addToCollection(game.id)"
                   [disabled]="(loadingService.isLoading$ | async)!"
                   *ngIf="!gameResult.inCollection"
           >
             <mat-icon>favorite_outline</mat-icon>
             Ajouter à la collection
           </button>
-          <button color="primary" mat-flat-button (click)="removeFromCollection()"
+          <button color="primary" mat-flat-button (click)="removeFromCollection(game.id)"
                   [disabled]="(loadingService.isLoading$ | async)!"
                   *ngIf="gameResult.inCollection"
           >

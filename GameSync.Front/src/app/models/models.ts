@@ -77,3 +77,12 @@ export interface PartyDetailRequest {
   id: number;
   invitationToken?: string;
 }
+
+export interface PartyGameRequest {
+  games: PartyGameRequestItem[]
+}
+
+export interface PartyGameRequestItem {
+  id: number;
+  isCustom?: boolean;
+}

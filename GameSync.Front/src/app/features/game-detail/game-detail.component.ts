@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {Observable, of, switchMap, map} from 'rxjs';
+import {map, Observable, of, switchMap} from 'rxjs';
 import {GameDetail, GameDetailResult} from "../../models/models";
 import {GamesService} from "../../services/games.service";
 import {ActivatedRoute} from "@angular/router";
@@ -39,8 +39,8 @@ export class GameDetailComponent implements OnInit {
             .pipe(map(this.wrapToResult));
         }
 
-      return this.gamesService.getGameDetail(params[0].path);
-    }));
+        return this.gamesService.getGameDetail(params[0].path);
+      }));
   }
 
   wrapToResult(game: GameDetail): GameDetailResult {
@@ -50,21 +50,17 @@ export class GameDetailComponent implements OnInit {
     }
   }
 
-  addToCollection() {
-    this.gameResult$.subscribe(res => {
-      this.gamesService.addGameToCollection(res.game.id).subscribe(() => {
-        this.messagesService.success('Jeu ajouté à la collection.');
-        this.refresh();
-      })
+  addToCollection(gameId: number) {
+    this.gamesService.addGameToCollection(gameId).subscribe(() => {
+      this.messagesService.success('Jeu ajouté à la collection.');
+      this.refresh();
     })
   }
 
-  removeFromCollection() {
-    this.gameResult$.subscribe(res => {
-      this.gamesService.deleteGameFromCollection(res.game.id, this.isCustom).subscribe(() => {
-        this.messagesService.success('Jeu retiré de la collection.');
-        this.refresh();
-      })
+  removeFromCollection(gameId: number) {
+    this.gamesService.deleteGameFromCollection(gameId, this.isCustom).subscribe(() => {
+      this.messagesService.success('Jeu retiré de la collection.');
+      this.refresh();
     })
   }
 

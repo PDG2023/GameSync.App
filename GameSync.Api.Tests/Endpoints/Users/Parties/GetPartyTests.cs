@@ -61,10 +61,12 @@ public class GetPartyAsAnonymousTests
         var party = await _factory.CreatePartyOfAnotherUserAsync(_token);
 
         // act
-        var (response, _) = await DoReq(party.Id, _token);
+        var (response, res) = await DoReq(party.Id, _token);
 
         // assert
         response.EnsureSuccessStatusCode();
+        Assert.NotNull(res);
+        Assert.False(res.IsOwner);
     }
 
     private async Task<TestResult<GetParty.Response>> DoReq(int partyId, string? invitationToken)
@@ -141,6 +143,7 @@ public class GetPartyTests : TestsWithLoggedUser
             party.DateTime,
             party.Name,
             party.Location,
+            result.IsOwner,
             GamesVoteInfo = new[]
             {
                 new

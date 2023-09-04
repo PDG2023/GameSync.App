@@ -1,11 +1,27 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using GameSync.Api.Persistence;
+using GameSync.Api.Persistence.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameSync.Api.Endpoints.Users.Me;
 
 public static class Me
 {
-    public class Endpoint : EndpointWithoutRequest<NoContent>
+
+    public class Response
     {
+        public required string UserName { get; init; }
+        public required string Email { get; init; }
+    }
+
+    public class Endpoint : EndpointWithoutRequest<Response>
+    {
+        private readonly GameSyncContext _ctx;
+
+        public Endpoint(GameSyncContext ctx)
+        {
+            _ctx = ctx;
+        }
 
         public override void Configure()
         {
@@ -13,9 +29,20 @@ public static class Me
             Group<MeGroup>();
         }
 
-        public override Task<NoContent> ExecuteAsync(CancellationToken ct)
+        public override async Task<Response> ExecuteAsync(CancellationToken ct)
         {
-            return Task.FromResult(TypedResults.NoContent());
+            var userId = User.ClaimValue(ClaimsTypes.UserId);
+
+            var user = await _ctx.Users
+                .Where(u => u.Id == userId)
+                .Select(u => new User
+                {
+                    UserName = u.UserName,
+                    Email = u.Email
+                })
+                .FirstOrDefaultAsync();  
+
+            return new Response { Email = user.Email, UserName = user.UserName };
         }
 
     }

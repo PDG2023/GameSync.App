@@ -1,9 +1,13 @@
 ﻿using FluentValidation;
-using GameSync.Api.Endpoints.Users.Me.Games.Validator;
+using GameSync.Api.CommonRequests;
+using GameSync.Api.Extensions;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
+using GameSync.Api.Persistence.Entities.Games;
+using GameSync.Api.Resources;
 using System.Net;
 using System.Text.Json.Serialization;
+using System.Web;
 
 namespace GameSync.Api.Endpoints.Users.Me.Games;
 
@@ -34,12 +38,15 @@ public static class CreateGame
     {
         public Validator()
         {
-            RuleFor(r => r.Name).NotEmpty();
-            Include(new GameValidator());
+            RuleFor(r => r.Name)
+                .NotEmpty()
+                .WithResourceError(() => Resource.InvalidName);
+
+            Include(new GameRequestValidator());
         }
     }
 
-    public class Endpoint : Endpoint<Request, Game>
+    public class Endpoint : Endpoint<Request, CustomGame>
     {
         private readonly GameSyncContext _context;
         public Endpoint(GameSyncContext context)
@@ -53,23 +60,23 @@ public static class CreateGame
             Group<CollectionGroup>();
         }
 
-        public override async Task<Game> ExecuteAsync(Request req, CancellationToken ct)
+        public override async Task<CustomGame> ExecuteAsync(Request req, CancellationToken ct)
         {
-            var trackingGame = await _context.Games.AddAsync(RequestToGame(req), ct);
+            var trackingGame = await _context.CustomGames.AddAsync(RequestToGame(req), ct);
             await _context.SaveChangesAsync(ct);
             return trackingGame.Entity;
         }
 
-        private Game RequestToGame(Request r)
+        private CustomGame RequestToGame(Request r)
         {
-            return new Game
+            return new CustomGame
             {
                 MaxPlayer = r.MaxPlayer,
                 MinPlayer = r.MinPlayer,
-                Name = WebUtility.HtmlEncode(r.Name),
+                Name = HttpUtility.HtmlEncode(r.Name),
                 MinAge = r.MinAge,
                 UserId = User.ClaimValue(ClaimsTypes.UserId)!,
-                Description = WebUtility.HtmlEncode(r.Description),
+                Description = HttpUtility.HtmlEncode(r.Description),
                 DurationMinute = r.DurationMinute
             };
         }

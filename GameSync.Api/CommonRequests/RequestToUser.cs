@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using GameSync.Api.Extensions;
+using GameSync.Api.Resources;
 
 namespace GameSync.Api.CommonRequests;
 
@@ -16,8 +18,7 @@ public class RequestToUserValidator : Validator<RequestToUser>
         RuleFor(x => x.Email)
             .NotEmpty()
             .EmailAddress()
-            .WithErrorCode(nameof(Resources.Resource.InvalidEmail))
-            .WithMessage(Resources.Resource.InvalidEmail);
+            .WithResourceError(() => Resource.InvalidEmail);
 
     }
 }

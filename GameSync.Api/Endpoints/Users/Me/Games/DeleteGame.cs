@@ -9,8 +9,12 @@ namespace GameSync.Api.Endpoints.Users.Me.Games;
 public static class DeleteGame
 {
 
+    public class Request : RequestToIdentifiableObject
+    {
+        public required bool IsCustomGame { get; set;}
+    }
 
-    public class Endpoint : Endpoint<RequestToIdentifiableObject, Results<BadRequestWhateverError, NotFound, Ok>>
+    public class Endpoint : Endpoint<Request, Results<BadRequestWhateverError, NotFound, Ok>>
     {
         private readonly GameSyncContext _context;
 
@@ -25,18 +29,25 @@ public static class DeleteGame
             Group<CollectionGroup>();
         }
 
-        public override async Task<Results<BadRequestWhateverError, NotFound, Ok>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
+        public override async Task<Results<BadRequestWhateverError, NotFound, Ok>> ExecuteAsync(Request req, CancellationToken ct)
         {
 
             var userId = User.ClaimValue(ClaimsTypes.UserId);
-            var gameExists = await _context.Games.AnyAsync(game => game.Id == req.Id && userId == game.UserId);
+            int count;
 
-            if (!gameExists)
+            if (req.IsCustomGame)
+            {
+                count = await _context.CustomGames.Where(game => game.Id == req.Id && game.UserId == userId).ExecuteDeleteAsync();
+            }
+            else
+            {
+                count = await _context.UserBoardGameGeekGames.Where(game => game.BoardGameGeekGameId == req.Id && game.UserId == userId).ExecuteDeleteAsync();
+            }
+
+            if (count == 0)
             {
                 return TypedResults.NotFound();
             }
-
-            await _context.Games.Where(game => game.Id == req.Id).ExecuteDeleteAsync();
 
             return TypedResults.Ok();
 

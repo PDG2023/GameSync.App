@@ -20,9 +20,12 @@ h1 {
 }
 
 .description-wrapper {
+  white-space: pre-wrap;
   text-align: justify;
 }
 
 img {
-  max-width: 400px;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 30px;
 }

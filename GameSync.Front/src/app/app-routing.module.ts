@@ -12,22 +12,43 @@ import {PartyDetailComponent} from "./features/party-detail/party-detail.compone
 import {PartyGameVoteIdentifyComponent} from "./features/party-game-vote-identify/party-game-vote-identify.component";
 import {GameDetailComponent} from "./features/game-detail/game-detail.component";
 import {SearchResultComponent} from "./features/search-result/search-result.component";
+import {AddEditCustomGameComponent} from "./components/add-custom-game/add-edit-custom-game.component";
+import { ConfirmMailComponent } from './features/confirm-mail/confirm-mail.component';
+import {ChangePasswordComponent} from "./features/change-password/change-password.component";
+import {ForgotPasswordComponent} from "./features/forgot-password/forgot-password.component";
 
 const anonymousOnlyRoutes: Routes = [
   {path: 'login', component: LoginComponent},
-  {path: 'register', component: RegisterComponent}
+  {path: 'register', component: RegisterComponent},
+  {path: 'confirm-mail', component: ConfirmMailComponent},
+  {path: 'forgot-password', component: ForgotPasswordComponent},
+  {path: 'change-password', component: ChangePasswordComponent},
 ]
 
 const authOnlyRoutes: Routes = [
   {path: 'parties', component: PartiesComponent},
   {path: 'collection', component: CollectionComponent},
+  {
+    path: 'collection',
+    children: [
+      {path: 'add-game', component: AddEditCustomGameComponent},
+      {path: 'edit-game/:id', component: AddEditCustomGameComponent}
+    ]
+  },
   {path: 'parties/:id', component: PartyDetailComponent},
   {path: 'parties/:id/vote-guest', component: PartyGameVoteIdentifyComponent},
 ]
 
 const routes: Routes = [
   {path: '', component: HomeComponent, pathMatch: 'full'},
-  {path: 'games/:id', component: GameDetailComponent},
+  {path: 'games', component: SearchResultComponent},
+  {
+    path: 'games',
+    children: [
+      {path: ':id', component: GameDetailComponent},
+      {path: 'custom/:id', component: GameDetailComponent}
+    ],
+  },
   {path: '', canActivateChild: [authGuardChild], children: authOnlyRoutes},
   {
     path: '',
@@ -35,7 +56,6 @@ const routes: Routes = [
     component: SecurityLayoutComponent,
     children: anonymousOnlyRoutes
   },
-  {path: 'games', component: SearchResultComponent}
 ];
 
 @NgModule({

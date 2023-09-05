@@ -1,8 +1,7 @@
-﻿using FluentValidation;
+﻿using GameSync.Api.BoardGameGeek;
 using GameSync.Api.CommonRequests;
 using GameSync.Api.Persistence;
-using GameSync.Api.Persistence.Entities;
-using GameSync.Business.BoardGamesGeek;
+using GameSync.Api.Persistence.Entities.Games;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,35 +31,51 @@ public static class AddBggGame
         public override async Task<Results<NotFound, Ok, BadRequestWhateverError>> ExecuteAsync(RequestToIdentifiableObject req, CancellationToken ct)
         {
             var ids = new List<int> { req.Id };
-            var games = await _client.GetBoardGamesDetailAsync(ids);
-            var game = games.FirstOrDefault();
+            var game = (await _client.GetBoardGamesDetailAsync(ids)).FirstOrDefault();
             if (game is null)
             {
                 return TypedResults.NotFound();
             }
 
             var userId = User.ClaimValue(ClaimsTypes.UserId);
+
             // check if the game has already been added 
-            var existingGame = await _context.BoardGameGeekGames.Where(g => g.UserId == userId && g.BoardGameGeekId == req.Id).FirstOrDefaultAsync();
-            if (existingGame is not null)
+            var gameExists = await _context.UserBoardGameGeekGames
+                .AnyAsync(g => g.UserId == userId && g.BoardGameGeekGameId == req.Id);
+
+            if (gameExists)
             {
                 AddError(Resources.Resource.GameAlreadyAdded, nameof(Resources.Resource.GameAlreadyAdded));
                 return new BadRequestWhateverError(ValidationFailures);
             }
-
-            var entityGame = new BoardGameGeekGame
+            
+            // check if the game has already been added in the db
+            var gameAlreadyAdded = await _context.BoardGameGeekGames.AnyAsync(g => g.Id == req.Id);
+            if (!gameAlreadyAdded)
             {
-                BoardGameGeekId = req.Id,
-                Description = game.Description,
-                MaxPlayer = game.MaxPlayer.GetValueOrDefault(),
-                Name = game.Name ?? string.Empty,
-                MinAge = game.MinAge.GetValueOrDefault(),
-                MinPlayer = game.MinPlayer.GetValueOrDefault(),
-                DurationMinute = game.DurationMinute,
-                UserId = userId!
-            };
+                var entityGame = new BoardGameGeekGame
+                {
+                    Id = req.Id,
+                    Description = game.Description,
+                    MaxPlayer = game.MaxPlayer,
+                    Name = game.Name,
+                    MinAge = game.MinAge,
+                    MinPlayer = game.MinPlayer,
+                    DurationMinute = game.DurationMinute,
+                    ImageUrl = game.ImageUrl,
+                    ThumbnailUrl = game.ThumbnailUrl,
+                    YearPublished = game.YearPublished,
+                    IsExpansion = game.IsExpansion,
+                };
+                await _context.BoardGameGeekGames.AddAsync(entityGame);
+                await _context.SaveChangesAsync();
+            }
 
-            await _context.BoardGameGeekGames.AddAsync(entityGame);
+            await _context.UserBoardGameGeekGames.AddAsync(new UserBoardGameGeekGame
+            {
+                BoardGameGeekGameId = req.Id,
+                UserId = userId
+            });
             await _context.SaveChangesAsync();
 
             return TypedResults.Ok();

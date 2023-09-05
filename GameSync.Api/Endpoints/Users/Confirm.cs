@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
+using GameSync.Api.Extensions;
 using GameSync.Api.Persistence.Entities;
+using GameSync.Api.Resources;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
@@ -12,10 +14,8 @@ public static class Confirm
 
     public class Request
     {
-        [QueryParam]
         public required string ConfirmationToken { get; init; }
 
-        [QueryParam]
         public required string Email { get; init; }
     }
 
@@ -23,8 +23,12 @@ public static class Confirm
     {
         public Validator()
         {
-            RuleFor(x => x.ConfirmationToken).NotEmpty();
-            RuleFor(x => x.Email).EmailAddress();
+            RuleFor(x => x.ConfirmationToken)
+                .NotEmpty()
+                .WithResourceError(() => Resource.InvalidToken);
+            RuleFor(x => x.Email)
+                .EmailAddress()
+                .WithResourceError(() => Resource.InvalidEmail);
         }
     }
 
@@ -35,9 +39,8 @@ public static class Confirm
 
         public override void Configure()
         {
-
             AllowAnonymous();
-            Get("confirm");
+            Post("confirm");
             Group<UsersGroup>();
         }
 
@@ -54,8 +57,18 @@ public static class Confirm
             {
                 return TypedResults.NotFound();
             }
+            string decoded;
 
-            var decoded = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(req.ConfirmationToken));
+            try
+            {
+
+                decoded = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(req.ConfirmationToken));
+            } 
+            catch
+            {
+                AddError("Jeton invalide.");
+                return new BadRequestWhateverError(ValidationFailures);
+            }
 
             var identityResult = await userManager.ConfirmEmailAsync(user, decoded);
 

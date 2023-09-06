@@ -16,8 +16,8 @@ import {AuthService} from "../../services/auth.service";
 export class GameDetailComponent implements OnInit {
 
   isCustom: boolean = false;
-  gameResult$: Observable<GameDetailResult> = of();
-
+  game?: GameDetail;
+  inCollection: boolean = false;
 
   constructor(
     private gamesService: GamesService,
@@ -29,52 +29,48 @@ export class GameDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("yo");
-    this.refresh();
-  }
 
-  refresh() {
-    this.gameResult$ = this.route.url.pipe(
-      switchMap(params => {
-        this.isCustom = params[0].path === 'custom';
+    this.route.url.pipe(
+      switchMap(segments => {
+        this.isCustom = segments[0].path === 'custom';
         if (this.isCustom) {
           return this.gamesService
-            .getCustomGameDetail(params[1].path)
+            .getCustomGameDetail(segments[1].path)
             .pipe(map(game => ({inCollection: false, game})));
         }
+        return this.gamesService.getGameDetail(segments[0].path);
+      }))
+      .subscribe(result => {
+        this.game = result.game;
+        this.inCollection = result.inCollection;
+      });
 
-        return this.gamesService.getGameDetail(params[0].path);
-      }));
   }
 
-
-
   addToCollection() {
-    this.gameResult$.subscribe(res => {
-      this.gamesService
-        .addGameToCollection(res.game.id)
-        .subscribe(() => {
-          this.messagesService.success('Jeu ajouté à la collection.');
-          this.gameResult$ = of({
-            game: res.game,
-            inCollection: true
-          })
-        })
-    })
+    if (this.game === undefined) {
+      return;
+    }
+
+    this.gamesService
+      .addGameToCollection(this.game.id)
+      .subscribe(() => {
+        this.messagesService.success('Jeu ajouté à la collection.');
+        this.inCollection = true;
+      });
   }
 
   removeFromCollection() {
-    this.gameResult$.subscribe(res => {
-      this.gamesService
-        .deleteGameFromCollection(res.game.id, this.isCustom)
-        .subscribe(() => {
-          this.messagesService.success('Jeu retiré de la collection.');
-          this.gameResult$ = of({
-            game: res.game,
-            inCollection: false
-          })
-        })
-    })
+    if (this.game === undefined) {
+      return;
+    }
+
+    this.gamesService
+      .deleteGameFromCollection(this.game.id, this.isCustom)
+      .subscribe(() => {
+        this.messagesService.success('Jeu retiré à la collection.');
+        this.inCollection = false;
+      });
   }
 
   formatDescription(description: string): Observable<string> {

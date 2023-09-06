@@ -1,5 +1,4 @@
-<ng-container *ngIf="gameResult$ | async as gameResult else gameNotFound">
-  <ng-container *ngIf="gameResult.game as game">
+<ng-container *ngIf="game !== undefined else gameNotFound">
     <div class="row mb-4">
       <div class="col-sm-4">
         <ng-container *ngIf="game.imageUrl else placeholder">
@@ -32,14 +31,14 @@
         <ng-container *ngIf="!isCustom && (authService.connectedUserSubject$ | async)">
           <button color="primary" mat-flat-button (click)="addToCollection()"
                   [disabled]="(loadingService.isLoading$ | async)!"
-                  *ngIf="!gameResult.inCollection"
+                  *ngIf="!inCollection"
           >
             <mat-icon>favorite_outline</mat-icon>
             Ajouter à la collection
           </button>
           <button color="primary" mat-flat-button (click)="removeFromCollection()"
                   [disabled]="(loadingService.isLoading$ | async)!"
-                  *ngIf="gameResult.inCollection"
+                  *ngIf="inCollection"
           >
             <mat-icon>favorite</mat-icon>
             Retirer de la collection
@@ -54,7 +53,6 @@
       </div>
     </div>
   </ng-container>
-    </ng-container>
 <ng-template #gameNotFound>
   <div class="game-not-existing" *ngIf="!(loadingService.isLoading$ | async)">
     <h1>

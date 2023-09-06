@@ -1,5 +1,6 @@
 ﻿using FastEndpoints;
 using GameSync.Api;
+using GameSync.Api.CommonResponses;
 using GameSync.Api.Endpoints.Users.Me.Parties;
 using System.Net;
 using Xunit;

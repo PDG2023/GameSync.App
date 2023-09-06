@@ -13,11 +13,13 @@ namespace Tests.Endpoints.Users.Parties;
 public class GetPartyAsAnonymousTests
 {
     private readonly GameSyncAppFactory _factory;
+    private readonly ITestOutputHelper _output;
     private readonly HttpClient _client;
 
-    public GetPartyAsAnonymousTests(GameSyncAppFactory factory)
+    public GetPartyAsAnonymousTests(GameSyncAppFactory factory, ITestOutputHelper output)
     {
         _factory = factory;
+        _output = output;
         _client = factory.CreateClient();
     }
 
@@ -61,7 +63,7 @@ public class GetPartyAsAnonymousTests
         var (response, res) = await DoReq(_token);
 
         // assert
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
         Assert.NotNull(res);
         Assert.False(res.IsOwner);
     }

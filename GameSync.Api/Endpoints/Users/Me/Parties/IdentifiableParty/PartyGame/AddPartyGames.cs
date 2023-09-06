@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
-namespace GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
+namespace GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.PartyGame;
 
-public static class AddGames
+public static class AddPartyGames
 {
 
     public class Request

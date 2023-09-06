@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GameSync.Api.Persistence.Entities.Games;
 
 
-public class UserBoardGameGeekGame : Game
+public class UserBoardGameGeekGame : UserGame
 {
     public int BoardGameGeekGameId { get; set; }
     [ForeignKey(nameof(BoardGameGeekGameId))]

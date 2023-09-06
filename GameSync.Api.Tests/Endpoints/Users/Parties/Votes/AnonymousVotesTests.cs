@@ -30,7 +30,7 @@ public class AnonymousVotesTests
     public async Task Anonymous_vote_without_token_produces_not_found()
     {
         // arrange
-        var pg = await _factory.CreatePartyGameWithDependencyAsync();
+        var pg = await _factory.CreatePartyGameOfOtherUserAsync();
 
         // act
         var (response, _) = await DoReq<Ok>(pg.PartyId, _username, false, string.Empty);
@@ -43,7 +43,7 @@ public class AnonymousVotesTests
     public async Task Put_new_vote_creates_one()
     {
         // arrange
-        var pg = await _factory.CreatePartyGameWithDependencyAsync(invitationToken: _token);
+        var pg = await _factory.CreatePartyGameOfOtherUserAsync(invitationToken: _token);
 
         // act
         var (response, _) = await DoReq<Ok>(pg.Id, _username, true, _token);
@@ -62,7 +62,7 @@ public class AnonymousVotesTests
     {
         // arrange
         var vote = new Vote { UserName = _username, VoteYes = true };
-        var pg = await _factory.CreatePartyGameWithDependencyAsync(new List<Vote> { vote }, _token);
+        var pg = await _factory.CreatePartyGameOfOtherUserAsync(new List<Vote> { vote }, _token);
 
         // act
         var (response, _) = await DoReq<Ok>(pg.Id, _username, false, _token);
@@ -81,7 +81,7 @@ public class AnonymousVotesTests
         // arrange
         const string otherUserName = "Other user";
         var vote = new Vote { UserName = otherUserName, VoteYes = true };
-        var pg = await _factory.CreatePartyGameWithDependencyAsync(new List<Vote> { vote }, _token);
+        var pg = await _factory.CreatePartyGameOfOtherUserAsync(new List<Vote> { vote }, _token);
 
         // act
         var (response, _) = await DoReq<Ok>(pg.Id, _username, false, _token);

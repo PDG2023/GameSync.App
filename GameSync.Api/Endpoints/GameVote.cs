@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
 using GameSync.Api.Extensions;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
@@ -99,7 +98,7 @@ public static class GameVote
                 {
                     vote.UserId = userId;
                 }
-                partyGame.Votes.Add(vote);
+                partyGame.Votes!.Add(vote);
             }
             else
             {

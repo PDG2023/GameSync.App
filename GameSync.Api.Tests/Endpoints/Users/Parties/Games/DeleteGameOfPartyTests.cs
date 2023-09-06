@@ -1,6 +1,6 @@
 ﻿using FastEndpoints;
 using GameSync.Api.CommonRequests;
-using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
+using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.PartyGame;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -55,8 +55,6 @@ public class DeleteGameOfPartyTests : TestsWithLoggedUser
     [Fact]
     public async Task Deleting_game_of_non_existing_party_produces_not_found()
     {
-        // arrange
-        var party = await Factory.CreateDefaultPartyAsync(UserId);
 
         // act
         var (response, _) = await DoDelete<NotFound>(45487874);
@@ -69,7 +67,7 @@ public class DeleteGameOfPartyTests : TestsWithLoggedUser
     private async Task<TestResult<TResponse>> DoDelete<TResponse>(int pgId)
     {
         var req = new RequestToIdentifiableObject { Id = pgId };
-        return await Client.DELETEAsync<DeleteGame.Endpoint, RequestToIdentifiableObject, TResponse>(req);
+        return await Client.DELETEAsync<DeletePartyGame.Endpoint, RequestToIdentifiableObject, TResponse>(req);
     }
 
     private async Task<PartyGame?> GetPartyGame(int id)

@@ -54,4 +54,4 @@ services:
         networks:
             - dev
         ports:
-           - "80:80"
+           - "1092:80"

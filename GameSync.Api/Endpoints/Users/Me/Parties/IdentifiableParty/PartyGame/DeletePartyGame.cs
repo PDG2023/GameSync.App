@@ -3,15 +3,15 @@ using GameSync.Api.Persistence;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
+namespace GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.PartyGame;
 
-public static class DeleteGame
+public static class DeletePartyGame
 {
-   public class Endpoint : Endpoint<RequestToIdentifiableObject, Results<Ok, NotFound>>
-   {
+    public class Endpoint : Endpoint<RequestToIdentifiableObject, Results<Ok, NotFound>>
+    {
         private readonly GameSyncContext _ctx;
 
-        public Endpoint(GameSyncContext ctx) 
+        public Endpoint(GameSyncContext ctx)
         {
             _ctx = ctx;
         }

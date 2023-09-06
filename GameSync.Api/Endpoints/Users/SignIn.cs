@@ -19,13 +19,13 @@ public static class SignIn
 
     public class Endpoint : Endpoint<RequestWithCredentials, Results<Ok<Response>, BadRequestWhateverError>>
     {
-        private readonly SignInManager<User> signInManager;
-        private readonly IConfiguration config;
+        private readonly SignInManager<User> _signInManager;
+        private readonly IConfiguration _config;
 
         public Endpoint(SignInManager<User> signInManager, IConfiguration config)
         {
-            this.signInManager = signInManager;
-            this.config = config;
+            this._signInManager = signInManager;
+            this._config = config;
         }
 
         public override void Configure()
@@ -39,14 +39,14 @@ public static class SignIn
         public override async Task<Results<Ok<Response>, BadRequestWhateverError>> ExecuteAsync(RequestWithCredentials req, CancellationToken ct)
         {
 
-            var user = await signInManager.UserManager.FindByEmailAsync(req.Email);
+            var user = await _signInManager.UserManager.FindByEmailAsync(req.Email);
             if (user is null)
             {
                 AddNotFoundCredentialsErrors();
                 return new BadRequestWhateverError(ValidationFailures);
             }
 
-            var signInResult = await signInManager.CheckPasswordSignInAsync(user, req.Password, false);
+            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, req.Password, false);
 
             if (!signInResult.Succeeded)
             {
@@ -63,9 +63,9 @@ public static class SignIn
 
 
             var token = JWTBearer.CreateToken(
-                signingKey: config["Jwt:SignKey"]!,
-                issuer: config["Jwt:Issuer"]!,
-                audience: config["Jwt:Issuer"]!,
+                signingKey: _config["Jwt:SignKey"]!,
+                issuer: _config["Jwt:Issuer"]!,
+                audience: _config["Jwt:Issuer"]!,
 
                 expireAt: DateTime.UtcNow.AddDays(1),
                 priviledges: u => {
@@ -74,9 +74,9 @@ public static class SignIn
 
             var response = new Response
             {
-                Email = user.Email,
+                Email = user.Email!,
                 Token = token,
-                UserName = user.UserName
+                UserName = user.UserName!
             };
             return TypedResults.Ok(response);
         }

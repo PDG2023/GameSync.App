@@ -1,7 +1,11 @@
-﻿namespace GameSync.Api.Endpoints.Users.Me.Parties;
+﻿namespace GameSync.Api.CommonResponses;
 
 public class PartyPreview
 {
+    public PartyPreview()
+    {
+        
+    }
     public required int Id { get; init; }
     public string? Location { get; init; }
     public required string Name { get; init; }

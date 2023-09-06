@@ -1,4 +1,5 @@
-﻿using GameSync.Api.Persistence;
+﻿using GameSync.Api.CommonResponses;
+using GameSync.Api.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameSync.Api.Endpoints.Users.Me.Parties;
@@ -26,6 +27,7 @@ public static class GetAllParties
             var userId = User.ClaimValue(ClaimsTypes.UserId);
 
             var previews = await _context.Parties
+                .AsNoTracking()
                 .Where(party => party.UserId == userId)
                 .Select(party => new PartyPreview
                 {

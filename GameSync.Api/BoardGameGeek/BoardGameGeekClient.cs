@@ -1,6 +1,7 @@
 ﻿using GameSync.Api.BoardGameGeek.Schemas;
 using GameSync.Api.BoardGameGeek.Schemas.Search;
 using GameSync.Api.CommonResponses;
+using GameSync.Api.Persistence.Entities.Games;
 using System.Xml.Serialization;
 
 namespace GameSync.Api.BoardGameGeek;
@@ -73,7 +74,7 @@ public class BoardGameGeekClient
 
     }
 
-    public async Task<IEnumerable<GameDetail>> GetBoardGamesDetailAsync(IEnumerable<int> ids)
+    public async Task<IEnumerable<IGame>> GetBoardGamesDetailAsync(IEnumerable<int> ids)
     {
         var detail = await GetDetailedThingsAsync(ids.Select(x => x.ToString()));
         return detail.Where(x => x is not null).Select(thing => new GameDetail

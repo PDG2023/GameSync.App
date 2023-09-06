@@ -13,7 +13,7 @@ public static class GetParty
 
     public class Request
     {
-        public required int Id { get; set; }
+        public int? Id { get; set; }
         public string? InvitationToken { get; set; }
 
     }
@@ -63,16 +63,21 @@ public static class GetParty
         {
             var userId = User.ClaimValue(ClaimsTypes.UserId);
 
-            if (userId is null && req.InvitationToken is null)
+            if (userId is null )
             {
-                return TypedResults.NotFound();
+                if (req.Id is not null || req.InvitationToken is null)
+                {
+                    return TypedResults.NotFound();
+                }
             }
 
             // TODO : This is extremely inefficient as the EF core query builder makes a lot a shit.
             //        Refactor, maybe using a raw sql or something.
 
             var partyDetails = _ctx.Parties
-                .Where(p => p.Id == req.Id && (p.UserId == userId || p.InvitationToken == req.InvitationToken))
+                .Where(p =>  req.Id != null 
+                    ? req.Id == p.Id && p.UserId ==  userId
+                    : p.InvitationToken == req.InvitationToken)
                 .Select(p => new Response
                 {
                     DateTime = p.DateTime,
@@ -97,16 +102,5 @@ public static class GetParty
 
             return TypedResults.Ok(res);
         }
-
-        private static BoardGameGeekGame BggGame(PartyGame pg)
-        {
-            return ((PartyBoardGameGeekGame)pg).BoardGameGeekGame;
-        }
-
-        private static CustomGame CustomGame(PartyGame pg)
-        {
-            return ((PartyCustomGame)pg).Game;
-        }
-
     }
 }

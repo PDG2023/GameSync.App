@@ -29,10 +29,10 @@ public class GetPartyAsAnonymousTests
     public async Task Getting_details_of_party_without_invitation_with_empty_token_in_requests_produces_not_found()
     {
         // arrange
-        var party = await _factory.CreatePartyOfAnotherUserAsync();
+        await _factory.CreatePartyOfAnotherUserAsync();
 
         // act
-        var (response, _) = await DoReq(party.Id, null);
+        var (response, _) = await DoReq(null);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -42,10 +42,10 @@ public class GetPartyAsAnonymousTests
     public async Task Getting_details_of_party_with_invitation_with_inequal_token_produces_not_found()
     {
         // arrange
-        var party = await _factory.CreatePartyOfAnotherUserAsync("t1");
+        await _factory.CreatePartyOfAnotherUserAsync("t1");
 
         // act
-        var (response, _) = await DoReq(party.Id, "t2");
+        var (response, _) = await DoReq("t2");
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -61,7 +61,7 @@ public class GetPartyAsAnonymousTests
         var party = await _factory.CreatePartyOfAnotherUserAsync(_token);
 
         // act
-        var (response, res) = await DoReq(party.Id, _token);
+        var (response, res) = await DoReq(_token);
 
         // assert
         response.EnsureSuccessStatusCode();
@@ -69,9 +69,9 @@ public class GetPartyAsAnonymousTests
         Assert.False(res.IsOwner);
     }
 
-    private async Task<TestResult<GetParty.Response>> DoReq(int partyId, string? invitationToken)
+    private async Task<TestResult<GetParty.Response>> DoReq(string? invitationToken)
     {
-        var req = new GetParty.Request { Id = partyId, InvitationToken = invitationToken };
+        var req = new GetParty.Request { InvitationToken = invitationToken };
         return await _client.GETAsync<GetParty.Endpoint, GetParty.Request, GetParty.Response>(req);
     }
 }

@@ -6,7 +6,7 @@ namespace Tests.BoardGameGeek;
 
 public class BoardGameGeekClientTests
 {
-    private BoardGameGeekClient _client = new();
+    private readonly BoardGameGeekClient _client = new();
 
     [Fact]
     public async Task Retrieving_vimeo_cluedo_should_work()

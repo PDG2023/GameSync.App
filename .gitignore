@@ -398,3 +398,4 @@ FodyWeavers.xsd
 .idea/
 /pushImage.ps1
 /xsdgen
+/GameSync.Benchmarks/GameVoteRetrievalQuery.cs

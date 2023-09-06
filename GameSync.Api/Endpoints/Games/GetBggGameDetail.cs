@@ -2,9 +2,9 @@
 using GameSync.Api.CommonRequests;
 using GameSync.Api.CommonResponses;
 using GameSync.Api.Persistence;
+using GameSync.Api.Persistence.Entities.Games;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace GameSync.Api.Endpoints.Games;
 
@@ -46,7 +46,7 @@ public static class GetBggGameDetail
 
             return TypedResults.Ok(new Response
             {
-                Game = game,
+                Game = new GameDetail(game),
                 InCollection = userId is null || await _context.UserBoardGameGeekGames.AnyAsync(bgg => bgg.BoardGameGeekGameId == req.Id && bgg.UserId == userId)
             });
         }

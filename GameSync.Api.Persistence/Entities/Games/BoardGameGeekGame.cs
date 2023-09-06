@@ -1,9 +1,9 @@
 ﻿namespace GameSync.Api.Persistence.Entities.Games;
 
-public class BoardGameGeekGame
+public class BoardGameGeekGame : IGame
 {
     public required int Id { get; set; }
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     public int MinPlayer { get; set; }
     public int MaxPlayer { get; set; }

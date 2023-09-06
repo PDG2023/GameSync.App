@@ -34,6 +34,7 @@ public static class Me
             var userId = User.ClaimValue(ClaimsTypes.UserId);
 
             var user = await _ctx.Users
+                .AsNoTracking()
                 .Where(u => u.Id == userId)
                 .Select(u => new User
                 {

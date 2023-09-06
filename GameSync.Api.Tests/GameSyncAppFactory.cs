@@ -2,7 +2,6 @@
 using FakeItEasy;
 using FastEndpoints;
 using GameSync.Api.AuthMailServices;
-using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
 using GameSync.Api.Extensions;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
@@ -39,8 +38,8 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
        .WithDatabase("db")
        .WithUsername("postgres")
        .WithPassword("postgres")
-       .WithCleanUp(true)
-       .WithAutoRemove(true)
+       //.WithCleanUp(true)
+       //.WithAutoRemove(true)
        .Build();
 
     }
@@ -68,7 +67,7 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         return game;
     }
 
-    public async Task<PartyCustomGame> CreatePartyGameWithDependencyAsync(List<Vote>? votes = null, string? invitationToken = null)
+    public async Task<PartyCustomGame> CreatePartyGameOfOtherUserAsync(List<Vote>? votes = null, string? invitationToken = null)
     {
         var party = await CreatePartyOfAnotherUserAsync(invitationToken);
         var game = await CreateTestGameAsync(party.UserId);
@@ -135,7 +134,7 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         {
             GameId = gameId,
             PartyId = partyId,
-            Votes = votes
+            Votes = votes ?? new List<Vote>()
         });
         await manager.SaveChangesAsync();
         return entity.Entity;
@@ -158,7 +157,7 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         });
     }
 
-    private void SetupMockMailService(IServiceCollection services)
+    private static void SetupMockMailService(IServiceCollection services)
     {
         services.RemoveService<IConfirmationEmailSender>();
         services.AddSingleton<IConfirmationEmailSender>(new MockMailService(false));

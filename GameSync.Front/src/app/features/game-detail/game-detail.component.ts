@@ -29,6 +29,7 @@ export class GameDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("yo");
     this.refresh();
   }
 
@@ -39,35 +40,40 @@ export class GameDetailComponent implements OnInit {
         if (this.isCustom) {
           return this.gamesService
             .getCustomGameDetail(params[1].path)
-            .pipe(map(this.wrapToResult));
+            .pipe(map(game => ({inCollection: false, game})));
         }
 
-      return this.gamesService.getGameDetail(params[0].path);
-    }));
+        return this.gamesService.getGameDetail(params[0].path);
+      }));
   }
 
-  wrapToResult(game: GameDetail): GameDetailResult {
-    return {
-      inCollection: false,
-      game
-    }
-  }
+
 
   addToCollection() {
     this.gameResult$.subscribe(res => {
-      this.gamesService.addGameToCollection(res.game.id).subscribe(() => {
-        this.messagesService.success('Jeu ajouté à la collection.');
-        this.refresh();
-      })
+      this.gamesService
+        .addGameToCollection(res.game.id)
+        .subscribe(() => {
+          this.messagesService.success('Jeu ajouté à la collection.');
+          this.gameResult$ = of({
+            game: res.game,
+            inCollection: true
+          })
+        })
     })
   }
 
   removeFromCollection() {
     this.gameResult$.subscribe(res => {
-      this.gamesService.deleteGameFromCollection(res.game.id, this.isCustom).subscribe(() => {
-        this.messagesService.success('Jeu retiré de la collection.');
-        this.refresh();
-      })
+      this.gamesService
+        .deleteGameFromCollection(res.game.id, this.isCustom)
+        .subscribe(() => {
+          this.messagesService.success('Jeu retiré de la collection.');
+          this.gameResult$ = of({
+            game: res.game,
+            inCollection: false
+          })
+        })
     })
   }
 

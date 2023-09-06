@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "http-local": {
+    "http-eighty": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
@@ -15,21 +15,10 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "ConnectionStrings__Default": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=gamesync;"
-      },
-      "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:5086"
-    },
-    "https": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:7116;http://localhost:5086"
+      "applicationUrl": "http://localhost:5086"
     },
     "DockerConfig": {
       "commandName": "Project",
@@ -40,13 +29,6 @@
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7116;http://localhost:5086"
-    },
-    "Docker": {
-      "commandName": "Docker",
-      "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
-      "publishAllPorts": true,
-      "useSSL": true
     }
   },
   "$schema": "https://json.schemastore.org/launchsettings.json",

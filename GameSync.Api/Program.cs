@@ -23,7 +23,6 @@ builder.Services.AddFastEndpoints();
 builder.Services.SwaggerDocument(x => x.ShortSchemaNames = true);
 builder.Services.AddMemoryCache();
 
-builder.Configuration.AddJsonFile("appsettings.Docker.json");
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddDbContext<GameSyncContext>(options =>

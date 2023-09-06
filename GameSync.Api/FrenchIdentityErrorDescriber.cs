@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+#pragma warning disable IDE0090 // Utiliser 'new(...)'
 
+#pragma warning disable CS8765 // La nullabilité de type du paramètre ne correspond pas au membre substitué (probablement en raison des attributs de nullabilité).
 namespace GameSync.Api;
 /// <inheritdoc />
 /// <summary>
@@ -68,3 +70,5 @@ public class FrenchIdentityErrorDescriber : IdentityErrorDescriber
     /// <inheritdoc />
     public override IdentityError PasswordRequiresUpper() => new IdentityError { Code = nameof(PasswordRequiresUpper), Description = "Le mot de passe doit contenir au moins un charactère majuscule ('A'-'Z')." };
 }
+#pragma warning restore CS8765 // La nullabilité de type du paramètre ne correspond pas au membre substitué (probablement en raison des attributs de nullabilité).
+#pragma warning restore IDE0090 // Utiliser 'new(...)'

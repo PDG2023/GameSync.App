@@ -1,5 +1,4 @@
 ﻿using FastEndpoints;
-using GameSync.Api.CommonRequests;
 using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -14,13 +13,11 @@ namespace Tests.Endpoints.Users.Parties;
 public class GetPartyAsAnonymousTests
 {
     private readonly GameSyncAppFactory _factory;
-    private readonly ITestOutputHelper _output;
     private readonly HttpClient _client;
 
-    public GetPartyAsAnonymousTests(GameSyncAppFactory factory, ITestOutputHelper output)
+    public GetPartyAsAnonymousTests(GameSyncAppFactory factory)
     {
         _factory = factory;
-        _output = output;
         _client = factory.CreateClient();
     }
 
@@ -58,7 +55,7 @@ public class GetPartyAsAnonymousTests
         const string _token = "letsparty";
 
         // arrange
-        var party = await _factory.CreatePartyOfAnotherUserAsync(_token);
+        await _factory.CreatePartyOfAnotherUserAsync(_token);
 
         // act
         var (response, res) = await DoReq(_token);

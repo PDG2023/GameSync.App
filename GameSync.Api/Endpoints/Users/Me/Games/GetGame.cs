@@ -1,7 +1,6 @@
 ﻿using GameSync.Api.CommonRequests;
 using GameSync.Api.CommonResponses;
 using GameSync.Api.Persistence;
-using GameSync.Api.Persistence.Entities.Games;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,22 +37,7 @@ public static class GetGame
                 return TypedResults.NotFound();
             }
 
-            var response = new GameDetail 
-            { 
-                Id = req.Id,
-                ImageUrl = game.ImageUrl,
-                Name = game.Name,
-                ThumbnailUrl = game.ThumbnailUrl,
-                YearPublished = game.YearPublished,
-                Description = game.Description,
-                DurationMinute = game.DurationMinute,
-                IsExpansion = game.IsExpansion,
-                MaxPlayer  = game.MaxPlayer,
-                MinAge = game.MinAge,
-                MinPlayer = game.MinPlayer
-            };
-
-            return TypedResults.Ok(response);
+            return TypedResults.Ok(new GameDetail(game));
         }
     }
 

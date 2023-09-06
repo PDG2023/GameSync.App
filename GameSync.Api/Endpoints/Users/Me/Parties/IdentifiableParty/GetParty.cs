@@ -102,5 +102,6 @@ public static class GetParty
 
             return TypedResults.Ok(res);
         }
+
     }
 }

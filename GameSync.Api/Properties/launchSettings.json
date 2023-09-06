@@ -1,19 +1,15 @@
 {
   "profiles": {
-
-
     "http-local": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "ConnectionStrings__Default": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=gamesync;"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost"
     },
-
     "http": {
       "commandName": "Project",
       "launchBrowser": true,
@@ -35,13 +31,15 @@
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7116;http://localhost:5086"
     },
-    "IIS Express": {
-      "commandName": "IISExpress",
+    "DockerConfig": {
+      "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+        "ASPNETCORE_ENVIRONMENT": "Docker"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:7116;http://localhost:5086"
     },
     "Docker": {
       "commandName": "Docker",

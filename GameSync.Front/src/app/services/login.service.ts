@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable, of} from "rxjs";
 import {environment} from "../../environments/environment";
-import {User} from "../models/models";
+import {Me, User} from "../models/models";
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +26,10 @@ export class LoginService {
 
   sendForgotPasswordRequest(email: string): Observable<never> {
     return this.http.post<never>(`${environment.apiUrl}/users/forgot-password`, {email});
+  }
+
+  getMe(): Observable<Me> {
+    return this.http.get<Me>(`${environment.apiUrl}/users/me`);
   }
 
 }

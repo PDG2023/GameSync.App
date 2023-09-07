@@ -39,6 +39,10 @@ export class PartyDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.refresh();
+  }
+
+  refresh() {
     this.partyDetail$ = this.partiesService.getPartyDetail({
       id: this.idParty ?? '',
       invitationToken: this.route.snapshot.params['token']
@@ -57,7 +61,10 @@ export class PartyDetailComponent implements OnInit {
 
   editParty() {
     this.partiesService.editParty({...this.partyDetailForm.value}, this.idParty)
-      .subscribe(() => this.messagesService.success('Modifications enregistrées.'));
+      .subscribe(() => {
+        this.messagesService.success('Modifications enregistrées.');
+        this.refresh();
+      });
   }
 
   openAddGameToPartyDialog() {
@@ -68,7 +75,10 @@ export class PartyDetailComponent implements OnInit {
             games: selectedItems.map(item => this.toPartyGameReq(item))
           }
           this.partiesService.addGameToParty(this.idParty, req)
-            .subscribe(() => this.messagesService.success('Jeu(x) ajouté(s) à la soirée'));
+            .subscribe(() => {
+              this.messagesService.success('Jeu(x) ajouté(s) à la soirée');
+              this.refresh()
+            });
         }
       });
   }
@@ -94,6 +104,7 @@ export class PartyDetailComponent implements OnInit {
         if (res) {
           this.partiesService.deleteGameFromParty(this.idParty, idGame).subscribe(() => {
             this.messagesService.success('Jeu supprimé de la soirée.');
+            this.refresh();
           });
         }
       });

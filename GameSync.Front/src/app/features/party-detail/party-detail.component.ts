@@ -25,6 +25,7 @@ export class PartyDetailComponent implements OnInit {
     dateTime: [{value: null, disabled: this.readonly}]
   });
 
+  isOwner = false;
   protected readonly idParty = this.route.snapshot.params['id'];
 
   constructor(
@@ -48,6 +49,7 @@ export class PartyDetailComponent implements OnInit {
       invitationToken: this.route.snapshot.params['token']
     }).pipe(
       tap(partyDetail => {
+        this.isOwner = partyDetail.isOwner
         this.partyDetailForm.patchValue({
           ...partyDetail
         });

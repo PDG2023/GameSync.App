@@ -19,7 +19,7 @@ export class PartiesService {
   }
 
   getPartyDetail(req: PartyDetailRequest): Observable<PartyDetail> {
-    const url = req.invitationToken ? `/parties/${req.invitationToken}?Id=${req.id}` : `/users/me/parties/${req.id}`;
+    const url = req.id ? `/users/me/parties/${req.id}` : `/parties/${req.invitationToken}`;
     return this.httpClient.get<PartyDetail>(`${environment.apiUrl}${url}`);
   }
 

@@ -27,7 +27,7 @@
         <input matInput placeholder="Lieu" formControlName="location">
       </mat-form-field>
     </div>
-    <div *ngIf="partyDetail.isOwner" class="col-sm-3 share-wrapper">
+    <div *ngIf="isOwner" class="col-sm-3 share-wrapper">
       <button mat-flat-button color="primary" (click)="editParty()">
         <mat-icon>save</mat-icon>
         Enregistrer
@@ -43,7 +43,7 @@
                          (gameRemovedFromParty)="deleteMe(gameVoteInfo.id)"></app-party-game-item>
   </div>
 </form>
-<div class="party-games-actions">
+<div *ngIf="isOwner" class="party-games-actions">
   <button mat-flat-button color="primary" (click)="openAddGameToPartyDialog()">
     <mat-icon>add</mat-icon>
     Ajouter un jeu

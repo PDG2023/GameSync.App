@@ -5,6 +5,7 @@ import {PartyItemComponent} from "../../components/party-item/party-item.compone
 import {MatCardModule} from "@angular/material/card";
 import {MatIconModule} from "@angular/material/icon";
 import {RouterTestingModule} from "@angular/router/testing";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('PartiesComponent', () => {
   let component: PartiesComponent;
@@ -16,7 +17,8 @@ describe('PartiesComponent', () => {
       imports: [
         MatCardModule,
         MatIconModule,
-        RouterTestingModule
+        RouterTestingModule,
+        HttpClientTestingModule
       ]
     });
     fixture = TestBed.createComponent(PartiesComponent);

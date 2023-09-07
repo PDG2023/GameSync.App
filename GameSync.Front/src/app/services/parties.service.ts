@@ -1,14 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {
-  BaseParty,
-  Party,
-  PartyDetail,
-  PartyDetailRequest,
-  PartyGameDetail,
-  PartyGameRequest,
-  VoteRequest
-} from '../models/models';
+import {BaseParty, Party, PartyDetail, PartyDetailRequest, PartyGameRequest} from '../models/models';
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
 

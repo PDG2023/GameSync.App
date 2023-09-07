@@ -16,15 +16,15 @@ export class PartiesComponent {
   constructor(
     private partiesService: PartiesService,
     private router: Router,
-  ){
+  ) {
     this.refresh();
   }
 
-  refresh(){
+  refresh() {
     this.myParties$ = this.partiesService.getMyParties();
   }
 
-  addParty(){
+  addParty() {
     this.router.navigateByUrl('/add-party');
   }
 

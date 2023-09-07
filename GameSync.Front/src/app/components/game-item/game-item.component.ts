@@ -18,7 +18,7 @@ export class GameItemComponent {
   @Input() addToPartyMode: boolean = false;
 
   @Output() itemDeleted = new EventEmitter();
-  @Output() itemSelected= new EventEmitter();
+  @Output() itemSelected = new EventEmitter();
 
   constructor(
     private confirmationDialogService: ConfirmationDialogService,

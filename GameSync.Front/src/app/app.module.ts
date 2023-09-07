@@ -52,6 +52,12 @@ import {AddGameToPartyDialogComponent} from './features/add-game-to-party-dialog
 import {ClipboardModule} from "@angular/cdk/clipboard";
 import {WhoVotedDialogComponent} from './features/who-voted-dialog/who-voted-dialog.component';
 import {ChoseNameDialogComponent} from './features/chose-name-dialog/chose-name-dialog.component';
+import {ConfirmMailComponent} from './features/confirm-mail/confirm-mail.component';
+import {ChangePasswordComponent} from './features/change-password/change-password.component';
+import {ForgotPasswordComponent} from './features/forgot-password/forgot-password.component';
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {AddGameToPartyDialogComponent} from './features/add-game-to-party-dialog/add-game-to-party-dialog.component';
+import {ClipboardModule} from "@angular/cdk/clipboard";
 
 @NgModule({
   declarations: [

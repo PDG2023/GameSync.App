@@ -54,6 +54,16 @@ export interface GameDetailResult {
   inCollection: boolean;
 }
 
+export interface GameVoteInfo {
+  id: number;
+  gameImageUrl: string;
+  gameName: string;
+  whoVotedYes: string[];
+  countVotedYes: number;
+  whoVotedNo: string[];
+  countVotedNo: number;
+}
+
 export interface BaseParty {
   location: string;
   name: string;
@@ -65,4 +75,21 @@ export interface Party extends BaseParty {
   numberOfGames: 0;
 }
 
+export interface PartyDetail extends BaseParty {
+  isOwner: boolean;
+  gamesVoteInfo: GameVoteInfo[];
+}
 
+export interface PartyDetailRequest {
+  id: number;
+  invitationToken?: string;
+}
+
+export interface PartyGameRequest {
+  games: PartyGameRequestItem[]
+}
+
+export interface PartyGameRequestItem {
+  id: number;
+  isCustom?: boolean;
+}

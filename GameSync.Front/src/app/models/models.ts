@@ -1,9 +1,14 @@
-export interface User {
+
+export interface Me {
   email: string;
   userName?: string;
+}
+
+export interface User extends Me {
   password: string;
   token?: string;
 }
+
 
 export interface HttpErrorResponseDetail {
   code: number;
@@ -59,3 +64,5 @@ export interface Party extends BaseParty {
   id: number;
   numberOfGames: 0;
 }
+
+

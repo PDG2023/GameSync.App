@@ -1,7 +1,7 @@
 
 export interface Me {
   email: string;
-  userName?: string;
+  userName: string;
 }
 
 export interface User extends Me {
@@ -54,15 +54,59 @@ export interface GameDetailResult {
   inCollection: boolean;
 }
 
+export interface GameVoteInfo {
+  id: number;
+  gameImageUrl: string;
+  gameName: string;
+  whoVotedYes: string[];
+  countVotedYes: number;
+  whoVotedNo: string[];
+  countVotedNo: number;
+}
+
 export interface BaseParty {
+  id: number;
   location: string;
   name: string;
   dateTime: Date;
 }
 
 export interface Party extends BaseParty {
-  id: number;
   numberOfGames: 0;
 }
 
+export interface PartyDetail extends BaseParty {
+  isOwner: boolean;
+  gamesVoteInfo: GameVoteInfo[];
+}
 
+export interface PartyDetailRequest {
+  id: number;
+  invitationToken?: string;
+}
+
+export interface PartyGameRequest {
+  games: PartyGameRequestItem[]
+}
+
+export interface PartyGameRequestItem {
+  id: number;
+  isCustom?: boolean;
+}
+
+export interface PartyGameDetail {
+  game: GameDetail;
+  isCustom: boolean;
+}
+
+export interface VoteInfo {
+  userName: string;
+  voteYes: boolean | null;
+}
+
+export interface VoteRequest {
+  invitationToken?: string;
+  partyId?: string;
+  partyGameId: number;
+  voteInfo: VoteInfo;
+}

@@ -1,46 +1,52 @@
-<div class="breadcrumb">
-  <button mat-flat-button>
+<div *ngIf="isOwner" class="breadcrumb">
+  <button mat-flat-button [routerLink]="['/parties']">
     <mat-icon>arrow_left</mat-icon>
     Retour à la liste des soirées
   </button>
 </div>
-<div class="row mb-5 align-items-center">
-  <div class="col-sm-3">
-    <mat-form-field>
-      <mat-label>Titre</mat-label>
-      <input matInput placeholder="Titre" value="Soirée 1">
-    </mat-form-field>
+<ng-container>
+
+</ng-container>
+<form [formGroup]="partyDetailForm" *ngIf="partyDetail$ | async as partyDetail">
+  <div class="row mb-5 align-items-center">
+    <div class="col-sm-3">
+      <mat-form-field>
+        <mat-label>Titre</mat-label>
+        <input matInput placeholder="Titre" formControlName="name">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-3">
+      <mat-form-field>
+        <mat-label>Date</mat-label>
+        <input matInput type="datetime-local" placeholder="Date" formControlName="dateTime">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-3">
+      <mat-form-field>
+        <mat-label>Lieu</mat-label>
+        <input matInput placeholder="Lieu" formControlName="location">
+      </mat-form-field>
+    </div>
+    <div *ngIf="isOwner" class="col-sm-3 share-wrapper">
+      <button mat-flat-button color="primary" (click)="editParty()">
+        <mat-icon>save</mat-icon>
+        Enregistrer
+      </button>
+      <button mat-flat-button color="accent" (click)="getInvitationToken(idParty)">
+        <mat-icon>share</mat-icon>
+        Partager
+      </button>
+    </div>
   </div>
-  <div class="col-sm-3">
-    <mat-form-field>
-      <mat-label>Date</mat-label>
-      <input matInput placeholder="Date" value="26/06/2023">
-    </mat-form-field>
+  <div *ngFor="let gameVoteInfo of partyDetail.gamesVoteInfo" class="party-games">
+    <app-party-game-item [readonly]="!partyDetail.isOwner" [gameVoteInfo]="gameVoteInfo"
+                         (gameRemovedFromParty)="deleteMe(gameVoteInfo.id)"
+                         (voted)="sendVote($event, gameVoteInfo.id)"
+                         (requestDetail)="toGameDetail(gameVoteInfo.id, partyDetail.id)"></app-party-game-item>
   </div>
-  <div class="col-sm-3">
-    <mat-form-field>
-      <mat-label>Lieu</mat-label>
-      <input matInput placeholder="Lieu" value="Chez moi">
-    </mat-form-field>
-  </div>
-  <div class="col-sm-3 share-wrapper">
-    <button mat-flat-button color="primary">
-      <mat-icon>save</mat-icon>
-      Enregistrer
-    </button>
-    <button mat-flat-button color="accent">
-      <mat-icon>share</mat-icon>
-      Partager
-    </button>
-  </div>
-</div>
-<div class="party-games">
-  <app-party-game-item></app-party-game-item>
-  <app-party-game-item></app-party-game-item>
-  <app-party-game-item></app-party-game-item>
-</div>
-<div class="party-games-actions">
-  <button mat-flat-button color="primary">
+</form>
+<div *ngIf="isOwner" class="party-games-actions">
+  <button mat-flat-button color="primary" (click)="openAddGameToPartyDialog()">
     <mat-icon>add</mat-icon>
     Ajouter un jeu
   </button>

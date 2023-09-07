@@ -65,6 +65,7 @@ public static class UpdateParty
                     Location = x.Location,
                     Name = x.Name,
                     UserId = x.UserId,
+                    InvitationToken = x.InvitationToken,
                     Id = x.Id
                 })
                 .FirstOrDefaultAsync(x => x.UserId == userId && x.Id == req.Id);
@@ -98,6 +99,9 @@ public static class UpdateParty
             {
                 party.DateTime = req.DateTime.Value;
             }
+
+            party.InvitationToken = party.InvitationToken;
+
         }
 
     }

@@ -32,7 +32,6 @@ import {PartyItemComponent} from "./components/party-item/party-item.component";
 import {PartyDetailComponent} from './features/party-detail/party-detail.component';
 import {PartyGameItemComponent} from './components/party-game-item/party-game-item.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
-import {PartyGameVoteIdentifyComponent} from './features/party-game-vote-identify/party-game-vote-identify.component';
 import {MatMenuModule} from "@angular/material/menu";
 import {GameItemComponent} from './components/game-item/game-item.component';
 import {DialogYesNoComponent} from './common/dialog-yes-no/dialog-yes-no.component';
@@ -52,81 +51,74 @@ import {AddGameToPartyDialogComponent} from './features/add-game-to-party-dialog
 import {ClipboardModule} from "@angular/cdk/clipboard";
 import {WhoVotedDialogComponent} from './features/who-voted-dialog/who-voted-dialog.component';
 import {ChoseNameDialogComponent} from './features/chose-name-dialog/chose-name-dialog.component';
-import {ConfirmMailComponent} from './features/confirm-mail/confirm-mail.component';
-import {ChangePasswordComponent} from './features/change-password/change-password.component';
-import {ForgotPasswordComponent} from './features/forgot-password/forgot-password.component';
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {AddGameToPartyDialogComponent} from './features/add-game-to-party-dialog/add-game-to-party-dialog.component';
-import {ClipboardModule} from "@angular/cdk/clipboard";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    SideNavComponent,
-    CollectionComponent,
-    PartiesComponent,
-    SearchComponent,
-    LoginComponent,
-    RegisterComponent,
-    SecurityLayoutComponent,
-    PartyItemComponent,
-    PartyDetailComponent,
-    PartyGameItemComponent,
-    PartyGameVoteIdentifyComponent,
-    GameItemComponent,
-    DialogYesNoComponent,
-    GameDetailComponent,
-    SearchResultComponent,
-    AddEditCustomGameComponent,
-    CollectionGameItemComponent,
-    AddEditCustomGameComponent,
-    AddPartyComponent,
-    AddGameToPartyDialogComponent,
-    ConfirmMailComponent,
-    ChangePasswordComponent,
-    ForgotPasswordComponent,
-      WhoVotedDialogComponent,
-      ChoseNameDialogComponent,
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    MatSidenavModule,
-    MatListModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatAutocompleteModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    HttpClientModule,
-    MatSnackBarModule,
-    MatProgressSpinnerModule,
-    MatProgressBarModule,
-    MatMenuModule,
-    MatDialogModule,
-    MatPaginatorModule,
-    MatCheckboxModule,
-    NgOptimizedImage,
-    ClipboardModule,
-  ],
-  providers: [
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        SideNavComponent,
+        CollectionComponent,
+        PartiesComponent,
+        SearchComponent,
+        LoginComponent,
+        RegisterComponent,
+        SecurityLayoutComponent,
+        PartyItemComponent,
+        PartyDetailComponent,
+        PartyGameItemComponent,
+        GameItemComponent,
+        DialogYesNoComponent,
+        GameDetailComponent,
+        SearchResultComponent,
+        AddEditCustomGameComponent,
+        CollectionGameItemComponent,
+        AddEditCustomGameComponent,
+        AddPartyComponent,
+        AddGameToPartyDialogComponent,
+        ConfirmMailComponent,
+        ChangePasswordComponent,
+        ForgotPasswordComponent,
+        WhoVotedDialogComponent,
+        ChoseNameDialogComponent,
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        MatSidenavModule,
+        MatListModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatAutocompleteModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatCardModule,
+        HttpClientModule,
+        MatSnackBarModule,
+        MatProgressSpinnerModule,
+        MatProgressBarModule,
+        MatMenuModule,
+        MatDialogModule,
+        MatPaginatorModule,
+        MatCheckboxModule,
+        NgOptimizedImage,
+        ClipboardModule,
+    ],
+    providers: [
 
-    {
-      provide: LocationStrategy,
-      useClass: PathLocationStrategy
-    },
-    {provide: HTTP_INTERCEPTORS, multi: true, useClass: HttpErrorInterceptor},
-    {provide: HTTP_INTERCEPTORS, multi: true, useClass: AuthInterceptor},
-    {provide: HTTP_INTERCEPTORS, multi: true, useClass: LoadingInterceptor}
-  ],
+        {
+            provide: LocationStrategy,
+            useClass: PathLocationStrategy
+        },
+        {provide: HTTP_INTERCEPTORS, multi: true, useClass: HttpErrorInterceptor},
+        {provide: HTTP_INTERCEPTORS, multi: true, useClass: AuthInterceptor},
+        {provide: HTTP_INTERCEPTORS, multi: true, useClass: LoadingInterceptor}
+    ],
 
 
-  bootstrap: [AppComponent]
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }

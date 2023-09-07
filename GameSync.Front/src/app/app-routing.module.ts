@@ -9,7 +9,6 @@ import {RegisterComponent} from "./features/register/register.component";
 import {authGuardChild} from "./guards/auth.guard";
 import {anonymousGuardChild} from "./guards/anonymous.guard";
 import {PartyDetailComponent} from "./features/party-detail/party-detail.component";
-import {PartyGameVoteIdentifyComponent} from "./features/party-game-vote-identify/party-game-vote-identify.component";
 import {GameDetailComponent} from "./features/game-detail/game-detail.component";
 import {SearchResultComponent} from "./features/search-result/search-result.component";
 import {AddEditCustomGameComponent} from "./components/add-custom-game/add-edit-custom-game.component";
@@ -38,7 +37,6 @@ const authOnlyRoutes: Routes = [
   },
   {path: 'add-party', component: AddPartyComponent},
   {path: 'parties/:id', component: PartyDetailComponent},
-  {path: 'parties/:id/vote-guest', component: PartyGameVoteIdentifyComponent},
 ]
 
 const routes: Routes = [

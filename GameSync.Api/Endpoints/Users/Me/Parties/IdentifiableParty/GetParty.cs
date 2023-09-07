@@ -113,7 +113,7 @@ public static class GetParty
                  IsOwner = partyDetails.IsOwner,
                  Name = partyDetails.Name,
                  GamesVoteInfo = gameInfos,
-                 Location = partyDetails.Location,
+                 Location = partyDetails.Location
             });
         }
 

@@ -1,1 +1,8 @@
-<p>home works!</p>
+<ng-container *ngIf="user !== null else notLoggedIn">
+  <h1>Bonjour {{user.userName}}</h1>
+</ng-container>
+
+<ng-template #notLoggedIn>
+  <h1>Bonjour utilisateur invité</h1>
+</ng-template>
+

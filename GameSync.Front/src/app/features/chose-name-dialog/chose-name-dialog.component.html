@@ -1,0 +1,16 @@
+<mat-dialog-content>
+    <h1>Saisissez un nom pour pouvoir voter</h1>
+    <form [formGroup]="nameForm">
+        <mat-form-field>
+            <mat-label>Nom</mat-label>
+            <input formControlName="userName" matInput type="text">
+            <mat-error>Ce champs est obligatoire pour voter</mat-error>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions class="d-flex justify-content-end">
+    <button color="primary" mat-flat-button [disabled]="!nameForm.valid" [mat-dialog-close]="nameForm.value.userName">
+        Valider
+    </button>
+    <button mat-flat-button mat-dialog-close>Fermer</button>
+</mat-dialog-actions>

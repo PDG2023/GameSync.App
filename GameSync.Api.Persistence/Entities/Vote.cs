@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GameSync.Api.Persistence.Entities;
 
 [Owned]
-[Index(nameof(UserId), IsUnique = true)]
 public class Vote
 {
     /// <summary>

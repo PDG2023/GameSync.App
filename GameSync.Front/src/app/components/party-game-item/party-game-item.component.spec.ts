@@ -1,10 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { PartyGameItemComponent } from './party-game-item.component';
+import {PartyGameItemComponent} from './party-game-item.component';
 import {MatCardModule} from "@angular/material/card";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatIconModule} from "@angular/material/icon";
 import {RouterTestingModule} from "@angular/router/testing";
+import {MatDialogModule} from "@angular/material/dialog";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('PartyGameItemComponent', () => {
   let component: PartyGameItemComponent;
@@ -17,7 +19,9 @@ describe('PartyGameItemComponent', () => {
         MatCardModule,
         MatProgressBarModule,
         MatIconModule,
-        RouterTestingModule
+        RouterTestingModule,
+        MatDialogModule,
+        HttpClientTestingModule
       ]
     });
     fixture = TestBed.createComponent(PartyGameItemComponent);

@@ -1,0 +1,6 @@
+<mat-dialog-content>
+  <app-collection #collection [addToPartyMode]="true"></app-collection>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+  <button mat-raised-button color="primary" [mat-dialog-close]="collection.gamesSelected">Valider la sélection</button>
+</mat-dialog-actions>

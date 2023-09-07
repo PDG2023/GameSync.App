@@ -10,6 +10,8 @@ export class LoadingService {
   isLoading$: Observable<boolean> = this.isLoading$$.asObservable();
 
   setLoading(isLoading: boolean) {
-    this.isLoading$$.next(isLoading);
+    setTimeout(() => {
+      this.isLoading$$.next(isLoading);
+    })
   }
 }

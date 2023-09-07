@@ -56,6 +56,23 @@ public class LoggedInVotesTests : TestsWithLoggedUser
 
 
     [Fact]
+    public async Task Vote_for_multiple_games_in_party_works()
+    {
+        // arrange
+        var party = await Factory.CreatePartyOfAnotherUserAsync();
+        var firstGame = await Factory.CreateTestGameAsync(party.UserId);
+        var secondGame = await Factory.CreateTestGameAsync(party.UserId);
+        var pg1 = await Factory.CreatePartyGameAsync(party.Id, firstGame.Id, new List<Vote>() { new Vote { UserId = UserId, VoteYes = true } });
+        var pg2 = await Factory.CreatePartyGameAsync(party.Id, secondGame.Id);
+
+        // act
+        var (response, _) = await DoReq<Ok>(party.Id, pg2.Id, false);
+
+        // assert
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
     public async Task Put_new_vote_in_existing_list_adds_it()
     {
         // arrange

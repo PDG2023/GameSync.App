@@ -114,6 +114,7 @@ public static class GetParty
                  Name = partyDetails.Name,
                  GamesVoteInfo = gameInfos,
                  Location = partyDetails.Location,
+                 Id = partyDetails.Id
             });
         }
 

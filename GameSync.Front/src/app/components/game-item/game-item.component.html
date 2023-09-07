@@ -12,18 +12,26 @@
     </ng-template>
   <mat-card-content>
   </mat-card-content>
-  <mat-card-actions class="d-flex justify-content-between">
-    <button mat-button (click)="navigateToDetails()">
-      <mat-icon>visibility</mat-icon>
-      Détails
-    </button>
-    <div>
-      <button *ngIf="!isReadOnly && game.isCustom" mat-icon-button (click)="editMe()">
-        <mat-icon>edit</mat-icon>
+
+  <ng-container *ngIf="!addToPartyMode else partyMode">
+    <mat-card-actions class="d-flex justify-content-between">
+      <button mat-button (click)="navigateToDetails()">
+        <mat-icon>visibility</mat-icon>
+        Détails
       </button>
-      <button *ngIf="!isReadOnly" mat-icon-button color="warn" (click)="deleteMe()">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
-  </mat-card-actions>
+      <div>
+        <button *ngIf="!isReadOnly && game.isCustom" mat-icon-button (click)="editMe()">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button *ngIf="!isReadOnly" mat-icon-button color="warn" (click)="deleteMe()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </mat-card-actions>
+  </ng-container>
+  <ng-template #partyMode>
+    <mat-card-actions class="d-flex justify-content-center">
+      <mat-checkbox (change)="toggleItem($event)"></mat-checkbox>
+    </mat-card-actions>
+  </ng-template>
 </mat-card>

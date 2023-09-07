@@ -25,6 +25,10 @@ export class LoginComponent implements OnInit {
     private messagesService: MessagesService,
     private router: Router
   ) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
+    });
   }
 
   ngOnInit() {

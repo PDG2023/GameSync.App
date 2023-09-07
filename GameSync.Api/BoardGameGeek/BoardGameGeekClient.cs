@@ -50,10 +50,8 @@ public class BoardGameGeekClient
 
         var boardGames = await GetDetailedThingsAsync(itemsId);
 
-        return boardGames.Zip(searchResults).Select(pair =>
-        {
-            var (boardGame, searchResult) = pair;
-            return new GamePreview
+        return searchResults
+            .Join(boardGames, searchRes => int.Parse(searchRes.Id), bggGame => bggGame.Id, (searchResult, boardGame) => new  GamePreview
             {
                 Id = int.Parse(searchResult.Id),
                 Name = searchResult.Name.Value,
@@ -61,8 +59,7 @@ public class BoardGameGeekClient
                 YearPublished = int.Parse(searchResult.YearPublished?.Value ?? "0"),
                 ImageUrl = boardGame.Image,
                 ThumbnailUrl = boardGame.Thumbnail,
-            };
-        });
+            });
     }
 
     protected virtual async Task<IEnumerable<ThingItem>> GetDetailedThingsAsync(IEnumerable<string> ids)

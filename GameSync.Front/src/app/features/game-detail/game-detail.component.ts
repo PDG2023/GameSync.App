@@ -37,9 +37,9 @@ export class GameDetailComponent implements OnInit {
             .getCustomGameDetail(segments[1].path)
             .pipe(map(game => ({inCollection: false, game})));
         }
+
         return this.gamesService.getGameDetail(segments[0].path);
-      }))
-      .subscribe(result => {
+      })).subscribe(result => {
         this.game = result.game;
         this.inCollection = result.inCollection;
       });

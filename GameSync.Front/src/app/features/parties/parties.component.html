@@ -1,2 +1,9 @@
-<app-party-item></app-party-item>
-<app-party-item></app-party-item>
+<div class="actions">
+  <button mat-flat-button color="primary" (click)="addParty()">
+    <mat-icon>add</mat-icon>
+    Ajouter une soirée
+  </button>
+</div>
+<ng-container *ngIf="myParties$ | async as myParties">
+  <app-party-item *ngFor="let party of myParties" [party]="party" (partyRemoved)="refresh()"></app-party-item>
+</ng-container>

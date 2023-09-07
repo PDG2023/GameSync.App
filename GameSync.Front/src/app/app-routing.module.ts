@@ -13,7 +13,8 @@ import {PartyGameVoteIdentifyComponent} from "./features/party-game-vote-identif
 import {GameDetailComponent} from "./features/game-detail/game-detail.component";
 import {SearchResultComponent} from "./features/search-result/search-result.component";
 import {AddEditCustomGameComponent} from "./components/add-custom-game/add-edit-custom-game.component";
-import { ConfirmMailComponent } from './features/confirm-mail/confirm-mail.component';
+import {AddPartyComponent} from "./features/add-party/add-party.component";
+import {ConfirmMailComponent} from './features/confirm-mail/confirm-mail.component';
 import {ChangePasswordComponent} from "./features/change-password/change-password.component";
 import {ForgotPasswordComponent} from "./features/forgot-password/forgot-password.component";
 
@@ -35,6 +36,7 @@ const authOnlyRoutes: Routes = [
       {path: 'edit-game/:id', component: AddEditCustomGameComponent}
     ]
   },
+  {path: 'add-party', component: AddPartyComponent},
   {path: 'parties/:id', component: PartyDetailComponent},
   {path: 'parties/:id/vote-guest', component: PartyGameVoteIdentifyComponent},
 ]
@@ -49,6 +51,7 @@ const routes: Routes = [
       {path: 'custom/:id', component: GameDetailComponent}
     ],
   },
+  {path: 'parties/guest/:token', component: PartyDetailComponent},
   {path: '', canActivateChild: [authGuardChild], children: authOnlyRoutes},
   {
     path: '',

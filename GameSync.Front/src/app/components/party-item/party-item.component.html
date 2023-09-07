@@ -1,20 +1,20 @@
-<mat-card>
+<mat-card *ngIf="party">
   <mat-card-content>
     <div class="row">
       <div class="col-sm-4 party-content">
-        <p>Soirée 1</p>
-        <p>13 jeux</p>
+        <p>{{party.name}}</p>
+        <p>{{party.numberOfGames}} jeux</p>
       </div>
       <div class="col-sm-4 party-content">
-        <p>Chez moi</p>
-        <p>26/06/2023</p>
+        <p>{{party.location}}</p>
+        <p>{{party.dateTime | date:'dd.MM.yyyy'}}</p>
       </div>
       <div class="col-sm-4 actions">
-        <button mat-flat-button [routerLink]="['/parties', 0]">
+        <button mat-flat-button [routerLink]="['/parties', party.id]">
           <mat-icon>edit</mat-icon>
           Modifier
         </button>
-        <button mat-icon-button color="warn">
+        <button mat-icon-button color="warn" (click)="removeParty()">
           <mat-icon>delete</mat-icon>
         </button>
       </div>

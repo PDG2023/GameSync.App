@@ -1,20 +1,28 @@
-<mat-card>
+<mat-card *ngIf="gameVoteInfo">
   <mat-card-content>
     <div class="row align-items-center">
-      <div class="col-sm-6 game-title">
-        <img src="https://placehold.co/400">
-        <h1>Les Loups-Garous de Thiercelieux</h1>
+      <div class="col-sm-2 game-title">
+        <ng-container *ngIf="gameVoteInfo.gameImageUrl else placeholder">
+          <img [src]="gameVoteInfo.gameImageUrl">
+        </ng-container>
+        <ng-template #placeholder>
+          <img src="https://placehold.co/400">
+        </ng-template>
+        <h1>{{gameVoteInfo.gameName}}</h1>
       </div>
-      <div class="col-sm-3">
-        <div class="progress-label">40 % (10 / 15 votes)</div>
-        <mat-progress-bar color="accent" mode="determinate" value="40"></mat-progress-bar>
+      <div class="col-sm-8">
+        <div class="progress-label">{{voteRatio}} % ({{gameVoteInfo.countVotedYes}} / {{totalVote}} votes)</div>
+        <mat-progress-bar color="accent" mode="determinate" [value]="voteRatio"></mat-progress-bar>
       </div>
-      <div class="col-sm-3 game-actions">
+      <div class="col-sm-2 game-actions">
         <button mat-icon-button [routerLink]="['/parties', 0, 'vote-guest']">
           <mat-icon>thumb_up</mat-icon>
         </button>
         <button mat-icon-button>
           <mat-icon>thumb_down</mat-icon>
+        </button>
+        <button *ngIf="!readonly" mat-icon-button (click)="deleteMe()">
+          <mat-icon color="warn">delete</mat-icon>
         </button>
       </div>
     </div>

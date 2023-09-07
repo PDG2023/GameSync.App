@@ -1,7 +1,7 @@
 
 export interface Me {
   email: string;
-  userName?: string;
+  userName: string;
 }
 
 export interface User extends Me {
@@ -92,4 +92,9 @@ export interface PartyGameRequest {
 export interface PartyGameRequestItem {
   id: number;
   isCustom?: boolean;
+}
+
+export interface VoteInfo {
+  userName: string;
+  voteYes: boolean | null;
 }

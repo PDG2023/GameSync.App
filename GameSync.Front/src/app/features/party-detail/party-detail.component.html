@@ -1,4 +1,4 @@
-<div class="breadcrumb">
+<div *ngIf="isOwner" class="breadcrumb">
   <button mat-flat-button [routerLink]="['/parties']">
     <mat-icon>arrow_left</mat-icon>
     Retour à la liste des soirées

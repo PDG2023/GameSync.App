@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-content>
     <div class="row align-items-center">
-      <div class="col-sm-3 game-title">
+      <div class="col-sm-3 game-title" (click)="toGameDetail()">
         <ng-container *ngIf="gameVoteInfo!.gameImageUrl else placeholder">
           <img [src]="gameVoteInfo!.gameImageUrl">
         </ng-container>
@@ -11,7 +11,9 @@
         <h1>{{gameVoteInfo?.gameName}}</h1>
       </div>
       <div class="col-sm-7">
-        <div class="progress-label">{{voteRatio}} % ({{gameVoteInfo?.countVotedYes}} / {{totalVote}} votes)</div>
+        <div class="progress-label">{{voteRatio | number : '1.0-2'}} % ({{gameVoteInfo?.countVotedYes}} / {{totalVote}}
+          votes)
+        </div>
         <mat-progress-bar color="accent" mode="determinate" [value]="voteRatio"></mat-progress-bar>
       </div>
       <div class="col-sm-2 game-actions">

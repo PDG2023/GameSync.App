@@ -4,6 +4,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {WhoVotedDialogComponent} from "../../features/who-voted-dialog/who-voted-dialog.component";
 import {AuthService} from "../../services/auth.service";
 import {ChoseNameDialogComponent} from "../../features/chose-name-dialog/chose-name-dialog.component";
+import {take} from "rxjs";
+import {PartiesService} from "../../services/parties.service";
 
 @Component({
   selector: 'app-party-game-item',
@@ -17,13 +19,15 @@ export class PartyGameItemComponent implements OnInit {
 
   @Output() gameRemovedFromParty = new EventEmitter();
   @Output() voted = new EventEmitter<VoteInfo>();
+  @Output() requestDetail = new EventEmitter();
 
   totalVote: number = 0;
   voteRatio: number = 0;
 
   constructor(
     private dialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    private partiesService: PartiesService
   ) {
   }
 
@@ -32,7 +36,7 @@ export class PartyGameItemComponent implements OnInit {
       this.totalVote = this.gameVoteInfo.countVotedYes + this.gameVoteInfo.countVotedNo;
       this.totalVote === 0 ?
         this.voteRatio = 0 :
-        this.voteRatio = Math.round(this.gameVoteInfo.countVotedYes / this.totalVote);
+        this.voteRatio = this.gameVoteInfo.countVotedYes / this.totalVote * 100;
     }
   }
 
@@ -45,23 +49,39 @@ export class PartyGameItemComponent implements OnInit {
   }
 
   vote(votedYes: boolean) {
-    this.authService.connectedUserSubject$.subscribe(user => {
-      if (user) {
-        this.voted.emit({
-          userName: user.userName,
-          voteYes: votedYes
-        });
-      } else {
-        this.dialog.open(ChoseNameDialogComponent).afterClosed()
-          .subscribe(userName => {
-            if (userName) {
-              this.voted.emit({
-                userName: userName,
-                voteYes: votedYes
-              })
-            }
-          })
-      }
+    this.authService.connectedUserSubject$.pipe(take(1))
+      .subscribe(user => {
+        if (user) {
+          this.sendVote(user.userName, votedYes);
+        } else {
+          this.guestVote(votedYes);
+        }
+      })
+  }
+
+  private guestVote(votedYes: boolean) {
+    this.authService.guestUserSubject$.pipe(take(1))
+      .subscribe(guest => {
+        if (!guest) {
+          this.dialog.open(ChoseNameDialogComponent).afterClosed()
+            .subscribe(userName => {
+              if (userName) {
+                this.authService.setGuestUser(userName);
+              }
+            });
+        }
+        this.sendVote(guest!, votedYes);
+      })
+  }
+
+  private sendVote(userName: string, votedYes: boolean) {
+    this.voted.emit({
+      userName: userName,
+      voteYes: votedYes
     })
+  }
+
+  toGameDetail() {
+    this.requestDetail.emit();
   }
 }

@@ -40,7 +40,9 @@
   </div>
   <div *ngFor="let gameVoteInfo of partyDetail.gamesVoteInfo" class="party-games">
     <app-party-game-item [readonly]="!partyDetail.isOwner" [gameVoteInfo]="gameVoteInfo"
-                         (gameRemovedFromParty)="deleteMe(gameVoteInfo.id)"></app-party-game-item>
+                         (gameRemovedFromParty)="deleteMe(gameVoteInfo.id)"
+                         (voted)="sendVote($event, gameVoteInfo.id)"
+                         (requestDetail)="toGameDetail(gameVoteInfo.id, partyDetail.id)"></app-party-game-item>
   </div>
 </form>
 <div *ngIf="isOwner" class="party-games-actions">

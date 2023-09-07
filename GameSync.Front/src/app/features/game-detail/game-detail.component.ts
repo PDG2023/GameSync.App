@@ -1,11 +1,12 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {map, Observable, of, switchMap} from 'rxjs';
+import {map, switchMap} from 'rxjs';
 import {GameDetail} from "../../models/models";
 import {GamesService} from "../../services/games.service";
 import {ActivatedRoute} from "@angular/router";
 import {LoadingService} from "../../services/loading.service";
 import {MessagesService} from "../../services/messages.service";
 import {AuthService} from "../../services/auth.service";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,6 +25,7 @@ export class GameDetailComponent implements OnInit {
     private route: ActivatedRoute,
     protected loadingService: LoadingService,
     private messagesService: MessagesService,
+    private sanitized: DomSanitizer,
     protected authService: AuthService
   ) {
   }
@@ -65,10 +67,5 @@ export class GameDetailComponent implements OnInit {
           this.inCollection = false;
         });
     }
-  }
-
-  formatDescription(description: string): Observable<string> {
-    //TODO: The backend should encode correctly
-    return of(description.replace(/&#10;&#10;/g, '\n\r\n\r'));
   }
 }

@@ -65,13 +65,13 @@ export interface GameVoteInfo {
 }
 
 export interface BaseParty {
+  id: number;
   location: string;
   name: string;
   dateTime: Date;
 }
 
 export interface Party extends BaseParty {
-  id: number;
   numberOfGames: 0;
 }
 
@@ -94,7 +94,19 @@ export interface PartyGameRequestItem {
   isCustom?: boolean;
 }
 
+export interface PartyGameDetail {
+  game: GameDetail;
+  isCustom: boolean;
+}
+
 export interface VoteInfo {
   userName: string;
   voteYes: boolean | null;
+}
+
+export interface VoteRequest {
+  invitationToken?: string;
+  partyId?: string;
+  partyGameId: number;
+  voteInfo: VoteInfo;
 }

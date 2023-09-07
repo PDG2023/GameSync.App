@@ -47,9 +47,8 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-12 description-wrapper">
-        <h1>Description</h1>
-        {{ formatDescription(game.description) | async }}
+      <h1>Description</h1>
+      <div class="col-sm-12 description-wrapper" [innerHTML]="game.description">
       </div>
     </div>
   </ng-container>

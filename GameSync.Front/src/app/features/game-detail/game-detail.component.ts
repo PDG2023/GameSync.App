@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {map, Observable, of, switchMap} from 'rxjs';
-import {GameDetail, GameDetailResult} from "../../models/models";
+import {GameDetail} from "../../models/models";
 import {GamesService} from "../../services/games.service";
 import {ActivatedRoute} from "@angular/router";
 import {LoadingService} from "../../services/loading.service";
@@ -29,7 +29,6 @@ export class GameDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.route.url.pipe(
       switchMap(segments => {
         this.isCustom = segments[0].path === 'custom';
@@ -44,33 +43,28 @@ export class GameDetailComponent implements OnInit {
         this.game = result.game;
         this.inCollection = result.inCollection;
       });
-
   }
 
   addToCollection() {
-    if (this.game === undefined) {
-      return;
+    if (this.game) {
+      this.gamesService
+        .addGameToCollection(this.game.id)
+        .subscribe(() => {
+          this.messagesService.success('Jeu ajouté à la collection.');
+          this.inCollection = true;
+        });
     }
-
-    this.gamesService
-      .addGameToCollection(this.game.id)
-      .subscribe(() => {
-        this.messagesService.success('Jeu ajouté à la collection.');
-        this.inCollection = true;
-      });
   }
 
   removeFromCollection() {
-    if (this.game === undefined) {
-      return;
+    if (this.game) {
+      this.gamesService
+        .deleteGameFromCollection(this.game.id, this.isCustom)
+        .subscribe(() => {
+          this.messagesService.success('Jeu retiré à la collection.');
+          this.inCollection = false;
+        });
     }
-
-    this.gamesService
-      .deleteGameFromCollection(this.game.id, this.isCustom)
-      .subscribe(() => {
-        this.messagesService.success('Jeu retiré à la collection.');
-        this.inCollection = false;
-      });
   }
 
   formatDescription(description: string): Observable<string> {

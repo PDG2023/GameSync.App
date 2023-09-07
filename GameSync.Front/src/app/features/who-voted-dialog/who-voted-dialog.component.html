@@ -1,0 +1,46 @@
+<mat-dialog-content>
+  <div class="row">
+    <div class="col-6 d-flex justify-content-center">
+      <mat-icon color="accent">thumb_up</mat-icon>
+    </div>
+    <div class="col-6 d-flex justify-content-center">
+      <mat-icon color="warn">thumb_down</mat-icon>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6 d-flex justify-content-center">
+      <h3>Vote pour</h3>
+    </div>
+    <div class="col-6 d-flex justify-content-center">
+      <h3>Vote contre</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6 d-flex justify-content-center">
+      {{data.countVotedYes}}
+    </div>
+    <div class="col-6 d-flex justify-content-center">
+      {{data.countVotedNo}}
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="row d-flex justify-content-between">
+    <div class="col-6">
+      <mat-list>
+        <mat-list-item *ngFor="let whoVotedYes of data.whoVotedYes">
+          {{whoVotedYes}}
+        </mat-list-item>
+      </mat-list>
+    </div>
+    <div class="col-6">
+      <mat-list>
+        <mat-list-item *ngFor="let whoVotedNo of data.whoVotedNo">
+          {{whoVotedNo}}
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+  <button mat-raised-button mat-dialog-close color="primary">Fermer</button>
+</mat-dialog-actions>

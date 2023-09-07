@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {PartiesService} from "../../services/parties.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, of, tap} from "rxjs";
-import {GameCollectionItem, PartyDetail, PartyGameRequest, PartyGameRequestItem} from "../../models/models";
+import {GameCollectionItem, PartyDetail, PartyGameRequest, PartyGameRequestItem, VoteInfo} from "../../models/models";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MessagesService} from "../../services/messages.service";
 import {MatDialog} from "@angular/material/dialog";
@@ -31,6 +31,7 @@ export class PartyDetailComponent implements OnInit {
   constructor(
     private partiesService: PartiesService,
     private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
     private messagesService: MessagesService,
     private clipboard: Clipboard,
@@ -110,5 +111,24 @@ export class PartyDetailComponent implements OnInit {
           });
         }
       });
+  }
+
+  sendVote(voteInfo: VoteInfo, partyGameId: number) {
+    this.partiesService.vote({
+      partyId: this.idParty ?? '',
+      invitationToken: this.route.snapshot.params['token'],
+      partyGameId: partyGameId,
+      voteInfo: voteInfo
+    }).subscribe(res => {
+      this.refresh();
+    });
+  }
+
+  toGameDetail(partyGameId: number, partyId: number) {
+    const token = this.route.snapshot.params['token'] ?? '';
+    this.partiesService.getGameDetailFromParty(partyId, partyGameId, token).subscribe(gameDetail => {
+      gameDetail.isCustom ? this.router.navigateByUrl('games/custom' + gameDetail.game.id)
+        : this.router.navigateByUrl('games/' + gameDetail.game.id);
+    })
   }
 }

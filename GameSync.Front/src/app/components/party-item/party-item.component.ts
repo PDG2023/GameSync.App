@@ -22,6 +22,7 @@ export class PartyItemComponent {
   }
 
 
+
   removeParty() {
     this.confirmationService.askConfirmation('Voulez-vous supprimer cette soirée ?').subscribe(res => {
       if (res) {

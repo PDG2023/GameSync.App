@@ -11,8 +11,8 @@ public class TestsWithLoggedUser : IAsyncLifetime
 
     protected string Mail { get; } = new Bogus.DataSets.Internet().Email();
     protected string Password { get; } = "uPY994@euuK9&TPny#wSv5b";
-    protected string UserId { get; private set; }
-    protected HttpClient Client { get; }
+    public string UserId { get; private set; }
+    public HttpClient Client { get; }
     protected GameSyncAppFactory Factory { get; }
 
     public TestsWithLoggedUser(GameSyncAppFactory factory)

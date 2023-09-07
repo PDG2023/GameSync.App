@@ -23,6 +23,7 @@ builder.Services.AddFastEndpoints();
 builder.Services.SwaggerDocument(x => x.ShortSchemaNames = true);
 builder.Services.AddMemoryCache();
 
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddDbContext<GameSyncContext>(options =>
 {

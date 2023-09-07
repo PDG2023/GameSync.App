@@ -46,12 +46,8 @@ services:
             args:
                 - "CMD=docker"
         environment:
-            - "ConnectionStrings__Default=User ID=postgres;Password=postgres;Host=db;Port=5432;Database=gamesync;"
-            - "ASPNETCORE_ENVIRONMENT=Development"
-            - "Smtp__Host=mail"
-            - "Smtp__Port=1025"
-            - "Smtp__From=no-reply@gamesync.com"
+            - "ASPNETCORE_ENVIRONMENT=Docker"
         networks:
             - dev
         ports:
-           - "80:80"
+           - "1092:80"

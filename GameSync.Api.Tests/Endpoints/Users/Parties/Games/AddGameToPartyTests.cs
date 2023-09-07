@@ -1,6 +1,6 @@
 ﻿using FastEndpoints;
 using GameSync.Api;
-using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.Games;
+using GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty.PartyGame;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -31,12 +31,12 @@ public class AddGameToPartyTests : TestsWithLoggedUser
     {
         // arrange
         var party = await Factory.CreateDefaultPartyAsync(UserId);
-        var request = new AddGames.Request 
+        var request = new AddPartyGames.Request 
         { 
             PartyId = party.Id, 
             Games = new[] 
             {
-                new AddGames.Request.PartyGameInfo()
+                new AddPartyGames.Request.PartyGameInfo()
                 {
                     Id = 4554854,
                     IsCustom = true,
@@ -47,7 +47,7 @@ public class AddGameToPartyTests : TestsWithLoggedUser
         // act
 
         var (response, _)
-            = await Client.POSTAsync<AddGames.Endpoint, AddGames.Request, NotFound>(request);
+            = await Client.POSTAsync<AddPartyGames.Endpoint, AddPartyGames.Request, NotFound>(request);
 
         // assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -61,7 +61,7 @@ public class AddGameToPartyTests : TestsWithLoggedUser
 
         // act
         var (response, _)
-            = await Client.POSTAsync<AddGames.Endpoint, AddGames.Request, Ok>(request);
+            = await Client.POSTAsync<AddPartyGames.Endpoint, AddPartyGames.Request, Ok>(request);
 
         // assert
         await response.EnsureSuccessAndDumpBodyIfNotAsync(_output);
@@ -74,23 +74,23 @@ public class AddGameToPartyTests : TestsWithLoggedUser
         var request = await GetRequestToPartyGame(UserId);
 
         // act
-        await Client.POSTAsync<AddGames.Endpoint, AddGames.Request, Ok>(request);
-        var (response, _) = await Client.POSTAsync<AddGames.Endpoint, AddGames.Request, Ok>(request);
+        await Client.POSTAsync<AddPartyGames.Endpoint, AddPartyGames.Request, Ok>(request);
+        var (response, _) = await Client.POSTAsync<AddPartyGames.Endpoint, AddPartyGames.Request, Ok>(request);
 
         // assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
     }
 
-    public async Task<AddGames.Request> GetRequestToPartyGame(string userId)
+    public async Task<AddPartyGames.Request> GetRequestToPartyGame(string userId)
     {
         var party = await Factory.CreateDefaultPartyAsync(userId);
         var game = await Factory.CreateTestGameAsync(userId);
-        return new AddGames.Request
+        return new AddPartyGames.Request
         {
             Games = new[]
             {
-                new AddGames.Request.PartyGameInfo
+                new AddPartyGames.Request.PartyGameInfo
                 {
                     Id = game.Id,
                     IsCustom = true,

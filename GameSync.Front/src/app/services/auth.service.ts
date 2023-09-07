@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {Router} from "@angular/router";
-import {User} from "../models/models";
+import {Me, User} from "../models/models";
 import {BehaviorSubject} from "rxjs";
 
 @Injectable({
@@ -9,14 +9,14 @@ import {BehaviorSubject} from "rxjs";
 })
 export class AuthService {
 
-  connectedUserSubject$: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+  connectedUserSubject$: BehaviorSubject<Me | null> = new BehaviorSubject<Me | null>(null);
 
   constructor(
     private router: Router
   ) {
   }
 
-  setConnectedUser(connectedUser: User): void {
+  setConnectedUser(connectedUser:  Me): void {
     this.connectedUserSubject$.next(connectedUser);
   }
 

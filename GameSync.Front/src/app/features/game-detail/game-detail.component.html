@@ -29,14 +29,14 @@
           </tr>
         </table>
         <ng-container *ngIf="!isCustom && (authService.connectedUserSubject$ | async)">
-          <button color="primary" mat-flat-button (click)="addToCollection(game.id)"
+          <button color="primary" mat-flat-button (click)="addToCollection()"
                   [disabled]="(loadingService.isLoading$ | async)!"
                   *ngIf="!inCollection"
           >
             <mat-icon>favorite_outline</mat-icon>
             Ajouter à la collection
           </button>
-          <button color="primary" mat-flat-button (click)="removeFromCollection(game.id)"
+          <button color="primary" mat-flat-button (click)="removeFromCollection()"
                   [disabled]="(loadingService.isLoading$ | async)!"
                   *ngIf="inCollection"
           >

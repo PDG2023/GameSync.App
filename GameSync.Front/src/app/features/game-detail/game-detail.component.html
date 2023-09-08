@@ -9,7 +9,7 @@
         </ng-template>
       </div>
       <div class="col-sm-8">
-        <h1>{{ game.name }}</h1>
+        <h1 [innerHTML]="game.name"></h1>
         <table class="game-attributes">
           <tr *ngIf="game.minPlayer">
             <td class="attribute-title">Nombre minimum de joueurs:</td>

@@ -1,18 +1,20 @@
 ﻿using FluentValidation;
+using GameSync.Api.CommonResponses;
 using GameSync.Api.Extensions;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameSync.Api.Endpoints;
+namespace GameSync.Api.Endpoints.LiveVote;
 
 public static class GameVote
 {
 
     public class Request
     {
-        public int PartyGameId { get; set; } 
+        public int PartyGameId { get; set; }
 
         public int? PartyId { get; init; }
         public string? InvitationToken { get; init; }
@@ -40,10 +42,12 @@ public static class GameVote
     public class Endpoint : Endpoint<Request, Results<Ok, NotFound, BadRequest>>
     {
         private readonly GameSyncContext _ctx;
+        private readonly IHubContext<VoteHub> _hubContext;
 
-        public Endpoint(GameSyncContext ctx)
+        public Endpoint(GameSyncContext ctx, IHubContext<VoteHub> hubContext)
         {
             _ctx = ctx;
+            _hubContext = hubContext;
         }
 
         public override void Configure()
@@ -67,6 +71,8 @@ public static class GameVote
                 if (req.UserName is null)
                     return TypedResults.BadRequest();
             }
+
+
 
             var partyGame = await _ctx.PartiesGames
                 .FirstOrDefaultAsync(pg => pg.Id == req.PartyGameId && (pg.Party.UserId == userId || pg.Party.InvitationToken == req.InvitationToken));
@@ -111,6 +117,11 @@ public static class GameVote
             }
 
             await _ctx.SaveChangesAsync();
+
+
+            await _hubContext.Clients
+                .Group(partyGame.PartyId.ToString())
+                .SendAsync("new-vote", new PartyGameInfo(partyGame));
 
             return TypedResults.Ok();
         }

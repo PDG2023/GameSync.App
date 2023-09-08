@@ -58,17 +58,7 @@ public static class UpdateParty
         {
             var userId = User.ClaimValue(ClaimsTypes.UserId);
 
-            var party = await _context.Parties
-                .Select(x => new Party
-                {
-                    DateTime = x.DateTime,
-                    Location = x.Location,
-                    Name = x.Name,
-                    UserId = x.UserId,
-                    InvitationToken = x.InvitationToken,
-                    Id = x.Id
-                })
-                .FirstOrDefaultAsync(x => x.UserId == userId && x.Id == req.Id);
+            var party = await _context.Parties.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == req.Id);
 
             if (party is null)
             {

@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:1092/api',
+  apiUrl: 'http://localhost:5086/api',
   securityStorage: 'jwt'
 };

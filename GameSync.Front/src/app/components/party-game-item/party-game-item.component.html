@@ -8,7 +8,7 @@
         <ng-template #placeholder>
           <img src="https://placehold.co/400">
         </ng-template>
-        <h1>{{gameVoteInfo?.gameName}}</h1>
+        <h1 [innerText]="gameVoteInfo?.gameName"></h1>
       </div>
       <div class="col-sm-7">
         <div class="progress-label">{{voteRatio | number : '1.0-2'}} % ({{gameVoteInfo?.countVotedYes}} / {{totalVote}}

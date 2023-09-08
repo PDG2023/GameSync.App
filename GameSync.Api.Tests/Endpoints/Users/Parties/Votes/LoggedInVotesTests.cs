@@ -1,5 +1,4 @@
 ﻿using FastEndpoints;
-using GameSync.Api.Endpoints;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Api.Persistence;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -7,6 +6,7 @@ using Xunit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Tests;
+using GameSync.Api.Endpoints.LiveVote;
 
 namespace Tests.Endpoints.Users.Parties.Votes;
 

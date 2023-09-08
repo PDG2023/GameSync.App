@@ -38,8 +38,8 @@ public class GameSyncAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
        .WithDatabase("db")
        .WithUsername("postgres")
        .WithPassword("postgres")
-       //.WithCleanUp(true)
-       //.WithAutoRemove(true)
+       .WithCleanUp(true)
+       .WithAutoRemove(true)
        .Build();
 
     }

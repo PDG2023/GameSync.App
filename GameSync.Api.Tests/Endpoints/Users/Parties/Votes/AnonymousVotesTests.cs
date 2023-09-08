@@ -1,5 +1,5 @@
 ﻿using FastEndpoints;
-using GameSync.Api.Endpoints;
+using GameSync.Api.Endpoints.LiveVote;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using GameSync.Api.Persistence.Migrations;

@@ -1,7 +1,7 @@
 <mat-card *ngIf="game">
   <mat-card-header>
     <mat-card-title>
-      {{ game.name }} {{ game.yearPublished ? '(' + game.yearPublished + ')' : ''}}
+      <span [innerHTML]="game.name"></span> {{ game.yearPublished ? '(' + game.yearPublished + ')' : ''}}
     </mat-card-title>
   </mat-card-header>
   <ng-container *ngIf="game.imageUrl else placeholder">

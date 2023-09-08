@@ -1,32 +1,45 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {PartiesService} from "../../services/parties.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Observable, of, tap} from "rxjs";
-import {GameCollectionItem, PartyDetail, PartyGameRequest, PartyGameRequestItem, VoteInfo} from "../../models/models";
+import {Observable, of, Subscription, tap} from "rxjs";
+import {
+  GameCollectionItem,
+  GameVoteInfo,
+  PartyDetail,
+  PartyGameRequest,
+  PartyGameRequestItem,
+  VoteInfo
+} from "../../models/models";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MessagesService} from "../../services/messages.service";
 import {MatDialog} from "@angular/material/dialog";
 import {AddGameToPartyDialogComponent} from "../add-game-to-party-dialog/add-game-to-party-dialog.component";
 import {Clipboard} from "@angular/cdk/clipboard";
 import {ConfirmationDialogService} from "../../services/confirmation-dialog.service";
+import {PartyVoteService} from "../../services/party-vote.service";
 
 @Component({
   selector: 'app-party-detail',
   templateUrl: './party-detail.component.html',
   styleUrls: ['./party-detail.component.scss']
 })
-export class PartyDetailComponent implements OnInit {
+export class PartyDetailComponent implements OnInit, OnDestroy {
   @Input() readonly = false;
 
-  partyDetail$: Observable<PartyDetail> = of();
+  partyDetail?: PartyDetail;
+
   partyDetailForm: FormGroup = this.fb.group({
     location: [{value: null, disabled: this.readonly}],
     name: [{value: null, disabled: this.readonly}],
     dateTime: [{value: null, disabled: this.readonly}]
   });
 
+  gamesVoteInfo?: GameVoteInfo[];
   isOwner = false;
+
   protected readonly idParty = this.route.snapshot.params['id'];
+
+  private voteSubscription?: Subscription;
 
   constructor(
     private partiesService: PartiesService,
@@ -36,29 +49,47 @@ export class PartyDetailComponent implements OnInit {
     private messagesService: MessagesService,
     private clipboard: Clipboard,
     private confirmationDialogService: ConfirmationDialogService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private voteHub: PartyVoteService,
+    private changeDetection: ChangeDetectorRef
   ) {
   }
 
   ngOnInit(): void {
     this.refresh();
   }
+  ngOnDestroy(): void {
+    this.voteSubscription?.unsubscribe();
+  }
 
   refresh() {
-    this.partyDetail$ = this.partiesService.getPartyDetail({
+    if (this.voteSubscription && !this.voteSubscription.closed) {
+      this.voteSubscription.unsubscribe();
+    }
+
+    this.partiesService.getPartyDetail({
       id: this.idParty ?? '',
       invitationToken: this.route.snapshot.params['token']
-    }).pipe(
-      tap(partyDetail => {
-        this.isOwner = partyDetail.isOwner
-        this.partyDetailForm.patchValue({
-          ...partyDetail
-        });
-        if (!partyDetail.isOwner) {
-          this.partyDetailForm.disable();
-        }
-      })
-    );
+    }).subscribe(detail => {
+      this.isOwner = detail.isOwner
+      this.partyDetail = detail;
+      this.gamesVoteInfo = detail.gamesVoteInfo;
+
+      this.partyDetailForm.patchValue({
+        ...detail
+      });
+      if (!detail.isOwner) {
+        this.partyDetailForm.disable();
+      }
+
+      this.voteHub.connectToPartyHub(this.partyDetail!.id)
+        .then(() => {
+          this.voteSubscription = this.voteHub.VoteFeed.subscribe((gameVote : GameVoteInfo) => {
+            let idx = this.gamesVoteInfo?.findIndex(partyGame => partyGame.id == gameVote.id)!;
+            this.gamesVoteInfo![idx] = gameVote;
+          });
+        })
+    });
   }
 
 

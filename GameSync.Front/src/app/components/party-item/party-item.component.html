@@ -2,7 +2,7 @@
   <mat-card-content>
     <div class="row">
       <div class="col-sm-4 party-content">
-        <p>{{party.name}}</p>
+        <p [innerHTML]="party.name"></p>
         <p>{{party.numberOfGames}} jeux</p>
       </div>
       <div class="col-sm-4 party-content">

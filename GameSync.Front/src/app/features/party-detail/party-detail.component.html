@@ -7,7 +7,7 @@
 <ng-container>
 
 </ng-container>
-<form [formGroup]="partyDetailForm" *ngIf="partyDetail$ | async as partyDetail">
+<form [formGroup]="partyDetailForm" *ngIf="partyDetail">
   <div class="row mb-5 align-items-center">
     <div class="col-sm-3">
       <mat-form-field>
@@ -38,7 +38,7 @@
       </button>
     </div>
   </div>
-  <div *ngFor="let gameVoteInfo of partyDetail.gamesVoteInfo" class="party-games">
+  <div *ngFor="let gameVoteInfo of gamesVoteInfo " class="party-games">
     <app-party-game-item [readonly]="!partyDetail.isOwner" [gameVoteInfo]="gameVoteInfo"
                          (gameRemovedFromParty)="deleteMe(gameVoteInfo.id)"
                          (voted)="sendVote($event, gameVoteInfo.id)"

@@ -9,7 +9,6 @@ export interface User extends Me {
   token?: string;
 }
 
-
 export interface HttpErrorResponseDetail {
   code: number;
   description: string;

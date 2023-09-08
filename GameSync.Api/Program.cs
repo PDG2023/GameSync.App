@@ -8,6 +8,7 @@ using FastEndpoints.Swagger;
 using GameSync.Api;
 using GameSync.Api.AuthMailServices;
 using GameSync.Api.BoardGameGeek;
+using GameSync.Api.Endpoints.LiveVote;
 using GameSync.Api.MailSender;
 using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
@@ -65,7 +66,9 @@ builder.Services.AddJWTBearerAuth(
 
 builder.Services.AddAuthorization();
 builder.Services.AddCors();
+builder.Services.AddSignalR();
 builder.Services.AddSingleton<BoardGameGeekClient, CachedBoardGameGeekClient>();
+
 
 if (!builder.Environment.IsProduction())
 {
@@ -91,7 +94,12 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsProduction())
 {
-    app.UseCors(configuration => configuration.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+    app.UseCors(configuration => configuration
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .WithOrigins("http://localhost:4200", "http://localhost", "http://localhost:1092")
+        .AllowCredentials()
+        );
 }
 
 app.UseFastEndpoints(c =>
@@ -109,7 +117,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSwaggerGen();
 app.MapFallbackToFile("index.html");
-
+app.MapHub<VoteHub>("/api/parties/vote");
 using (var scope = app.Services.CreateScope())
 {
     scope.ServiceProvider

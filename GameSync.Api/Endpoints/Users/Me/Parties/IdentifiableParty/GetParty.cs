@@ -1,6 +1,9 @@
-﻿using GameSync.Api.Persistence;
+﻿using GameSync.Api.CommonResponses;
+using GameSync.Api.Endpoints.LiveVote;
+using GameSync.Api.Persistence;
 using GameSync.Api.Persistence.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameSync.Api.Endpoints.Users.Me.Parties.IdentifiableParty;
@@ -25,28 +28,17 @@ public static class GetParty
 
         public IEnumerable<PartyGameInfo>? GamesVoteInfo { get; init; }
 
-        public class PartyGameInfo
-        {
-            public required int Id { get; set; }
-            public string? GameImageUrl { get; init; }
-            public string? GameName { get; init; }
-            public IEnumerable<string>? WhoVotedYes { get; init; }
-            public int CountVotedYes => WhoVotedYes?.Count() ?? 0;
-            public IEnumerable<string>? WhoVotedNo { get; init; }
-            public int CountVotedNo => WhoVotedNo?.Count() ?? 0;
-
-        }
-
-
     }
 
     public class Endpoint : Endpoint<Request, Results<Ok<Response>, NotFound>>
     {
         private readonly GameSyncContext _ctx;
+        private readonly IHubContext<VoteHub> _voteHubContext;
 
-        public Endpoint(GameSyncContext context)
+        public Endpoint(GameSyncContext context, IHubContext<VoteHub> voteHubContext)
         {
             _ctx = context;
+            _voteHubContext = voteHubContext;
         }
 
         public override void Configure()
@@ -96,7 +88,7 @@ public static class GetParty
             var gameInfos = await _ctx.PartiesGames
                 .AsNoTracking()
                 .Where(pg => pg.PartyId == partyDetails.Id)
-                .Select(pg => new Response.PartyGameInfo
+                .Select(pg => new PartyGameInfo
                 {
                     Id = pg.Id,
                     GameImageUrl = pg is PartyBoardGameGeekGame ? ((PartyBoardGameGeekGame)pg).BoardGameGeekGame.ImageUrl : ((PartyCustomGame)pg).Game.ImageUrl,

@@ -6,6 +6,8 @@ Cette appli web a pour but de faciliter l'organisation de soirées "jeux de soci
 ## Informations générales
 Toutes les informations concernant l'app elle-même se situent dans l'onglet [Wiki](https://github.com/PDG2023/GameSync.App/wiki) du projet. S'y trouvent notamment l'architecture des différents environnements, les instructions de lancement en local, processus de travail, etc ...
 
+La landing page est accessible [ici](https://gamesync.azurewebsites.net/coming-soon.html).
+
 ## Limitations connues
 - L'API de [BGG](https://boardgamegeek.com/) utilisée pour récupérer les informations sur les jeux ne fourni pas de système de pagination. Donc les requêtes de recherche sont relativement lentes. 
     - Un système de cache a été mis en place : une fois que la recherche a été faite une fois, cela devient nettement plus rapide.
